@@ -6,7 +6,6 @@ from threading import Thread, currentThread, Timer
 from time import sleep
 import sys
 import subprocess, shlex
-from req-handler import SimpleHTTPRequestHandler
 
 IP="192.168.10.239"
 DEVICES = {
@@ -121,6 +120,22 @@ def usr(recieved):
     else:
         return " | Invalid user"
 
+
+
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        global tDisco
+        self.send_response(200)
+        self.end_headers()
+
+        recieved = parse.parse_qs(parse.urlsplit(self.path).query)
+        print(recieved)
+
+        msg = " | Respose:"
+        msg += act(recieved)
+        msg += inp(recieved)
+        msg += usr(recieved)
+        self.wfile.write(msg.encode("utf-8"))
 
 
 if __name__ == "__main__":
