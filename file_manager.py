@@ -28,7 +28,7 @@ def getFile(fileName):
     mimeType = getMimeType(filePath)
 
     if(not isfile(filePath)):
-        return dict(resCode=404)
+        return getFile("/404.html")
 
     if(mimeType is None):
         return dict(resCode=501)

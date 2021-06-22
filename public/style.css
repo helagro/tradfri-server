@@ -1,5 +1,9 @@
 
-h1{
-    color: red;
-    background-color: blue;
+.actionDiv{
+    border: 0.1em solid gray;
+    background-color: white;
+}
+
+.actionDiv:hover{
+    background-color: lightgray;
 }
