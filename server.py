@@ -5,8 +5,8 @@ import random
 from threading import Thread, currentThread, Timer
 from time import sleep
 import sys
-from gpiozero import LED
 import subprocess, shlex
+from req-handler import SimpleHTTPRequestHandler
 
 IP="192.168.10.239"
 DEVICES = {
@@ -16,11 +16,6 @@ DEVICES = {
     "fan": "15001/65540"
 }
 COLORS = ["f5faf6","f1e0b5","efd275"]
-LEDS = {
-    "h": LED(14),
-    "o": LED(15),
-    "s": LED(18)
-}
 
 #essential
 def runCommand(payload, target, method="put"):
@@ -71,6 +66,7 @@ def act(recieved):
 def inp(recieved):
     global tDisco
 
+
     res = hasQuerys(["act", "inp"], recieved)
     if(not res): return ""
     act = res["act"]
@@ -86,6 +82,7 @@ def inp(recieved):
             return " | Disco stopped"
 
     elif (act == "tOn"):
+            print("tOn")
             lamp = DEVICES[inp]
             runCommand("{ \"3311\": [{ \"5850\": 1}]}", lamp)
             start_time = Timer(3600, runCommand, ["{ \"3311\": [{ \"5850\": 0}]}", lamp])
@@ -126,22 +123,7 @@ def usr(recieved):
 
 
 
-class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        global tDisco
-        self.send_response(200)
-        self.end_headers()
-
-        recieved = parse.parse_qs(parse.urlsplit(self.path).query)
-        print(recieved)
-
-        msg = " | Respose:"
-        msg += act(recieved)
-        msg += inp(recieved)
-        msg += usr(recieved)
-        self.wfile.write(msg.encode("utf-8"))
-
-
 if __name__ == "__main__":
+    print("Server started")
     httpd = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
     httpd.serve_forever()
