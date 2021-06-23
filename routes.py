@@ -12,7 +12,6 @@ def allSafeStorageParameters():
     return dict(resCode = 200, mimeType="text/json", fileContent=safeStorageContentJson.encode('utf-8'))
 
 
-
 def locationToRouteString(location):
     onlyFileName = location.split("/")[-1]
     return onlyFileName

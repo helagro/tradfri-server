@@ -1,0 +1,22 @@
+
+.inputLayerDiv{
+    display: grid;
+    grid-auto-flow: row;
+    width: min-content;
+    border: lightslategray solid 0.1em;
+    padding: 1em;
+    margin: 0.5em 0;
+}
+
+.inputElementAdd{
+    width: 2em;
+    grid-row: 2;
+    margin-bottom: 1em;
+    margin-left: 2em;
+}
+
+.inputElementDiv{
+    margin-left: 2em;
+    display: grid;
+    grid-template-columns: min-content min-content;
+}
