@@ -1,7 +1,9 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import input_router
 from urllib import parse
+import json
 from cgi import parse_header, parse_multipart
+import storage_handler
 
 class ReqHandler(BaseHTTPRequestHandler):
     
@@ -40,6 +42,21 @@ class ReqHandler(BaseHTTPRequestHandler):
         return postvars
 
     def do_POST(self):
-        print("vi har post ==============================================================")
-        print(self.parse_POST())
+        infoSent = self.parse_POST()
+        jsonArea = infoSent[b'jsonArea'][0]
+        jsonAreaStr = jsonArea.decode("utf-8")
+        jsonObj = json.loads(jsonAreaStr)
+        storage_handler.saveInputStorageContent(jsonObj)
+
+        self.send_response(301)
+        self.send_header("location", "/index.html")
+        self.send_header('Content-type', "text/html")
+        self.end_headers()
+
+
+        self.wfile.write(input_router.entry("", "/")["fileContent"])
+
+        
+
+
 

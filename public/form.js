@@ -1,5 +1,5 @@
 const FORM = document.getElementById("mainForm")
-const GENERATED_ITEMS_DIV = document.getElementById("generatedItems")
+const jsonArea = document.getElementById("jsonArea")
 
 
 function main(){
@@ -38,71 +38,44 @@ function jsonRequestCallback(status, response){
 }
 
 function processJsonDocument(json){
-    createInputsForEveryItem(json, 1, GENERATED_ITEMS_DIV)
-}
-
-function createInputsForEveryItem(json, depth, parent){
-    for(var [key, value] of Object.entries(json)){
-        console.log(key, value);
-        if(value !== null && (typeof value === 'object' || Array.isArray(value))) {
-            const div = createInputDiv(key, depth, parent)
-            createInputsForEveryItem(value, depth + 1, div)
-        } else{
-            createInputForItem(key, value, parent)
+    let jsonString = JSON.stringify(json) 
+    let tabI = 0
+    
+    for(let i = 0; i<jsonString.length; i++){
+        let letter = jsonString[i]
+        switch (letter){
+            case "{": 
+                tabI ++
+            case ",": 
+                const tabs = generateTabs(tabI)
+                let insertStr = "\n" + tabs
+                let insertTextLeng
+                [insertTextLeng, jsonString] = insert(insertStr, jsonString, i)
+                i += insertTextLeng
+                break
+            case "}":
+                tabI --
+                
         }
     }
+
+    jsonArea.value = jsonString
 }
 
-function createInputDiv(key, depth, parent){
-    const div = document.createElement("div")
-    div.style.marginLeft = `${depth*2}em`
-    div.className = "inputLayerDiv"
-
-    const p = document.createElement("p")
-    p.innerText = key
-    p.style.fontWeight = "bold"
-    div.appendChild(p)
-
-    const button = document.createElement("button")
-    button.innerText = "+"
-    button.type = "button"
-    button.className = "inputElementAdd"
-    button.addEventListener("click", function(){
-        createInputForItem("", "", div)
-    })
-    div.appendChild(button)
-
-    GENERATED_ITEMS_DIV.appendChild(div)
-    return div
-}   
-
-
-function createInputForItem(key, item, parent){
-    console.log("item", item)
-
-    const div = document.createElement("div")
-    div.className = "inputElementDiv"
-
-    const label = document.createElement("input")
-    label.className = "inputLabel"
-    label.value=key
-    label.name = key
-    
-    div.appendChild(label)
-
-    const input = document.createElement("input")
-    input.className = "input"
-    input.value = item
-    input.name = item
-    div.appendChild(input)
-
-    parent.appendChild(div)
-    
+function insert(insertText, jsonString, i){
+    const insertTextLeng = insertText.length
+    const insertI = i+1
+    const newText = jsonString.slice(0, insertI) + insertText + jsonString.slice(insertI);
+    return [insertTextLeng, newText]
 }
 
-
-function submittBtn(){
-    
+function generateTabs(tabI){
+    const TAB = "   "
+    var newString = ""
+    for (let i = 0; i<= tabI; i++){
+        newString += TAB
+    }
+    return newString
 }
 
 
