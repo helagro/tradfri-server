@@ -1,9 +1,9 @@
-function getJSONObjectFromUrlParams(){
+function getJSONObjectFromUrlParams(callback){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const jsonUrl = urlParams.get('jsonUrl')
 
-    getJSON(jsonUrl, jsonRequestCallback)
+    getJSON(jsonUrl, callback)
     console.log(queryString, urlParams, jsonUrl)
 }
 

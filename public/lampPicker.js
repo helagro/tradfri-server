@@ -17,18 +17,19 @@ function createItemElements(devices){
 }
 
 function createItemElement(device){
-    const div = document.createElement("div")
-    div.className = "itemContainer"
+    const a = document.createElement("a")
+    a.className = "itemContainer"
+    a.href = `deviceControl.html?jsonUrl=itemContainerJson&device=${JSON.stringify(device)}`
 
     const name = document.createElement("p")
     name.innerText = device.name
-    div.appendChild(name)
+    a.appendChild(name)
 
     const id = document.createElement("p")
     id.innerText = device.id
-    div.appendChild(id)
+    a.appendChild(id)
 
-    deviceContainer.appendChild(div)
+    deviceContainer.appendChild(a)
 }
 
 main()

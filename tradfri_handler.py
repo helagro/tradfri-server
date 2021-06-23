@@ -93,11 +93,13 @@ def getDevices():
             devicesSerializable.append(dict(
                 id=device.id,
                 name=device.name
+                
             ))
 
 
     print("gone", devicesSerializable)
     return devicesSerializable
+
 
 
 run()

@@ -1,4 +1,7 @@
 
+
+
 .itemContainer{
+    display: block;
     border: lightslategrey 0.5em solid;
 }
