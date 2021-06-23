@@ -18,6 +18,8 @@ def getMimeType(filePath):
     vaildMimeTypes = {
         ".html" : "text/html",
         ".css" : "text/css",
+        ".js" : "text/javascript",
+        ".json" : "text/json"
     }
     return vaildMimeTypes.get(fileExtension, None)
 

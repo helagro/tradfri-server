@@ -1,12 +1,12 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib import parse
-import env
 import random
 import threading
 from time import sleep
 import sys
 import subprocess, shlex
 from req_handler import SimpleHTTPRequestHandler
+import routined
 
 
 def startServer():
@@ -18,11 +18,9 @@ def startServerThread():
     t.start()
 
 
-def startRoutined():
-    return
 
 def startRoutinedThread():
-    t = threading.Thread(target=startRoutined)
+    t = threading.Thread(target=routined.start)
     t.start()
 
 if __name__ == "__main__":
