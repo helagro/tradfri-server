@@ -7,6 +7,19 @@ FILE_NAME = "storage.json"
 storageContent = None
 
 
+def clearFeildsIn(object, property):
+    dictionary = object[property]
+
+    for key in dictionary:
+        dictionary[key] = "**********"
+
+
+def getSafeStorageContentJson():
+    storageContentCopy = storageContent.copy()
+    clearFeildsIn(storageContentCopy, "private")
+    safeJson = json.dumps(storageContentCopy)
+    return safeJson
+    
 
 def saveStorageContent():
     with open(FILE_NAME, "w") as filestream:

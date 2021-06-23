@@ -1,4 +1,5 @@
-import file_manager
+import response_file_manager
+import routes
 
 
 def queryRouter(query):
@@ -7,8 +8,12 @@ def queryRouter(query):
 
 
 def locationRouter(location):
-    fileInfo = file_manager.getFile(location)
-    return fileInfo
+    specialRouteFileDict = routes.getspecialRouteFileDict(location)
+    if(not specialRouteFileDict is None):
+        return specialRouteFileDict
+
+
+    return response_file_manager.getFile(location)
 
 
 def entry(query, location):

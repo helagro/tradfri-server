@@ -25,3 +25,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(fileInfo["fileContent"])
 
+    def do_POST(self):
+        print("vi har post")
+
