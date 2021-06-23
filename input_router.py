@@ -20,8 +20,5 @@ def entry(query, location):
     print(query, location)
     queryRouterRes = queryRouter(query)
 
-    if(queryRouterRes is None):
-        print("no queries")
-
     fileInfo = locationRouter(location)
     return fileInfo

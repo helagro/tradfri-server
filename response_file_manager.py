@@ -40,9 +40,3 @@ def getFile(fileName):
     fileStream.close()
     
     return dict(resCode=200, mimeType=mimeType, fileContent=fileContent)
-
-
-
-def editFromServerJson(newText):
-    with open("public/fromServer.json", "w") as filestream:
-        filestream.write(newText)

@@ -24,9 +24,8 @@ class ReqHandler(BaseHTTPRequestHandler):
 
         self.send_header('Content-type', fileInfo["mimeType"])
         self.end_headers()
-
-
         self.wfile.write(fileInfo["fileContent"])
+
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])
@@ -52,8 +51,6 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.send_header("location", "/index.html")
         self.send_header('Content-type', "text/html")
         self.end_headers()
-
-
         self.wfile.write(input_router.entry("", "/")["fileContent"])
 
         

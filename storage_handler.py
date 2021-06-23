@@ -22,19 +22,18 @@ def getSafeStorageContentJson():
     return safeJson
     
 
-def saveStorageContent():
-    with open(FILE_NAME, "w") as filestream:
-        json.dump(storageContent, filestream)
-
 def saveInputStorageContent(input):
     global storageContent
 
-    for key in input["private"]:
-        if(input["private"][key] == "**********"):
-            input["private"][key] = storageContent["private"][key]
+    privateDict = input["private"]
+
+    for key in privateDict:
+        if(privateDict[key] == "**********"):
+            privateDict[key] = privateDict[key]
 
     storageContent = input
-    saveStorageContent()
+    with open(FILE_NAME, "w") as filestream:
+        json.dump(storageContent, filestream)
 
 
 def readInStorageContent():
@@ -50,7 +49,5 @@ def readInStorageContent():
 
 def setup():
     readInStorageContent()
-    print(storageContent)
-    saveStorageContent()
 
 setup()
