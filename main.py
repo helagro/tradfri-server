@@ -5,12 +5,12 @@ import threading
 from time import sleep
 import sys
 import subprocess, shlex
-from req_handler import SimpleHTTPRequestHandler
+from req_handler import ReqHandler
 import routined
 
 
 def startServer():
-    httpd = HTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
+    httpd = HTTPServer(('0.0.0.0', 8000), ReqHandler)
     httpd.serve_forever()
 
 def startServerThread():

@@ -1,11 +1,10 @@
 import storage_handler
 import response_file_manager
 
-def editAll():
-    print("init setup")
-    safeStorageContentJson = storage_handler.getSafeStorageContentJson()
-    response_file_manager.editFromServerJson(safeStorageContentJson)
-    return "/form.html"
+
+def saveStorageForm():
+    pass
+
 
 def allSafeStorageParameters():
     safeStorageContentJson = storage_handler.getSafeStorageContentJson()

@@ -86,12 +86,14 @@ function createInputForItem(key, item, parent){
     const label = document.createElement("input")
     label.className = "inputLabel"
     label.value=key
+    label.name = key
     
     div.appendChild(label)
 
     const input = document.createElement("input")
     input.className = "input"
     input.value = item
+    input.name = item
     div.appendChild(input)
 
     parent.appendChild(div)
@@ -99,8 +101,8 @@ function createInputForItem(key, item, parent){
 }
 
 
-function addButtonListener(){
-    console.log("fes")
+function submittBtn(){
+    
 }
 
 
