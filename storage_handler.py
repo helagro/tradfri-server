@@ -6,7 +6,10 @@ import copy
 FILE_NAME = "storage.json"
 
 storageContent = None
+storageContentUpdateListener = None
 
+def getStorageContent():
+    return storageContent
 
 def clearFeildsIn(object, property):
     dictionary = object[property]
@@ -37,6 +40,7 @@ def saveInputStorageContent(input):
     storageContent = input
     with open(FILE_NAME, "w") as filestream:
         json.dump(storageContent, filestream)
+    
 
 
 def readInStorageContent():
