@@ -30,7 +30,10 @@ def getFile(fileName):
     mimeType = getMimeType(filePath)
 
     if(not isfile(filePath)):
-        return getFile("/404.html")
+        if(mimeType == "text/html"):
+            return getFile("/404.html")
+        else:
+            return dict(resCode = 404)
 
     if(mimeType is None):
         return dict(resCode=501)

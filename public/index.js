@@ -1,6 +1,6 @@
 
 function main(){
-    getJSON("isTradfriSetup", jsonRequestCallback)
+    getJSON("indexJson", jsonRequestCallback)
 }
 
 function jsonRequestCallback(status, response){

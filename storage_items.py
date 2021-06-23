@@ -10,8 +10,12 @@ SUPPORTED_ACTIONS = dict(
 def getNewStorageItem():
     return dict(
         private = dict(
-            gatewayUsername = None,
-            gatewayPresharedKey = None
+            host = dict(
+                identity = None,
+                
+            ),
+            psk_id = None,
+            psk = None
         ),
         gatewayIp = None,
         itemUrlPrefix = None,

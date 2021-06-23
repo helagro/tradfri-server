@@ -6,7 +6,7 @@ import copy
 FILE_NAME = "storage.json"
 
 storageContent = None
-storageContentUpdateListener = None
+storageContentUpdateListeners = []
 
 def getStorageContent():
     return storageContent
@@ -40,7 +40,13 @@ def saveInputStorageContent(input):
     storageContent = input
     with open(FILE_NAME, "w") as filestream:
         json.dump(storageContent, filestream)
+
+    callOnUpdateListeners()
     
+
+def callOnUpdateListeners():
+    for listener in storageContentUpdateListeners:
+        listener()
 
 
 def readInStorageContent():
@@ -52,6 +58,9 @@ def readInStorageContent():
 
     with open(FILE_NAME, "r") as fileStream:
         storageContent = json.load(fileStream)
+
+    callOnUpdateListeners()
+    
 
 
 def setup():

@@ -1,3 +1,4 @@
 .env
 env.py
 storage.json
+*.conf
