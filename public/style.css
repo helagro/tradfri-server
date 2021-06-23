@@ -7,7 +7,3 @@
 .actionDiv:hover{
     background-color: lightgray;
 }
-
-#needsRaspiSetup{
-    display: none;
-}

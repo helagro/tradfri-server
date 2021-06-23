@@ -1,39 +1,64 @@
+#!/usr/bin/env python3
+
+
+# Hack to allow relative import above top level package
+import json
+import sys
+import os
+
+folder = os.path.dirname(os.path.abspath(__file__))  # noqa
+sys.path.insert(0, os.path.normpath("%s/.." % folder))  # noqa
+
 from pytradfri import Gateway
 from pytradfri.api.libcoap_api import APIFactory
 from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
-import storage_handler
+
 import uuid
+import argparse
+import threading
+import time
 
 CONFIG_FILE = "tradfri_standalone_psk.conf"
-
-gateway = Gateway()
-isSetup = False
+gateway = None
 api = None
 
-key = None
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "host", metavar="IP", type=str, help="IP Address of your Tradfri gateway"
+)
+parser.add_argument(
+    "-K",
+    "--key",
+    dest="key",
+    required=False,
+    help="Security code found on your Tradfri gateway",
+)
+args = parser.parse_args()
 
 
-def init():
-    global key
-
-    if load_json(CONFIG_FILE)["host"] is None:
-        print(
-            "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
-            end=" ",
-        )
-        key = input().strip()
+if args.host not in load_json(CONFIG_FILE) and args.key is None:
+    print(
+        "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
+        end=" ",
+    )
+    key = input().strip()
     if len(key) != 16:
         raise PytradfriError("Invalid 'Security Code' provided.")
-    setup()
+    else:
+        args.key = key
 
 
-def setup(): 
+def run():
+    global gateway
+    global api
+
     conf = load_json(CONFIG_FILE)
 
     try:
-        identity = conf["host"].get("identity")
-        psk = conf["host"].get("key")
+        identity = conf[args.host].get("identity")
+        psk = conf[args.host].get("key")
         api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk)
     except KeyError:
         identity = uuid.uuid4().hex
@@ -55,14 +80,24 @@ def setup():
     api = api_factory.request
 
     gateway = Gateway()
-    
 
+    
 def getDevices():
     devices_command = gateway.get_devices()
     devices_commands = api(devices_command)
     devices = api(devices_commands)
-    print("dev", devices)
+
+    devicesSerializable = []
+    for device in devices:
+        if(device.has_socket_control or device.has_light_control):
+            devicesSerializable.append(dict(
+                id=device.id,
+                name=device.name
+            ))
 
 
-storage_handler.storageContentUpdateListeners.append(setup)
-setup()
+    print("gone", devicesSerializable)
+    return devicesSerializable
+
+
+run()

@@ -20,6 +20,6 @@ def startRoutinedThread():
     t.start()
 
 if __name__ == "__main__":
-    startServerThread()
-    startRoutinedThread()
-    print("Started successfully")
+    tradfri_handler.run()
+    print("Successfull tradfri setup")
+    startServer()

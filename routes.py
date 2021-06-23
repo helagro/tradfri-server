@@ -6,25 +6,22 @@ import json
 
 #ANCHOR jsons
 def allSafeStorageParameters():
-    safeStorageContentJson = storage_handler.getSafeStorageContentJson()
+    safeStorageContentJson = storage_handler.getStorageContent()
     return dict(resCode = 200, mimeType="text/json", fileContent=safeStorageContentJson.encode('utf-8'))
 
-def indexJson():
-    contentDict = dict(isSetup = tradfri_handler.isSetup)
-    contentDictStr = json.dumps(contentDict)
-    fileContent = contentDictStr.encode('utf-8')
-    return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
 def lampPickerJson():
+    print("ninja defuse")
     contentDict = dict(devices = tradfri_handler.getDevices())
     contentDictStr = json.dumps(contentDict)
     fileContent = contentDictStr.encode('utf-8')
+    print("guess", fileContent)
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
 
 specialRoutes = dict(
     allSafeStorageParameters=allSafeStorageParameters,
-    indexJson=indexJson
+    lampPickerJson=lampPickerJson
 )
 
 
