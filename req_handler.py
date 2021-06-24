@@ -27,6 +27,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.wfile.write(fileInfo["fileContent"])
 
 
+
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])
         if ctype == 'multipart/form-data':

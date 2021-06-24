@@ -101,5 +101,29 @@ def getDevices():
     return devicesSerializable
 
 
+def getDevice(deviceId):
+    device_command = gateway.get_device(deviceId)
+    device = api(device_command)
+    return device
+
+
+
+def performAction(deviceId, action):
+    device = getDevice(deviceId)
+    api(device.light_control.set_state(True))
+    print("devefsic==========================================================================", device, device.light_control)
+
+    command = None
+    if(action == "on"):
+        command = device.light_control.set_state(True)
+    if(action == "off"):
+        command = device.light_control.set_state(False)
+
+    api(command)
+
+
+
+
+
 
 run()

@@ -15,7 +15,13 @@ def lampPickerJson():
     fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
-def deviceControlJson():
+def deviceControlJson(query):
+    deviceId = json.loads(query["device"][0])["id"]
+    action = query["action"][0]
+    print("deviceId", deviceId, "action", action)
+    tradfri_handler.performAction(deviceId, action)
+    contentDictStr = "what is that"
+    fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
 
@@ -31,7 +37,7 @@ def locationToRouteString(location):
     onlyFileName = location.split("/")[-1]
     return onlyFileName
 
-def getspecialRouteFileDict(location):
+def getspecialRouteFileDict(location, query):
     routeString = locationToRouteString(location)
 
     matchingRoute = specialRoutes.get(routeString, None)
@@ -39,6 +45,6 @@ def getspecialRouteFileDict(location):
     if(matchingRoute is None):
         return
 
-    newLocation = matchingRoute()
+    newLocation = matchingRoute(query)
     return newLocation
 
