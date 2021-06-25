@@ -3,7 +3,7 @@ const jsonArea = document.getElementById("jsonArea")
 
 
 function main(){
-    getJSONObjectFromUrlParams()
+    getJSONObjectFromUrlParams(jsonRequestCallback)
 }
 
 function jsonRequestCallback(status, response){

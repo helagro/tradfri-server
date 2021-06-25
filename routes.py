@@ -5,11 +5,12 @@ import json
 
 
 #ANCHOR jsons
-def allSafeStorageParameters():
+def allSafeStorageParameters(query):
     safeStorageContentJson = storage_handler.getStorageContent()
-    return dict(resCode = 200, mimeType="text/json", fileContent=safeStorageContentJson.encode('utf-8'))
+    print("alone", json.dumps(safeStorageContentJson).encode('utf-8'))
+    return dict(resCode = 200, mimeType="text/json", fileContent=json.dumps(safeStorageContentJson).encode('utf-8'))
 
-def lampPickerJson():
+def lampPickerJson(query):
     contentDict = dict(devices = tradfri_handler.getDevices())
     contentDictStr = json.dumps(contentDict)
     fileContent = contentDictStr.encode('utf-8')
@@ -18,8 +19,11 @@ def lampPickerJson():
 def deviceControlJson(query):
     deviceId = json.loads(query["device"][0])["id"]
     action = query["action"][0]
-    print("deviceId", deviceId, "action", action)
-    tradfri_handler.performAction(deviceId, action)
+    payload = query["payload"][0]
+
+    print("deviceId", deviceId, "action", action, "payload", payload)
+
+    tradfri_handler.performAction(deviceId, action, payload)
     contentDictStr = "what is that"
     fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)

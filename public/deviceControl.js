@@ -1,17 +1,21 @@
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+let deviceJson
 
 function main(){
+    deviceJson = urlParams.get('device')
+    device = JSON.parse(deviceJson)
 
-    performActionFromQueries()
-    const device = getDevice()
+    performAction(urlParams.get("action"), deviceJson, urlParams.get("payload"))
     fillElements(device)
 }
 
 
-function performActionFromQueries(){
-    if(urlParams.has("action")){
-        getJSON(`deviceControlJson?device=${urlParams.get("device")}&action=${urlParams.get("action")}`, actionListener)
+function performAction(action, deviceJson, payload){
+    if(action !== null){
+        getJSON(`deviceControlJson?device=${deviceJson}&action=${action}&payload=${payload}`, actionListener)
+    } else{
+        console.log("action is not specified")
     }
 }
 
@@ -20,11 +24,6 @@ function actionListener(status, json){
 }
 
 
-function getDevice(){
-    const deviceStr = urlParams.get('device')
-    const device = JSON.parse(deviceStr)
-    return device
-}
 function fillElements(device){
     document.getElementById("deviceName").innerText = device.name
     document.getElementById("deviceId").innerText = device.id
@@ -39,6 +38,16 @@ function replaceQueryParam(param, newval, search) {
 }
 
 
+
+//ANCHOR listeners
+
+let wasOn = true
+function toggleOnOff(){
+    let actionValue = wasOn ? "off" : "on"
+    wasOn = !wasOn
+
+    performAction(actionValue, deviceJson, null)
+}
 
 
 main()
