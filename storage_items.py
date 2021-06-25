@@ -6,14 +6,14 @@ def getNewStorageItem():
             events = [
                 dict(                    
                     name="Day",
-                    device="65536",
+                    device="65546",
                     timeInMin = 380,
                     color = "eaf6fb",
                     brightness = 90
                 ),
                 dict(                    
                     name="Evening",
-                    device="65536",
+                    device="65546",
                     timeInMin = 1230,
                     color = "ebb63e",
                     brightness = 10

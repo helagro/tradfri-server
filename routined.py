@@ -23,7 +23,8 @@ def scheduleEvent(event):
 
 
 def getCurTimeInMin():
-    return datetime.hour * 60 + datetime.min
+    now = datetime.now()
+    return now.hour * 60 + now.minute
 
 
 def findNextEvent():
