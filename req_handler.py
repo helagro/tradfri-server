@@ -1,4 +1,4 @@
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler
 import input_router
 from urllib import parse
 import json
@@ -20,6 +20,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.send_response(resCode)
 
         if(resCode != 200):
+            self.end_headers()
             return
 
         self.send_header('Content-type', fileInfo["mimeType"])

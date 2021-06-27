@@ -4,9 +4,13 @@ import tradfri_handler
 import time
 
 
+
 def preformEvent(event):
-    tradfri_handler.performAction(event["device"], "setColor", event["color"])
-    tradfri_handler.performAction(event["device"], "setBrightness", event["brightness"])
+    for device in storage_handler.getStorageContent()["routined"]["lamps"]:
+        isOn = tradfri_handler.performAction(device, "isOn", None)
+        tradfri_handler.performAction(device, "setColor", event["color"])
+        tradfri_handler.performAction(device, "setBrightness", event["brightness"])
+        tradfri_handler.performAction(device, "setState", isOn)
     print("performed timed event: " + event["name"])
 
 
@@ -21,28 +25,34 @@ def scheduleEvent(event):
     preformEvent(event)
     start()
 
-
 def getCurTimeInMin():
     now = datetime.now()
     return now.hour * 60 + now.minute
 
+def addRelevantDaysToEvents(event):
+    currentTime = getCurTimeInMin()
+
+    if(event["timeInMin"] < currentTime):
+        event["timeInMin"] += (24*60 - currentTime)
+
+
+
 
 def findNextEvent():
-    curTime = getCurTimeInMin()
-
     curNearestEvent = None
     events = storage_handler.getStorageContent()["routined"]["events"]
     for event in events:
-        if((curNearestEvent is None) or ((event["timeInMin"] < curNearestEvent["timeInMin"]) and (event["timeInMin"] > curTime))):
+        addRelevantDaysToEvents(event)
+
+        if(curNearestEvent is None or (event["timeInMin"] < curNearestEvent["timeInMin"])):
             curNearestEvent = event
 
     return curNearestEvent
 
 
 def start():
-    print("routined started")
-
     nextEvent = findNextEvent()
+    print("scheduleding for:", nextEvent)
     scheduleEvent(nextEvent)
 
 

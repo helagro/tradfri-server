@@ -113,16 +113,17 @@ def performAction(deviceId, action, payload):
     device = getDevice(deviceId)
 
     command = None
-    if(action == "on"):
-        command = device.light_control.set_state(True)
-    if(action == "off"):
-        command = device.light_control.set_state(False)
-    if(action == "setBrightness"):
+    if(action == "setState"):
+        command = device.light_control.set_state(payload)
+    elif(action == "setBrightness"):
         command = device.light_control.set_dimmer(int(payload))
-    if(action == "setColor"):
+    elif(action == "setColor"):
         command = device.light_control.set_hex_color(payload)
-    if(action == "setDefinedColor"):
+    elif(action == "setDefinedColor"):
         command = device.light_control.set_predefined_color(payload)
+    elif(action == "isOn"):
+        return device.light_control.lights[0].state
+
 
     api(command)
 

@@ -10,7 +10,6 @@ storageContentUpdateListeners = []
 
 def getStorageContent():
     return storageContent
-
     
 
 def saveInputStorageContent(input):
