@@ -1,5 +1,4 @@
 import storage_handler
-import response_file_manager
 import tradfri_handler
 import json
 

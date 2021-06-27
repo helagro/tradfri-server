@@ -1,5 +1,4 @@
 from genericpath import isfile
-from urllib import parse
 import os
 
 FILE_FOLDER = "public"

@@ -1,7 +1,6 @@
 import json
 from genericpath import isfile
 import storage_items
-import copy
 
 FILE_NAME = "storage.json"
 
