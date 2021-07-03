@@ -1,7 +1,6 @@
 const deviceContainer = document.getElementById("devicesContainer")
 
 function main(){
-    console.log("everywhere")
     getJSON("lampPickerJson", jsonCallback)
 }
 

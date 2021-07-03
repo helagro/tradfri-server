@@ -36,6 +36,11 @@ if args.host not in load_json(CONFIG_FILE) and args.key is None:
         args.key = key
 
 
+
+def test():
+    print("test ran")
+
+
 def run():
     global gateway
     global api
@@ -66,6 +71,8 @@ def run():
     api = api_factory.request
 
     gateway = Gateway()
+
+    test()
 
     
 def getDevices():
