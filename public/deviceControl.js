@@ -43,10 +43,15 @@ function replaceQueryParam(param, newval, search) {
 
 let wasOn = true
 function toggleOnOff(){
-    let actionValue = wasOn ? "off" : "on"
+    let payload = wasOn ? 0 : 1
     wasOn = !wasOn
 
-    performAction(actionValue, deviceJson, null)
+    performAction("setState", deviceJson, payload)
+}
+
+
+function tOn(){
+    performAction("tOn", deviceJson, null)
 }
 
 

@@ -4,6 +4,7 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 import argparse
+import threading
 
 CONFIG_FILE = "tradfri_standalone_psk.conf"
 gateway = None
@@ -37,10 +38,6 @@ if args.host not in load_json(CONFIG_FILE) and args.key is None:
 
 
 
-def test():
-    print("test ran")
-
-
 def run():
     global gateway
     global api
@@ -72,8 +69,6 @@ def run():
 
     gateway = Gateway()
 
-    test()
-
     
 def getDevices():
     devices_command = gateway.get_devices()
@@ -90,7 +85,6 @@ def getDevices():
             ))
 
 
-    print("gone", devicesSerializable)
     return devicesSerializable
 
 
@@ -105,9 +99,11 @@ def getDevice(deviceId):
 def performAction(deviceId, action, payload):
     device = getDevice(deviceId)
 
+    deviceControl = device.light_control if(device.has_light_control) else device.has_socket_control
+
     command = None
     if(action == "setState"):
-        command = device.light_control.set_state(payload)
+        command = deviceControl.set_state(payload)
     elif(action == "setBrightness"):
         command = device.light_control.set_dimmer(int(payload))
     elif(action == "setColor"):
@@ -115,7 +111,14 @@ def performAction(deviceId, action, payload):
     elif(action == "setDefinedColor"):
         command = device.light_control.set_predefined_color(payload)
     elif(action == "isOn"):
-        return device.light_control.lights[0].state
+        return deviceControl.lights[0].state
+    elif(action == "tOn"):
+        performAction(deviceId, "setState", 1)
+        threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
+        return
+    else:
+        print("Invalid action")
+        return
 
 
     api(command)
