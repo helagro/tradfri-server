@@ -2,6 +2,10 @@ h1,h2,h3{
     text-align: center;
 }
 
+a{
+    color: rgb(26, 77, 26);
+}
+
 body{
     margin: 0;
 }
