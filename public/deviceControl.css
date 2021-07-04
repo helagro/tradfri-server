@@ -1,5 +1,8 @@
  
- 
+ main{
+   margin-top: 20vh
+ }
+
  #deviceId{
    text-align: center;
  }

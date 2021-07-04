@@ -1,7 +1,20 @@
 
-
+#devicesContainer{
+    display: grid;
+    margin: 0 5%;
+    column-gap: 1em;
+    row-gap: 1em;
+}
 
 .itemContainer{
     display: block;
-    border: lightslategrey 0.5em solid;
+    border: rgb(209, 209, 209) 0.1em solid;
+    text-align: center;
+}
+
+
+@media screen and (min-width: 500px){
+    #devicesContainer{
+        grid-auto-flow: column;
+    }
 }

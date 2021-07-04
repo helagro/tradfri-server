@@ -2,12 +2,3 @@ h1,h2,h3{
     text-align: center;
 }
 
-
-.actionDiv{
-    border: 0.1em solid gray;
-    background-color: white;
-}
-
-.actionDiv:hover{
-    background-color: lightgray;
-}

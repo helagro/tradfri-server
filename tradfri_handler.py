@@ -99,7 +99,7 @@ def getDevice(deviceId):
 def performAction(deviceId, action, payload):
     device = getDevice(deviceId)
 
-    deviceControl = device.light_control if(device.has_light_control) else device.has_socket_control
+    deviceControl = device.light_control if(device.has_light_control) else device.socket_control
 
     command = None
     if(action == "setState"):

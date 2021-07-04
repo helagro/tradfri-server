@@ -1,0 +1,15 @@
+
+main{
+    margin-top: 5vh;
+}
+
+.actionDiv{
+    border: 0.1em solid gray;
+    background-color: white;
+    max-width: 80vw;
+    margin: 0.5em auto;
+}
+
+.actionDiv:hover{
+    background-color: lightgray;
+}

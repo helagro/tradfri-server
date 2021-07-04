@@ -9,24 +9,26 @@
     <link rel="stylesheet" href="deviceControl.css">
 </head>
 <body>
-    <h1>Device control</h1>
-    <div class="deviceInfo">
-        <h3 id="deviceName"></h3>
-        <p id="deviceId"></p>
-    </div>
-    <div class="deviceControls">
-        <div id="onOffDiv" class="deviceControl">
-            <p>On / Off</p>
-            <label class="switch">
-                <input type="checkbox" onchange="toggleOnOff()">
-                <span class="slider round"></span>
-            </label>
+    <main>
+        <h1>Device control</h1>
+        <div class="deviceInfo">
+            <h3 id="deviceName"></h3>
+            <p id="deviceId"></p>
         </div>
-        <div id="tOn" class="deviceControl">
-            <button onclick="tOn()">Turn on for an hour</button>
+        <div class="deviceControls">
+            <div id="onOffDiv" class="deviceControl">
+                <p>On / Off</p>
+                <label class="switch">
+                    <input type="checkbox" onchange="toggleOnOff()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div id="tOn" class="deviceControl">
+                <button onclick="tOn()">Turn on for an hour</button>
+            </div>
         </div>
-    </div>
-
+    </main>
+    
     <script src="script.js"></script>
     <script src="deviceControl.js"></script>
 </body>
