@@ -41,12 +41,8 @@ function replaceQueryParam(param, newval, search) {
 
 //ANCHOR listeners
 
-let wasOn = true
 function toggleOnOff(){
-    let payload = wasOn ? 0 : 1
-    wasOn = !wasOn
-
-    performAction("setState", deviceJson, payload)
+    performAction("setState", deviceJson, "toggle")
 }
 
 

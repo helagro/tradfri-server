@@ -103,7 +103,8 @@ def performAction(deviceId, action, payload):
 
     command = None
     if(action == "setState"):
-        command = deviceControl.set_state(payload)
+        state = payload if (payload != "toggle") else (not performAction(deviceId, "isOn", None))
+        command = deviceControl.set_state(state)
     elif(action == "setBrightness"):
         command = device.light_control.set_dimmer(int(payload))
     elif(action == "setColor"):
@@ -111,7 +112,11 @@ def performAction(deviceId, action, payload):
     elif(action == "setDefinedColor"):
         command = device.light_control.set_predefined_color(payload)
     elif(action == "isOn"):
-        return deviceControl.lights[0].state
+        if(device.has_light_control):
+            return deviceControl.lights[0].state
+        else:
+            return deviceControl.sockets[0].state
+        
     elif(action == "tOn"):
         performAction(deviceId, "setState", 1)
         threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
