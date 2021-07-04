@@ -1,0 +1,16 @@
+
+nav{
+    display: grid;
+    background-color: rgb(9, 196, 9);
+    width: 100vw;
+    height: 3em;
+    align-content: center;
+    justify-content: center;
+    grid-auto-flow: column;
+    column-gap: 3em;
+}
+
+a{
+    color: white;
+    font-size: 1.4em;
+}
