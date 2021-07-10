@@ -3,6 +3,7 @@ import threading
 from req_handler import ReqHandler
 import routined
 import tradfri_handler
+import logs
 
 
 def startServer():
