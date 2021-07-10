@@ -1,6 +1,7 @@
 import storage_handler
 import tradfri_handler
 import json
+import logs
 
 
 #ANCHOR jsons
@@ -26,12 +27,17 @@ def deviceControlJson(query):
     fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
+def logJson(query):
+    logsList = logs.getLogs()
+    logsJson = json.dumps(logsList)
+    return dict(resCode = 200, mimeType="text/json", fileContent=logsJson.encode('utf-8'))
 
 
 specialRoutes = dict(
     allSafeStorageParameters=allSafeStorageParameters,
     lampPickerJson=lampPickerJson,
-    deviceControlJson=deviceControlJson  
+    deviceControlJson=deviceControlJson,
+    logJson=logJson
 )
 
 

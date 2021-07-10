@@ -2,6 +2,7 @@ import storage_handler
 from datetime import datetime
 import tradfri_handler
 import time
+import logs
 
 
 
@@ -11,7 +12,7 @@ def preformEvent(event):
         tradfri_handler.performAction(device, "setColor", event["color"])
         tradfri_handler.performAction(device, "setBrightness", event["brightness"])
         tradfri_handler.performAction(device, "setState", isOn)
-    print("performed timed event: " + event["name"])
+    logs.addLog("performed timed event: " + event["name"])
 
 
 def scheduleEvent(event):
@@ -52,7 +53,7 @@ def findNextEvent():
 
 def start():
     nextEvent = findNextEvent()
-    print("scheduleding for:", nextEvent)
+    logs.addLog("scheduleding for:", nextEvent)
     scheduleEvent(nextEvent)
 
 

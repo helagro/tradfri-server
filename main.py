@@ -24,4 +24,4 @@ if __name__ == "__main__":
 
     startServerThread()
     startRoutinedThread()
-    print("Successfull tradfri setup")
+    logs.addLog("Successfull tradfri setup")
