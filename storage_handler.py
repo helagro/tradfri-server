@@ -1,6 +1,8 @@
 import json
 from genericpath import isfile
 import storage_items
+import logs
+import copy
 
 FILE_NAME = "storage.json"
 
@@ -8,7 +10,7 @@ storageContent = None
 storageContentUpdateListeners = []
 
 def getStorageContent():
-    return storageContent
+    return copy.deepcopy(storageContent)
     
 
 def saveInputStorageContent(input):
@@ -31,6 +33,7 @@ def readInStorageContent():
 
     if(not isfile(FILE_NAME)):
         storageContent = storage_items.getNewStorageItem()
+        logs.addLog("no storage file")
         return
 
     with open(FILE_NAME, "r") as fileStream:
