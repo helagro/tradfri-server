@@ -4,6 +4,7 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 import argparse
+import logs
 import threading
 
 CONFIG_FILE = "tradfri_standalone_psk.conf"
@@ -122,7 +123,7 @@ def performAction(deviceId, action, payload):
         threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
         return
     else:
-        print("Invalid action")
+        logs.log("Invalid action")
         return
 
 
