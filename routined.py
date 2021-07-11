@@ -53,7 +53,7 @@ def findNextEvent():
 
 def start():
     nextEvent = findNextEvent()
-    logs.addLog("scheduleding for:", nextEvent, "(Time in minute is delay, not from 0:00!!)")
+    logs.addLog("scheduleding for:", nextEvent, "(Time in minute is including day, not from 0:00!!)")
     scheduleEvent(nextEvent)
 
 
