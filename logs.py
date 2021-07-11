@@ -8,3 +8,4 @@ def addLog(*logInput):
     for log in logInput:
         logStr += str(log) + " "
     logsList.append(logStr)
+    print("log:", logStr)
