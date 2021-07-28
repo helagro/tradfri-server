@@ -13,8 +13,11 @@ def performEventForDevice(event, device):
     tradfri_handler.performAction(device, "setState", isOn)
 
 def preformEvent(event):
-    for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
-        performEventForDevice(event, device)
+    try:
+        for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
+            performEventForDevice(event, device)
+    except:
+        logs.log("Performing scheduled event failed!")
     logs.log("performed timed event: " + event["name"])
 
 
