@@ -12,7 +12,7 @@ def preformEvent(event):
         tradfri_handler.performAction(device, "setColor", event["color"])
         tradfri_handler.performAction(device, "setBrightness", event["brightness"])
         tradfri_handler.performAction(device, "setState", isOn)
-    logs.addLog("performed timed event: " + event["name"])
+    logs.log("performed timed event: " + event["name"])
 
 
 def scheduleEvent(event):
@@ -53,7 +53,7 @@ def findNextEvent():
 
 def start():
     nextEvent = findNextEvent()
-    logs.addLog("scheduleding for:", nextEvent, "(Time in minute is including day, not from 0:00!!)")
+    logs.log("scheduleding for:", nextEvent, "(Time in minute is including day, not from 0:00!!)")
     scheduleEvent(nextEvent)
 
 

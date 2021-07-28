@@ -33,7 +33,7 @@ def readInStorageContent():
 
     if(not isfile(FILE_NAME)):
         storageContent = storage_items.getNewStorageItem()
-        logs.addLog("no storage file")
+        logs.log("no storage file")
         return
 
     with open(FILE_NAME, "r") as fileStream:

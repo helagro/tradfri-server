@@ -19,7 +19,7 @@ def deviceControlJson(query):
     deviceId = json.loads(query["device"][0])["id"]
     action = query["action"][0]
     payload = query["payload"][0]
-    logs.addLog("deviceId", deviceId, "action", action, "payload", payload)
+    logs.log("deviceId", deviceId, "action", action, "payload", payload)
 
     tradfri_handler.performAction(deviceId, action, payload)
 
