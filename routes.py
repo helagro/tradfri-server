@@ -6,7 +6,7 @@ import logs
 
 #ANCHOR jsons
 def allSafeStorageParameters(query):
-    storageContentJson = json.dumps(storage_handler.getStorageContent())
+    storageContentJson = json.dumps(storage_handler.getStorageContentCopy())
     return dict(resCode = 200, mimeType="text/json", fileContent=storageContentJson.encode('utf-8'))
 
 def lampPickerJson(query):

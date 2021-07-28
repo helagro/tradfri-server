@@ -9,7 +9,7 @@ FILE_NAME = "storage.json"
 storageContent = None
 storageContentUpdateListeners = []
 
-def getStorageContent():
+def getStorageContentCopy():
     return copy.deepcopy(storageContent)
     
 

@@ -7,7 +7,7 @@ import logs
 
 
 def preformEvent(event):
-    for device in storage_handler.getStorageContent()["routined"]["lamps"]:
+    for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
         isOn = tradfri_handler.performAction(device, "isOn", None)
         tradfri_handler.performAction(device, "setColor", event["color"])
         tradfri_handler.performAction(device, "setBrightness", event["brightness"])
@@ -30,20 +30,23 @@ def getCurTimeInMin():
     now = datetime.now()
     return now.hour * 60 + now.minute
 
-def addRelevantDaysToEvents(event):
+def addRelevantDaysToEvent(event):
     currentTime = getCurTimeInMin()
 
     if(event["timeInMin"] < currentTime):
-        event["timeInMin"] += (24*60 - currentTime)
+        return event["timeInMin"] + 24*60
+    return event["timeInMin"]
 
 
 
 
 def findNextEvent():
     curNearestEvent = None
-    events = storage_handler.getStorageContent()["routined"]["events"]
+    events = storage_handler.getStorageContentCopy()["routined"]["events"]
     for event in events:
-        addRelevantDaysToEvents(event)
+        event["timeInMin"] = addRelevantDaysToEvent(event)
+
+        print("hi", event, curNearestEvent)
 
         if(curNearestEvent is None or (event["timeInMin"] < curNearestEvent["timeInMin"])):
             curNearestEvent = event
@@ -53,7 +56,7 @@ def findNextEvent():
 
 def start():
     nextEvent = findNextEvent()
-    logs.log("scheduleding for:", nextEvent, "(Time in minute is including day, not from 0:00!!)")
+    logs.log("scheduleding for:", nextEvent, "(Time in minute is including a day if the event is tomorrow)")
     scheduleEvent(nextEvent)
 
 
