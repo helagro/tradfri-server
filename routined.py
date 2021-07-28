@@ -4,14 +4,17 @@ import tradfri_handler
 import time
 import logs
 
-
+def performEventForDevice(event, device):
+    isOn = tradfri_handler.performAction(device, "isOn", None)
+    tradfri_handler.performAction(device, "setBrightness", event["brightness"])
+    time.sleep(3)
+    tradfri_handler.performAction(device, "setColor", event["color"])
+    time.sleep(3)
+    tradfri_handler.performAction(device, "setState", isOn)
 
 def preformEvent(event):
     for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
-        isOn = tradfri_handler.performAction(device, "isOn", None)
-        tradfri_handler.performAction(device, "setColor", event["color"])
-        tradfri_handler.performAction(device, "setBrightness", event["brightness"])
-        tradfri_handler.performAction(device, "setState", isOn)
+        performEventForDevice(event, device)
     logs.log("performed timed event: " + event["name"])
 
 
@@ -20,6 +23,7 @@ def scheduleEvent(event):
     nowInMin = getCurTimeInMin()
     day = 0 if nowInMin < eventTime else 60*24
     eventTimeFromNow = eventTime + day - nowInMin
+    logs.log("scheduleding for:", event, "(Time in minute is including a day if the event is tomorrow), in ", eventTimeFromNow, " miniutes")
 
     time.sleep(eventTimeFromNow * 60)
 
@@ -33,7 +37,7 @@ def getCurTimeInMin():
 def addRelevantDaysToEvent(event):
     currentTime = getCurTimeInMin()
 
-    if(event["timeInMin"] < currentTime):
+    if(event["timeInMin"] <= currentTime):
         return event["timeInMin"] + 24*60
     return event["timeInMin"]
 
@@ -46,8 +50,6 @@ def findNextEvent():
     for event in events:
         event["timeInMin"] = addRelevantDaysToEvent(event)
 
-        print("hi", event, curNearestEvent)
-
         if(curNearestEvent is None or (event["timeInMin"] < curNearestEvent["timeInMin"])):
             curNearestEvent = event
 
@@ -56,7 +58,6 @@ def findNextEvent():
 
 def start():
     nextEvent = findNextEvent()
-    logs.log("scheduleding for:", nextEvent, "(Time in minute is including a day if the event is tomorrow)")
     scheduleEvent(nextEvent)
 
 
