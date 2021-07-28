@@ -16,8 +16,8 @@ def preformEvent(event):
     try:
         for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
             performEventForDevice(event, device)
-    except:
-        logs.log("Performing scheduled event failed!")
+    except Exception as e:
+        logs.log("Performing scheduled event failed because: ", e)
     logs.log("performed timed event: " + event["name"])
 
 
