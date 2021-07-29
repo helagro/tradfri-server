@@ -129,6 +129,8 @@ def performAction(deviceId, action, payload):
 
     api(command)
 
+    logs.log("Performed action:", str(deviceId), action, str(payload))
+
 
 
 
