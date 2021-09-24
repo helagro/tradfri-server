@@ -13,11 +13,15 @@ def performEventForDevice(event, device):
     tradfri_handler.performAction(device, "setState", isOn)
 
 def preformEvent(event):
-    try:
-        for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
-            performEventForDevice(event, device)
-    except Exception as e:
-        logs.log("Performing scheduled event failed because: ", e)
+    for device in storage_handler.getStorageContentCopy()["routined"]["lamps"]:
+        if tradfri_handler.performAction(device, "isOn", None):
+            try:
+                performEventForDevice(event, device)
+            except Exception as e:
+                logs.log("Performing scheduled event failed because: ", e)
+                return
+        else:
+            logs.log(str(device), "is not online")
     logs.log("performed timed event: " + event["name"])
 
 
