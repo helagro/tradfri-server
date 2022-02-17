@@ -1,14 +1,11 @@
 from http.server import BaseHTTPRequestHandler
 import input_router
-from urllib import parse
+from urllib import parse, request
 import json
 from cgi import parse_header, parse_multipart
 import settings.storage_handler as storage_handler
 
 class ReqHandler(BaseHTTPRequestHandler):
-    
-    def getQuery(self, path):
-        return parse.parse_qs(parse.urlsplit(path).query)
 
     def do_GET(self):
         query = self.getQuery(self.path)
@@ -27,7 +24,23 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(fileInfo["fileContent"])
 
+    def getQuery(self, path):
+        return parse.parse_qs(parse.urlsplit(path).query)
 
+
+
+    def do_POST(self):
+        infoSent = self.parse_POST()
+        jsonArea = infoSent[b'jsonArea'][0]
+        jsonObj = self.getJsonObject(jsonArea)
+        
+        storage_handler.saveInputStorageContent(jsonObj)
+
+        self.send_response(301)
+        self.send_header("location", "/index.html")
+        self.send_header('Content-type', "text/html")
+        self.end_headers()
+        self.wfile.write(input_router.entry("", "/")["fileContent"])
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])
@@ -42,18 +55,9 @@ class ReqHandler(BaseHTTPRequestHandler):
             postvars = {}
         return postvars
 
-    def do_POST(self):
-        infoSent = self.parse_POST()
-        jsonArea = infoSent[b'jsonArea'][0]
+    def getJsonObject(self, jsonArea):
         jsonAreaStr = jsonArea.decode("utf-8")
-        jsonObj = json.loads(jsonAreaStr)
-        storage_handler.saveInputStorageContent(jsonObj)
-
-        self.send_response(301)
-        self.send_header("location", "/index.html")
-        self.send_header('Content-type', "text/html")
-        self.end_headers()
-        self.wfile.write(input_router.entry("", "/")["fileContent"])
+        return json.loads(jsonAreaStr)
 
         
 

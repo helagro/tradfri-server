@@ -1,11 +1,9 @@
-from re import sub
 import settings.storage_handler as storage_handler
 import tradfri.tradfri_handler as tradfri_handler
 import json
 import logs
 import subprocess
 import sys
-import threading
 
 
 def allSafeStorageParameters(query):
