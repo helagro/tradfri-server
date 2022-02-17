@@ -1,4 +1,4 @@
-import storage_handler
+import settings.storage_handler as storage_handler
 from datetime import datetime
 import tradfri.tradfri_handler as tradfri_handler
 import time

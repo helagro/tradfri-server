@@ -3,7 +3,7 @@ import input_router
 from urllib import parse
 import json
 from cgi import parse_header, parse_multipart
-import storage_handler
+import settings.storage_handler as storage_handler
 
 class ReqHandler(BaseHTTPRequestHandler):
     

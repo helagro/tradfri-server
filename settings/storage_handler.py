@@ -1,10 +1,10 @@
 import json
 from genericpath import isfile
-import storage_items
+import settings.storage_items as storage_items
 import logs
 import copy
 
-FILE_NAME = "storage.json"
+FILE_NAME = "settings/storage.json"
 
 storageContent = None
 storageContentUpdateListeners = []

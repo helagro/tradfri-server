@@ -1,6 +1,6 @@
 from datetime import datetime
 
-logsList = list(["====logs first item===="])
+logsList = list(["====logs start===="])
 
 def getLogs():
     return logsList

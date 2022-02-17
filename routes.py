@@ -1,5 +1,5 @@
 from re import sub
-import storage_handler
+import settings.storage_handler as storage_handler
 import tradfri.tradfri_handler as tradfri_handler
 import json
 import logs
