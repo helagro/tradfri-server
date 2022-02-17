@@ -13,7 +13,5 @@ def locationRouter(location, query):
 
 
 def entry(query, location):
-    print(query, location)
-
     fileInfo = locationRouter(location, query)
     return fileInfo

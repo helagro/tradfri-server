@@ -129,7 +129,7 @@ def performAction(deviceId, action, payload):
 
     api(command)
 
-    logs.log("Performed action:", str(deviceId), action, str(payload))
+    logs.log(f"Performed action \"{action}\" for \"{deviceId}\" with payload \"str(payload)\"")
 
 
 
