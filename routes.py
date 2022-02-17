@@ -5,6 +5,7 @@ import json
 import logs
 import subprocess
 import sys
+import threading
 
 
 def allSafeStorageParameters(query):
@@ -34,19 +35,19 @@ def logJson(query):
     logsJson = json.dumps(logsList)
     return dict(resCode = 200, mimeType="text/json", fileContent=logsJson.encode('utf-8'))
 
-def update(query):
+def doUpdate(query):
     subprocess.Popen("bash_scripts/update.sh")
     sys.exit()
 
 
 
-specialRoutes = dict(
-    allSafeStorageParameters=allSafeStorageParameters,
-    lampPickerJson=lampPickerJson,
-    deviceControlJson=deviceControlJson,
-    logJson=logJson,
-    update=update
-)
+specialRoutes = {
+    "allSafeStorageParameters":allSafeStorageParameters,
+    "lampPickerJson":lampPickerJson,
+    "deviceControlJson":deviceControlJson,
+    "logJson":logJson,
+    "doUpdate":doUpdate
+}
 
 
 def locationToRouteString(location):
