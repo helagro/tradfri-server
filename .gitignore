@@ -3,3 +3,4 @@ env.py
 *.conf
 storage.json
 __pycache__/
+libcoap/
