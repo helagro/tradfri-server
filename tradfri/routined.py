@@ -30,7 +30,7 @@ def scheduleEvent(event):
     nowInMin = getCurTimeInMin()
     day = 0 if nowInMin < eventTime else 60*24
     eventTimeFromNow = eventTime + day - nowInMin
-    logs.log("scheduleding for:", event, "(Time in minute is including a day if the event is tomorrow), in ", eventTimeFromNow, " miniutes")
+    logs.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", eventTimeFromNow, " miniutes")
 
     time.sleep(eventTimeFromNow * 60)
 

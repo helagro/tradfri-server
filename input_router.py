@@ -2,7 +2,6 @@ import response_file_manager
 import routes
 
 
-
 def locationRouter(location, query):
     specialRouteFileDict = routes.getspecialRouteFileDict(location, query)
     if(not specialRouteFileDict is None):
