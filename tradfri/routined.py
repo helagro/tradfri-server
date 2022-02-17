@@ -1,6 +1,6 @@
 import storage_handler
 from datetime import datetime
-import tradfri_handler
+import tradfri.tradfri_handler as tradfri_handler
 import time
 import logs
 

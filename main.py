@@ -1,8 +1,8 @@
 from http.server import HTTPServer
 import threading
 from req_handler import ReqHandler
-import routined
-import tradfri_handler
+import tradfri.routined as routined
+import tradfri.tradfri_handler as tradfri_handler
 import logs
 
 
