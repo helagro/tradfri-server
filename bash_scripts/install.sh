@@ -13,3 +13,5 @@ cd libcoap
 ./configure --disable-documentation --disable-shared --without-debug CFLAGS="-D COAP_DEBUG_FD=stderr"
 make
 make install
+
+pip3 install pytradfri

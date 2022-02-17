@@ -1,10 +1,12 @@
+from re import sub
 import storage_handler
 import tradfri_handler
 import json
 import logs
+import subprocess
+import sys
 
 
-#ANCHOR jsons
 def allSafeStorageParameters(query):
     storageContentJson = json.dumps(storage_handler.getStorageContentCopy())
     return dict(resCode = 200, mimeType="text/json", fileContent=storageContentJson.encode('utf-8'))
@@ -32,12 +34,18 @@ def logJson(query):
     logsJson = json.dumps(logsList)
     return dict(resCode = 200, mimeType="text/json", fileContent=logsJson.encode('utf-8'))
 
+def update(query):
+    subprocess.Popen("bash_scripts/update.sh")
+    sys.exit()
+
+
 
 specialRoutes = dict(
     allSafeStorageParameters=allSafeStorageParameters,
     lampPickerJson=lampPickerJson,
     deviceControlJson=deviceControlJson,
-    logJson=logJson
+    logJson=logJson,
+    update=update
 )
 
 
