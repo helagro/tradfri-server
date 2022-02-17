@@ -7,7 +7,7 @@ import argparse
 import logs
 import threading
 
-CONFIG_FILE = "tradfri_standalone_psk.conf"
+CONFIG_FILE = "tradfri/tradfri_standalone_psk.conf"
 gateway = None
 api = None
 
