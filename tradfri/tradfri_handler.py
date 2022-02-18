@@ -117,7 +117,6 @@ def performAction(deviceId, action, payload):
             return deviceControl.lights[0].state
         else:
             return deviceControl.sockets[0].state
-        
     elif(action == "tOn"):
         performAction(deviceId, "setState", 1)
         threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
@@ -125,7 +124,6 @@ def performAction(deviceId, action, payload):
     else:
         logs.log("Invalid action")
         return
-
 
     api(command)
 

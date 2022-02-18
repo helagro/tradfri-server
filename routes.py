@@ -6,11 +6,11 @@ import subprocess
 import sys
 
 
-def allSafeStorageParameters(query):
+def getSettings(_):
     storageContentJson = json.dumps(storage_handler.getStorageContentCopy())
     return dict(resCode = 200, mimeType="text/json", fileContent=storageContentJson.encode('utf-8'))
 
-def lampPickerJson(query):
+def lampPickerJson(_):
     contentDict = dict(devices = tradfri_handler.getDevices())
     contentDictStr = json.dumps(contentDict)
     fileContent = contentDictStr.encode('utf-8')
@@ -28,19 +28,19 @@ def deviceControlJson(query):
     fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
-def logJson(query):
+def logJson(_):
     logsList = logs.getLogs()
     logsJson = json.dumps(logsList)
     return dict(resCode = 200, mimeType="text/json", fileContent=logsJson.encode('utf-8'))
 
-def doUpdate(query):
+def doUpdate(_):
     subprocess.Popen("bash_scripts/update.sh")
     sys.exit()
 
 
 
 specialRoutes = {
-    "allSafeStorageParameters":allSafeStorageParameters,
+    "settings":getSettings,
     "lampPickerJson":lampPickerJson,
     "deviceControlJson":deviceControlJson,
     "logJson":logJson,

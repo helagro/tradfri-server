@@ -28,7 +28,7 @@ def callOnUpdateListeners():
         listener()
 
 
-def readInStorageContent():
+def loadSettings():
     global storageContent
 
     if(not isfile(FILE_NAME)):
@@ -44,6 +44,6 @@ def readInStorageContent():
 
 
 def setup():
-    readInStorageContent()
+    loadSettings()
 
 setup()

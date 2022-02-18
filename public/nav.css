@@ -7,7 +7,7 @@ nav{
     align-content: center;
     justify-content: center;
     grid-auto-flow: column;
-    column-gap: 3em;
+    column-gap: 3%;
 }
 
 a{
