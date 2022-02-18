@@ -4,46 +4,52 @@ import settings.storage_items as storage_items
 import logs
 import copy
 
-FILE_NAME = "settings/storage.json"
+class StorageHandler:
+    FILE_NAME = "settings/storage.json"
 
-storageContent = None
-storageContentUpdateListeners = []
+    storageContent = None
+    storageContentUpdateListeners = []
 
-def getStorageContentCopy():
-    return copy.deepcopy(storageContent)
-    
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(StorageHandler, cls).__new__(cls)
+            cls.instance.loadSettings()
+        return cls.instance
 
-def saveInputStorageContent(input):
-    global storageContent
+    def loadSettings(self):
+        if(not isfile(self.FILE_NAME)):
+            self.storageContent = storage_items.getNewStorageItem()
+            logs.log("no storage file")
+            return
 
-    storageContent = input
-    with open(FILE_NAME, "w") as filestream:
-        json.dump(storageContent, filestream)
+        with open(self.FILE_NAME, "r") as fileStream:
+            self.storageContent = json.load(fileStream)
 
-    callOnUpdateListeners()
-    
+        self.callOnUpdateListeners()
 
-def callOnUpdateListeners():
-    for listener in storageContentUpdateListeners:
-        listener()
+    def saveInputStorageContent(self, input):
+        self.storageContent = input
+        with open(self.FILE_NAME, "w") as filestream:
+            json.dump(self.storageContent, filestream)
 
-
-def loadSettings():
-    global storageContent
-
-    if(not isfile(FILE_NAME)):
-        storageContent = storage_items.getNewStorageItem()
-        logs.log("no storage file")
-        return
-
-    with open(FILE_NAME, "r") as fileStream:
-        storageContent = json.load(fileStream)
-
-    callOnUpdateListeners()
-    
+        self.callOnUpdateListeners()
 
 
-def setup():
-    loadSettings()
+    def addStorageUpdateListener(self, storageUpdateListener):
+        self.storageContentUpdateListeners.append(storageUpdateListener)
 
-setup()
+    def callOnUpdateListeners(self):
+        for listener in self.storageContentUpdateListeners:
+            listener()
+
+
+    def getStorageContentCopy(self):
+        return copy.deepcopy(self.storageContent)
+
+
+
+        
+
+
+
+        

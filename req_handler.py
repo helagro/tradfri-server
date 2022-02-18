@@ -3,7 +3,7 @@ import input_router
 from urllib import parse, request
 import json
 from cgi import parse_header, parse_multipart
-import settings.storage_handler as storage_handler
+from settings.storage_handler import StorageHandler
 
 class ReqHandler(BaseHTTPRequestHandler):
 
@@ -34,7 +34,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         jsonArea = infoSent[b'jsonArea'][0]
         jsonObj = self.getJsonObject(jsonArea)
         
-        storage_handler.saveInputStorageContent(jsonObj)
+        StorageHandler().saveInputStorageContent(jsonObj)
 
         self.send_response(301)
         self.send_header("location", "/index.html")

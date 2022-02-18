@@ -8,7 +8,7 @@ def getLogs():
 def log(*logInput):
     logStr = createLogStr(logInput)
     logsList.append(logStr)
-    print("log:", logStr)
+    print("log:", logStr, flush=True)
 
     if len(logsList) > 100:
         logsList.pop(0)

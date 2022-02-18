@@ -1,4 +1,4 @@
-import settings.storage_handler as storage_handler
+from settings.storage_handler import StorageHandler
 import tradfri.tradfri_handler as tradfri_handler
 import json
 import logs
@@ -7,7 +7,7 @@ import sys
 
 
 def getSettings(_):
-    storageContentJson = json.dumps(storage_handler.getStorageContentCopy())
+    storageContentJson = json.dumps(StorageHandler().getStorageContentCopy())
     return dict(resCode = 200, mimeType="text/json", fileContent=storageContentJson.encode('utf-8'))
 
 def lampPickerJson(_):
