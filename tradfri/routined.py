@@ -63,14 +63,10 @@ def getCurTimeInMin():
 
 def performEvent(event):
     for device in storageHandler.getStorageContentCopy()["routined"]["lamps"]:
-        if tradfri_handler.performAction(device, "isOn", None):
-            try:
-                performEventForDevice(event, device)
-            except Exception as e:
-                logs.log("Performing scheduled event failed because: ", e)
-                return
-        else:
-            logs.log(str(device), "is not online")
+        try:
+            performEventForDevice(event, device)
+        except Exception as e:
+            logs.log("Performing scheduled event failed because: ", e)
     logs.log("performed timed event: " + event["name"])
 
 def performEventForDevice(event, device):
