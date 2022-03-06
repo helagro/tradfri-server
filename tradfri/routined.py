@@ -26,12 +26,14 @@ def rescheduleNextEvent():
 def scheduleNextEvent():
     global timer
     event = findNextEvent()
+
     eventTime = event["timeInMin"]
     nowInMin = getCurTimeInMin()
     day = 0 if nowInMin < eventTime else 60*24
     eventTimeFromNow = eventTime + day - nowInMin
     logs.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", eventTimeFromNow, " miniutes")
 
+    if not timer is None: timer.cancel()
     timer = Timer(eventTimeFromNow * 60, lambda: performEventAndScheduleNext(event))
     timer.start()
 
