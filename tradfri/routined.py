@@ -40,7 +40,7 @@ def scheduleNextEvent():
 
 def findNextEvent():
     curNearestEvent = None
-    events = storageHandler.getStorageContentCopy()["routined"]["events"]
+    events = storageHandler.getStorageContentCopy()["events"]
     for event in events:
         event["timeInMin"] = addRelevantDaysToEvent(event)
 
@@ -64,7 +64,8 @@ def getCurTimeInMin():
 
 
 def performEvent(event):
-    for device in storageHandler.getStorageContentCopy()["routined"]["lamps"]:
+    print(event["lamps"], "=============================")
+    for device in event["lamps"]:
         try:
             performEventForDevice(event, device)
         except Exception as e:
