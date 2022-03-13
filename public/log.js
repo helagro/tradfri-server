@@ -5,7 +5,7 @@ function main(){
 }
 
 function jsonCallback(status, json){
-    console.log("fese", json, status)
+    console.log(json, status)
     if(status === null)
         createItemElements(json)
 }
