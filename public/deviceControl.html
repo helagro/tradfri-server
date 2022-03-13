@@ -24,6 +24,18 @@
                 <button onclick="tOn()">Turn on for an hour</button>
             </div>
         </div>
+        <div class="advancedControls">
+            <label>action</label>
+            <select id="actionSelect">
+                <option value="setState">setState</option>
+                <option value="setBrightness">setBrightness</option>
+                <option value="setColor">setColor</option>
+                <option value="setDefinedColor">setDefinedColor</option>
+            </select>
+            <label>payload</label>
+            <input type="text" id="payloadInput">
+            <button onclick="sendControlFormula()">send</button>
+        </div>
     </main>
     
     <script src="script.js"></script>

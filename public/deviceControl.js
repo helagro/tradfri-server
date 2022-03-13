@@ -50,5 +50,11 @@ function tOn(){
     performAction("tOn", deviceJson, null)
 }
 
+function sendControlFormula(){
+    let actionSelect = document.getElementById("actionSelect")
+    let payloadInput = document.getElementById("payloadInput")
+    performAction(actionSelect.value, deviceJson, payloadInput.value)
+}
+
 
 main()
