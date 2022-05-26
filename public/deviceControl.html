@@ -11,30 +11,33 @@
 <body>
     <object type="text/html" data="nav.html" class="navObject"></object>
     <main>
-        <h1>Device control</h1>
         <div class="deviceInfo">
-            <h3 id="deviceName"></h3>
-            <p id="deviceId"></p>
+            <h1 id="deviceName">Name</h1>
+            <p id="deviceId">12345</p>
         </div>
         <div class="deviceControls">
-            <div id="onOffDiv" class="deviceControl">
-                <button onclick="toggleOnOff()">toggle on/off</button>
+            <div class="mainControls">
+                <div id="onOffDiv" class="deviceControl">
+                    <button onclick="toggleOnOff()">Toggle On/Off</button>
+                </div>
+                <div id="tOn" class="deviceControl">
+                    <button onclick="tOn()">Turn on for an hour</button>
+                </div>
             </div>
-            <div id="tOn" class="deviceControl">
-                <button onclick="tOn()">Turn on for an hour</button>
+
+
+            <div class="advancedControls">
+                <label>Action</label>
+                <select id="actionSelect">
+                    <option value="setState">setState</option>
+                    <option value="setBrightness">setBrightness</option>
+                    <option value="setColor">setColor</option>
+                    <option value="setDefinedColor">setDefinedColor</option>
+                </select>
+                <label>Payload</label>
+                <input type="text" id="payloadInput">
+                <button onclick="sendControlFormula()">Send</button>
             </div>
-        </div>
-        <div class="advancedControls">
-            <label>action</label>
-            <select id="actionSelect">
-                <option value="setState">setState</option>
-                <option value="setBrightness">setBrightness</option>
-                <option value="setColor">setColor</option>
-                <option value="setDefinedColor">setDefinedColor</option>
-            </select>
-            <label>payload</label>
-            <input type="text" id="payloadInput">
-            <button onclick="sendControlFormula()">send</button>
         </div>
     </main>
     
