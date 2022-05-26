@@ -34,6 +34,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 1.6em;
+  border-radius: 1em;
 }
 
 .mainControls{
