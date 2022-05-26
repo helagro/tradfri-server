@@ -22,11 +22,12 @@
 }
  
 .deviceControls{
-   margin: 2% auto 0 auto;
+   margin: 2em auto 0 auto;
    display: grid;
    width: max-content;
    grid-template-columns: 1fr 1fr;
    column-gap: 2em;
+   row-gap: 1em;
 }
 
 .deviceControls > div{
@@ -69,3 +70,9 @@ button{
   width: 100% !important;
 }
  
+
+@media screen and (max-width: 40em){
+  .deviceControls{
+    grid-template-columns: 1fr;
+ }
+}
