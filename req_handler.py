@@ -34,7 +34,9 @@ class ReqHandler(BaseHTTPRequestHandler):
         jsonArea = infoSent[b'jsonArea'][0]
         jsonObj = self.getJsonObject(jsonArea)
         
-        StorageHandler().saveInputStorageContent(jsonObj)
+        storageHandler = StorageHandler()
+        storageHandler.calculateValues(jsonObj)
+        storageHandler.saveInputStorageContent(jsonObj)
 
         self.send_response(301)
         self.send_header("location", "/index.html")

@@ -6,6 +6,7 @@ def getNewStorageItem():
             dict(                    
                 name="Day",
                 timeInMin = 380,
+                timeStr = "6:00",
                 color = "eaf6fb",
                 brightness = 90,
                 lamps = ["65546"]
@@ -13,6 +14,7 @@ def getNewStorageItem():
             dict(                    
                 name="Evening",
                 timeInMin = 1230,
+                timeStr = "20:30",
                 color = "ebb63e",
                 brightness = 10,
                 lamps = ["65546"]

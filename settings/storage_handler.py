@@ -27,6 +27,17 @@ class StorageHandler:
 
         self.callOnUpdateListeners()
 
+    def calculateValues(self, storageContent):
+        events = storageContent["events"]
+
+        for event in events:
+            timeStr = event["timeStr"]
+            timeStrSplit = timeStr.split(":")
+            hour = timeStrSplit[0]
+            min = timeStrSplit[1]
+            event["timeInMin"] = int(hour) * 60 + int(min)
+            print(event["timeInMin"])
+
     def saveInputStorageContent(self, input):
         self.storageContent = input
         with open(self.FILE_NAME, "w") as filestream:
