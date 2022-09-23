@@ -21,11 +21,19 @@ def deviceControlJson(query):
     action = query["action"][0]
     payload = query["payload"][0]
 
-    tradfri_handler.performAction(deviceId, action, payload)
-
-    contentDictStr = "d:a"
+    result = tradfri_handler.performAction(deviceId, action, payload)
+    contentDictStr = "d:a" if result == None else json.dumps(result)
     fileContent = contentDictStr.encode('utf-8')
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
+
+def getColor(query):
+    deviceId = json.loads(query["device"][0])["id"]
+
+    deviceStatus = tradfri_handler.getDeviceStatus(deviceId)
+
+    fileContent = deviceStatus.encode('utf-8')
+    return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
+
 
 def logJson(_):
     logsList = logs.getLogs()

@@ -96,7 +96,6 @@ def getDevice(deviceId):
 
 
 
-
 def performAction(deviceId, action, payload):
     device = getDevice(deviceId)
 
@@ -112,6 +111,8 @@ def performAction(deviceId, action, payload):
         command = device.light_control.set_hex_color(payload)
     elif(action == "setDefinedColor"):
         command = device.light_control.set_predefined_color(payload)
+    elif(action == "getColor"):
+        return {"color": device.light_control.lights[0].hex_color}
     elif(action == "isOn"):
         if(device.has_light_control):
             return deviceControl.lights[0].state
