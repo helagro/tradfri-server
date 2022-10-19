@@ -1,7 +1,7 @@
 from http.server import HTTPServer
 import threading
 from req_handler import ReqHandler
-import tradfri.routined as routined
+import tradfri.timers as timers
 import tradfri.tradfri_handler as tradfri_handler
 import logs
 
@@ -17,7 +17,7 @@ def startServerThread():
 
 
 def startRoutinedThread():
-    t = threading.Thread(target=routined.start)
+    t = threading.Thread(target=timers.start)
     t.start()
 
 if __name__ == "__main__":
