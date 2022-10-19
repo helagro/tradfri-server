@@ -4,3 +4,4 @@ env.py
 storage.json
 __pycache__/
 libcoap/
+.vscode/

@@ -1,7 +1,7 @@
 import json
 from genericpath import isfile
-import settings.storage_items as storage_items
-import logs
+from . import storage_items
+from .. import logs
 import copy
 
 class StorageHandler:

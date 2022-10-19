@@ -4,7 +4,7 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 import argparse
-import logs
+from .. import logs
 import threading
 
 CONFIG_FILE = "tradfri/tradfri_standalone_psk.conf"

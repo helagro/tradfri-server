@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-import input_router
+import code.input_router as input_router
 from urllib import parse, request
 import json
 from cgi import parse_header, parse_multipart
