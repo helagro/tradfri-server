@@ -4,19 +4,22 @@ import json
 import logs
 import subprocess
 import sys
+from my_response_successful import MyResponseSuccessful
 
+
+#========== SPECIFIC ROUTES ==========
 
 def getSettings(_):
     storageContentJson = json.dumps(StorageHandler().getStorageContentCopy())
-    return dict(resCode = 200, mimeType="text/json", fileContent=storageContentJson.encode('utf-8'))
+    return MyResponseSuccessful("text/json", storageContentJson.encode('utf-8'))
 
-def lampPickerJson(_):
+def getDevices(_):
     contentDict = dict(devices = tradfri_handler.getDevices())
     contentDictStr = json.dumps(contentDict)
     fileContent = contentDictStr.encode('utf-8')
-    return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
+    return MyResponseSuccessful("text/json", fileContent=fileContent)
 
-def deviceControlJson(query):
+def getDeviceInfo(query):
     deviceId = json.loads(query["device"][0])["id"]
     action = query["action"][0]
     payload = query["payload"][0]
@@ -35,7 +38,7 @@ def getColor(query):
     return dict(resCode = 200, mimeType="text/json", fileContent=fileContent)
 
 
-def logJson(_):
+def getLogs(_):
     logsList = logs.getLogs()
     logsJson = json.dumps(logsList)
     return dict(resCode = 200, mimeType="text/json", fileContent=logsJson.encode('utf-8'))
@@ -44,20 +47,23 @@ def doUpdate(_):
     subprocess.Popen("bash_scripts/update.sh")
     sys.exit()
 
-
-
 specialRoutes = {
     "settings":getSettings,
-    "lampPickerJson":lampPickerJson,
-    "deviceControlJson":deviceControlJson,
-    "logJson":logJson,
+    "lampPickerJson":getDevices,
+    "deviceControlJson":getDeviceInfo,
+    "logJson":getLogs,
     "doUpdate":doUpdate
 }
 
 
-def locationToRouteString(location):
-    onlyFileName = location.split("/")[-1]
-    return onlyFileName
+#========== GENERAL METHODS ==========
+
+
+
+def hasRoute(location):
+    routeString = locationToRouteString(location)
+    matchingRoute = specialRoutes.get(routeString, None)
+    return not (matchingRoute is None)
 
 def getspecialRouteFileDict(location, query):
     routeString = locationToRouteString(location)
@@ -69,4 +75,8 @@ def getspecialRouteFileDict(location, query):
 
     newLocation = matchingRoute(query)
     return newLocation
+
+def locationToRouteString(location):
+    onlyFileName = location.split("/")[-1]
+    return onlyFileName
 

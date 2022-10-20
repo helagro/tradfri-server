@@ -1,5 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-import code.input_router as input_router
+import router
 from urllib import parse, request
 import json
 from cgi import parse_header, parse_multipart
@@ -11,9 +11,11 @@ class ReqHandler(BaseHTTPRequestHandler):
         query = self.getQuery(self.path)
         location = self.path.split("?")[0]
         
-        fileInfo = input_router.entry(query, location)
-        resCode = fileInfo["resCode"]
+        response = router.entry(query, location)
+        resCode = response["resCode"]
+        self.GETResponse()
 
+    def GETResponse(self):
         self.send_response(resCode)
 
         if(resCode != 200):

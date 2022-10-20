@@ -1,5 +1,7 @@
 from genericpath import isfile
 import os
+from my_response import MyResponse
+from my_response_successful import MyResponseSuccessful
 
 FILE_FOLDER = "public"
 
@@ -12,13 +14,14 @@ def getFile(fileName):
         if(mimeType == "text/html"):
             return getFile("/404.html")
         else:
-            return dict(resCode = 404)
+            return MyResponse(404)
 
     fileStream = open(filePath, "rb")
     fileContent = fileStream.read()
     fileStream.close()
     
-    return dict(resCode=200, mimeType=mimeType, fileContent=fileContent)
+    return MyResponseSuccessful(mimeType, fileContent)
+
 
 def getFilePath(fileName):
     if(fileName == "/"):
