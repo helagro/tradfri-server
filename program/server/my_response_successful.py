@@ -8,3 +8,7 @@ class MyResponseSuccessful(MyResponse):
         super().__init__(200)
         self.mimeType = mimeType
         self.fileContent = fileContent
+
+    @classmethod
+    def empty(self):
+        super().__init__(200)

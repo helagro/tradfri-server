@@ -16,6 +16,7 @@ class StorageHandler:
             cls.instance.loadSettings()
         return cls.instance
 
+
     def loadSettings(self):
         if(not isfile(self.FILE_NAME)):
             self.storageContent = storage_items.getNewStorageItem()
@@ -27,7 +28,7 @@ class StorageHandler:
 
         self.callOnUpdateListeners()
 
-    def calculateValues(self, storageContent):
+    def calculateTimeInMin(self, storageContent) -> None:
         events = storageContent["events"]
 
         for event in events:
@@ -36,7 +37,6 @@ class StorageHandler:
             hour = timeStrSplit[0]
             min = timeStrSplit[1]
             event["timeInMin"] = int(hour) * 60 + int(min)
-            print(event["timeInMin"])
 
     def saveInputStorageContent(self, input):
         self.storageContent = input
@@ -46,6 +46,8 @@ class StorageHandler:
         self.callOnUpdateListeners()
 
 
+    #========== LISTENERS ==========
+
     def addStorageUpdateListener(self, storageUpdateListener):
         self.storageContentUpdateListeners.append(storageUpdateListener)
 
@@ -53,6 +55,8 @@ class StorageHandler:
         for listener in self.storageContentUpdateListeners:
             listener()
 
+
+    #========== OTHER ==========
 
     def getStorageContentCopy(self):
         return copy.deepcopy(self.storageContent)

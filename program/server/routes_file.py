@@ -2,6 +2,7 @@ from genericpath import isfile
 import os
 from my_response import MyResponse
 from my_response_successful import MyResponseSuccessful
+from my_mime_types import MyMimeTypes
 
 FILE_FOLDER = "public"
 
@@ -11,7 +12,7 @@ def getFile(fileName):
     mimeType = getMimeType(filePath)
 
     if(not isfile(filePath)):
-        if(mimeType == "text/html"):
+        if(mimeType == MyMimeTypes.HTML):
             return getFile("/404.html")
         else:
             return MyResponse(404)
@@ -34,9 +35,9 @@ def getMimeType(filePath):
     fileExtension = os.path.splitext(filePath)[1]
 
     vaildMimeTypes = {
-        ".html" : "text/html",
-        ".css" : "text/css",
-        ".js" : "text/javascript",
-        ".json" : "text/json"
+        ".html" : MyMimeTypes.HTML,
+        ".css" : MyMimeTypes.CSS,
+        ".js" : MyMimeTypes.JAVASCRIPT,
+        ".json" : MyMimeTypes.JSON
     }
     return vaildMimeTypes.get(fileExtension, None)

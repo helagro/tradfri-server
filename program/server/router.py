@@ -1,12 +1,7 @@
 import routes_file
 import routes_special
 
-
-def entry(query, location):
-    fileInfo = locationRouter(location, query)
-    return fileInfo
-
-def locationRouter(location, query):
+def route(location, query):
     hasOtherRoute = routes_special.hasRoute(location)
 
     if(hasOtherRoute):
