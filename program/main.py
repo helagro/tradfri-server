@@ -21,7 +21,7 @@ def startRoutinedThread():
     t.start()
 
 if __name__ == "__main__":
-    tradfri_handler.run()
+    tradfri_handler.setup()
 
     startServerThread()
     startRoutinedThread()

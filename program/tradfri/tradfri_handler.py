@@ -10,36 +10,42 @@ import threading
 CONFIG_FILE = "tradfri/tradfri_standalone_psk.conf"
 gateway = None
 api = None
+args = None
 
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "host", metavar="IP", type=str, help="IP Address of your Tradfri gateway"
-)
-parser.add_argument(
-    "-K",
-    "--key",
-    dest="key",
-    required=False,
-    help="Security code found on your Tradfri gateway",
-)
-args = parser.parse_args()
+#========== INPUT ==========
 
-
-if args.host not in load_json(CONFIG_FILE) and args.key is None:
-    print(
-        "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
-        end=" ",
+def getInput():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "host", metavar="IP", type=str, help="IP Address of your Tradfri gateway"
     )
-    key = input().strip()
-    if len(key) != 16:
-        raise PytradfriError("Invalid 'Security Code' provided.")
-    else:
-        args.key = key
+    parser.add_argument(
+        "-K",
+        "--key",
+        dest="key",
+        required=False,
+        help="Security code found on your Tradfri gateway",
+    )
+    args = parser.parse_args()
+
+    if args.host not in load_json(CONFIG_FILE) and args.key is None:
+        print(
+            "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
+            end=" ",
+        )
+        key = input().strip()
+        if len(key) != 16:
+            raise PytradfriError("Invalid 'Security Code' provided.")
+        else:
+            args.key = key
+
+input()
 
 
+#========== SETUP ==========
 
-def run():
+def setup():
     global gateway
     global api
 
@@ -67,9 +73,48 @@ def run():
             )
 
     api = api_factory.request
-
     gateway = Gateway()
 
+
+#========== PERFORM ACTION ==========
+
+def performAction(deviceId, action, payload):
+    device = getDevice(deviceId)
+
+    deviceControl = device.light_control if(device.has_light_control) else device.socket_control
+
+    command = None
+    match action:
+        case "setState":
+            state = payload if (payload != "toggle") else (not performAction(deviceId, "isOn", None))
+            command = deviceControl.set_state(state)
+        case "setBrightness":
+            command = device.light_control.set_dimmer(int(payload))
+        case "setColor":
+            command = device.light_control.set_hex_color(payload)
+        case "setDefinedColor":
+            command = device.light_control.set_predefined_color(payload)
+        case "getColor":
+            return {"color": device.light_control.lights[0].hex_color}
+        case "isOn":
+            if(device.has_light_control):
+                return deviceControl.lights[0].state
+            else:
+                return deviceControl.sockets[0].state
+        case "tOn":
+            performAction(deviceId, "setState", 1)
+            threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
+            return
+        case _:
+            logs.log("Invalid action")
+            return
+
+    api(command)
+    logs.log(f"Performed action \"{action}\" for \"{deviceId}\" with payload \"{str(payload)}\"")
+
+
+
+#========== GET DEVICE ==========
     
 def getDevices():
     devices_command = gateway.get_devices()
@@ -96,43 +141,5 @@ def getDevice(deviceId):
 
 
 
-def performAction(deviceId, action, payload):
-    device = getDevice(deviceId)
 
-    deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-
-    command = None
-    if(action == "setState"):
-        state = payload if (payload != "toggle") else (not performAction(deviceId, "isOn", None))
-        command = deviceControl.set_state(state)
-    elif(action == "setBrightness"):
-        command = device.light_control.set_dimmer(int(payload))
-    elif(action == "setColor"):
-        command = device.light_control.set_hex_color(payload)
-    elif(action == "setDefinedColor"):
-        command = device.light_control.set_predefined_color(payload)
-    elif(action == "getColor"):
-        return {"color": device.light_control.lights[0].hex_color}
-    elif(action == "isOn"):
-        if(device.has_light_control):
-            return deviceControl.lights[0].state
-        else:
-            return deviceControl.sockets[0].state
-    elif(action == "tOn"):
-        performAction(deviceId, "setState", 1)
-        threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
-        return
-    else:
-        logs.log("Invalid action")
-        return
-
-    api(command)
-
-    logs.log(f"Performed action \"{action}\" for \"{deviceId}\" with payload \"{str(payload)}\"")
-
-
-
-
-
-
-run()
+setup()
