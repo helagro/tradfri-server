@@ -42,13 +42,11 @@ function replaceQueryParam(param, newval, search) {
 }
 
 
-
-//ANCHOR listeners
+//========== LISTENERS ==========
 
 function toggleOnOff(){
     performAction("setState", deviceJson, "toggle")
 }
-
 
 function tOn(){
     performAction("tOn", deviceJson, null)
