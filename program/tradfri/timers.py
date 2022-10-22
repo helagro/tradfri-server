@@ -1,9 +1,9 @@
 from ast import Num
-from ..settings.storage_handler import StorageHandler
+from settings.storage_handler import StorageHandler
 from datetime import datetime
 from . import tradfri_handler
 from threading import Timer
-from .. import logs
+import logs
 import time
 
 timer = None

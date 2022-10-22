@@ -1,4 +1,4 @@
-from my_response import MyResponse
+from .my_response import MyResponse
 
 class MyResponseSuccessful(MyResponse):
     mimeType: str

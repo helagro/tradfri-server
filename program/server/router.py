@@ -1,10 +1,10 @@
-import routes_file
-import routes_special
+from . import routes_files
+from . import routes_special
 
-def route(location, query):
+def route(location: str, query: dict):
     hasOtherRoute = routes_special.hasRoute(location)
 
     if(hasOtherRoute):
         return routes_special.getspecialRouteFileDict(location, query)
     else:
-        return routes_file.getFile(location)
+        return routes_files.getFile(location)

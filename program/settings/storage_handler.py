@@ -1,7 +1,7 @@
 import json
 from genericpath import isfile
 from . import storage_items
-from .. import logs
+import logs
 import copy
 
 class StorageHandler:

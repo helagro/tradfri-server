@@ -4,8 +4,8 @@ import json
 import logs
 import subprocess
 import sys
-from my_mime_types import MyMimeTypes
-from my_response_successful import MyResponseSuccessful
+from .my_mime_types import MyMimeTypes
+from .my_response_successful import MyResponseSuccessful
 
 
 #========== SPECIFIC ROUTES ==========
@@ -26,7 +26,7 @@ def getDeviceInfo(query):
     payload = query["payload"][0]
 
     result = tradfri_handler.performAction(deviceId, action, payload)
-    contentDictStr = "d:a" if result == None else json.dumps(result)
+    contentDictStr = "result:None" if result == None else json.dumps(result)
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
 

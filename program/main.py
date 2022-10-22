@@ -1,6 +1,6 @@
 from http.server import HTTPServer
 import threading
-from req_handler import ReqHandler
+from server.req_handler import ReqHandler
 import tradfri.timers as timers
 import tradfri.tradfri_handler as tradfri_handler
 import logs

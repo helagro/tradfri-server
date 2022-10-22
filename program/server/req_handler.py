@@ -1,7 +1,8 @@
 from http.server import BaseHTTPRequestHandler
-from my_response import MyResponse
-from my_response_successful import MyResponseSuccessful
-import router
+from .my_response import MyResponse
+from .my_response_successful import MyResponseSuccessful
+from .my_mime_types import MyMimeTypes
+from . import router
 from urllib import parse
 import json
 from cgi import parse_header, parse_multipart
@@ -12,11 +13,11 @@ class ReqHandler(BaseHTTPRequestHandler):
     #========== GET ==========
 
     def do_GET(self):
-        query = self.getQuery(self.path)
-        location = self.path.split("?")[0]
+        query: dict = self.getQuery(self.path)
+        location: str = self.path.split("?")[0]
         
-        response: MyResponse = router.route(query, location)
-        self.setGETResponse(response.resCode)
+        response: MyResponse = router.route(location, query)
+        self.setGETResponse(response)
 
     def getQuery(self, path):
         return parse.parse_qs(parse.urlsplit(path).query)
@@ -46,7 +47,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
         self.send_response(301)
         self.send_header("location", "/index.html")
-        self.send_header('Content-type', "text/html")
+        self.send_header('Content-type', MyMimeTypes.HTML)
         self.end_headers()
         self.wfile.write(router.route("", "/")["fileContent"])
 

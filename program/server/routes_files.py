@@ -1,8 +1,8 @@
 from genericpath import isfile
 import os
-from my_response import MyResponse
-from my_response_successful import MyResponseSuccessful
-from my_mime_types import MyMimeTypes
+from .my_response import MyResponse
+from .my_response_successful import MyResponseSuccessful
+from .my_mime_types import MyMimeTypes
 
 FILE_FOLDER = "public"
 
