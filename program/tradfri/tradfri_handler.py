@@ -16,6 +16,8 @@ args = None
 #========== INPUT ==========
 
 def getInput():
+    global args
+    
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "host", metavar="IP", type=str, help="IP Address of your Tradfri gateway"
@@ -40,7 +42,7 @@ def getInput():
         else:
             args.key = key
 
-input()
+getInput()
 
 
 #========== SETUP ==========
@@ -78,40 +80,38 @@ def setup():
 
 #========== PERFORM ACTION ==========
 
-def performAction(deviceId, action, payload):
-    device = getDevice(deviceId)
-
+def performAction(deviceID, action, payload):
+    device = getDevice(deviceID)
     deviceControl = device.light_control if(device.has_light_control) else device.socket_control
 
-    command = None
     match action:
-        case "setState":
-            state = payload if (payload != "toggle") else (not performAction(deviceId, "isOn", None))
-            command = deviceControl.set_state(state)
-        case "setBrightness":
-            command = device.light_control.set_dimmer(int(payload))
-        case "setColor":
-            command = device.light_control.set_hex_color(payload)
-        case "setDefinedColor":
-            command = device.light_control.set_predefined_color(payload)
-        case "getColor":
+        case "tOn":
+            performAction(deviceID, "setState", 1)
+            threading.Timer(3600, lambda: performAction(deviceID, "setState", 0)).start()
+            return
+        case "getColor": 
             return {"color": device.light_control.lights[0].hex_color}
         case "isOn":
-            if(device.has_light_control):
-                return deviceControl.lights[0].state
-            else:
-                return deviceControl.sockets[0].state
-        case "tOn":
-            performAction(deviceId, "setState", 1)
-            threading.Timer(3600, lambda: performAction(deviceId, "setState", 0)).start()
-            return
-        case _:
-            logs.log("Invalid action")
-            return
+            return deviceControl.lights[0].state if device.has_light_control else deviceControl.sockets[0].state
+        
+
+    command = getCommand(device, deviceID, deviceControl, action, payload)
+    if(command is None): 
+        logs.log("Invalid action")
+        return
 
     api(command)
-    logs.log(f"Performed action \"{action}\" for \"{deviceId}\" with payload \"{str(payload)}\"")
+    logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
 
+
+def getCommand(device, deviceID, deviceControl, action: str, payload):
+    match action:
+        case "setBrightness": return device.light_control.set_dimmer(int(payload))
+        case "setColor": return device.light_control.set_hex_color(payload)
+        case "setDefinedColor": return device.light_control.set_predefined_color(payload)
+        case "setState":
+            state = payload if (payload != "toggle") else (not performAction(deviceID, "isOn", None))
+            return deviceControl.set_state(state)
 
 
 #========== GET DEVICE ==========
@@ -134,8 +134,8 @@ def getDevices():
     return devicesSerializable
 
 
-def getDevice(deviceId):
-    device_command = gateway.get_device(deviceId)
+def getDevice(deviceID):
+    device_command = gateway.get_device(deviceID)
     device = api(device_command)
     return device
 
