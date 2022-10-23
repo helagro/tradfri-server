@@ -20,13 +20,13 @@ def getDevices(_):
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
 
-def getDeviceInfo(query):
+def performAction(query: dict):
     deviceId = json.loads(query["device"][0])["id"]
     action = query["action"][0]
-    payload = query["payload"][0]
+    payload = query["payload"][0] if "payload" in query else None
 
     result = tradfri_handler.performAction(deviceId, action, payload)
-    contentDictStr = "result:None" if result == None else json.dumps(result)
+    contentDictStr = None if result == None else json.dumps(result)
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
 
@@ -51,7 +51,7 @@ def doUpdate(_):
 specialRoutes = {
     "settings":getSettings,
     "lampPickerJson":getDevices,
-    "deviceControlJson":getDeviceInfo,
+    "deviceControlJson":performAction,
     "logJson":getLogs,
     "doUpdate":doUpdate
 }

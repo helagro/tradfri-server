@@ -1,3 +1,4 @@
+from cgitb import reset
 from pytradfri import Gateway
 from pytradfri.api.libcoap_api import APIFactory
 from pytradfri.error import PytradfriError
@@ -83,26 +84,34 @@ def setup():
 def performAction(deviceID, action, payload):
     device = getDevice(deviceID)
     deviceControl = device.light_control if(device.has_light_control) else device.socket_control
+    result = None
 
     match action:
         case "tOn":
             performAction(deviceID, "setState", 1)
             threading.Timer(3600, lambda: performAction(deviceID, "setState", 0)).start()
-            return
         case "getColor": 
-            return {"color": device.light_control.lights[0].hex_color}
+            result = {"color": device.light_control.lights[0].hex_color}
         case "isOn":
-            return deviceControl.lights[0].state if device.has_light_control else deviceControl.sockets[0].state
-        
+            result =  deviceControl.lights[0].state if device.has_light_control else deviceControl.sockets[0].state
+        case _:
+            actionPerformedSuccessfully = performActionWithCommand(device, deviceID, deviceControl, action, payload)
+            if not actionPerformedSuccessfully: 
+                FAILED_MESSAGE = "Failed to perform action " + action
+                logs.log(FAILED_MESSAGE)
+                return {"result": FAILED_MESSAGE}
+            return {"result": f"Action \"{action}\" performed successfully"}
 
+    logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
+    return result
+
+
+def performActionWithCommand(device, deviceID, deviceControl, action, payload) -> bool:
     command = getCommand(device, deviceID, deviceControl, action, payload)
     if(command is None): 
-        logs.log("Invalid action")
-        return
-
+        return False
     api(command)
-    logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
-
+    return True
 
 def getCommand(device, deviceID, deviceControl, action: str, payload):
     match action:
@@ -126,8 +135,7 @@ def getDevices():
         if(device.has_socket_control or device.has_light_control):
             devicesSerializable.append(dict(
                 id=device.id,
-                name=device.name
-                
+                name=device.name  
             ))
 
 

@@ -19,11 +19,11 @@ function performAction(action, deviceJson, payload){
     }
 }
 
-function actionListener(status, json){
-    console.log(json)
+function actionListener(status, jsonObj){
+    console.log(jsonObj)
 
-    if(json != null){
-        alert("color: " + json.color)
+    if(jsonObj != null && "color" in jsonObj){
+        alert("color: " + jsonObj.color)
     }
 }
 
