@@ -100,7 +100,7 @@ def performAction(deviceID, action, payload):
                 FAILED_MESSAGE = "Failed to perform action " + action
                 logs.log(FAILED_MESSAGE)
                 return {"result": FAILED_MESSAGE}
-            return {"result": f"Action \"{action}\" performed successfully"}
+            return {"result": f"Action '{action}' performed successfully with payload '{payload}'"}
 
     logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
     return result
