@@ -68,8 +68,8 @@ def getspecialRouteFileDict(location, query):
 
     if(routeMethod is None): return
 
-    newLocation = routeMethod(query)
-    return newLocation
+    result = routeMethod(query)
+    return result
 
 def getRoute(location):
     routeString = locationToRouteString(location)
