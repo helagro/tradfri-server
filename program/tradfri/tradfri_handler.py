@@ -82,11 +82,6 @@ def setup():
 #========== PERFORM ACTION ==========
 
 def performAction(deviceID, action, payload):
-    result = doPerformAction(deviceID, action, payload)
-    logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
-    return result
-
-def doPerformAction(deviceID, action, payload):
     device = getDevice(deviceID)
     deviceControl = device.light_control if(device.has_light_control) else device.socket_control
     result = None
@@ -105,7 +100,9 @@ def doPerformAction(deviceID, action, payload):
                 FAILED_MESSAGE = "Failed to perform action " + action
                 logs.log(FAILED_MESSAGE)
                 return {"result": FAILED_MESSAGE}
-            return {"result": f"Action '{action}' performed successfully with payload '{payload}'"}
+            result = {"result": f"Action '{action}' performed successfully with payload '{payload}'"}
+
+    logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
     return result
 
 
