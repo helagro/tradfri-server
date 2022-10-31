@@ -1,5 +1,6 @@
 import json
 from genericpath import isfile
+import math
 from . import storage_items
 import logs
 import copy
@@ -10,11 +11,15 @@ class StorageHandler:
     storageContent = None
     storageContentUpdateListeners = []
 
+
+    #========== CONSTRUCTOR ==========
+
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(StorageHandler, cls).__new__(cls)
             cls.instance.loadSettings()
         return cls.instance
+
 
 
     def loadSettings(self):
@@ -28,7 +33,7 @@ class StorageHandler:
 
         self.callOnUpdateListeners()
 
-    def calculateTimesInMin(self, storageContent, splitter=":") -> None:
+    def calculateTimesInMin(self, storageContent) -> None:
         events = storageContent["events"]
 
         for event in events:
@@ -41,6 +46,12 @@ class StorageHandler:
         hour = timeStrSplit[0]
         min = timeStrSplit[1]
         return int(hour) * 60 + int(min)
+
+    def calculateTimeStr(self, timeInMin):
+        minutes = timeInMin % 60
+        hours = math.floor(timeInMin / 60)
+        minutesStr = format(minutes, '02d')
+        return f"{hours}:{minutesStr}"
 
 
     def saveInputStorageContent(self, input):

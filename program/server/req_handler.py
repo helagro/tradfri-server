@@ -1,4 +1,6 @@
 from http.server import BaseHTTPRequestHandler
+
+from program.settings.sync_settings import sync
 from .my_response import MyResponse
 from .my_response_successful import MyResponseSuccessful
 from .my_mime_types import MyMimeTypes
@@ -7,6 +9,7 @@ from urllib import parse
 import json
 from cgi import parse_header, parse_multipart
 from settings.storage_handler import StorageHandler
+from settings import sync_settings
 
 class ReqHandler(BaseHTTPRequestHandler):
 
@@ -19,8 +22,10 @@ class ReqHandler(BaseHTTPRequestHandler):
         response: MyResponse = router.route(location, query)
         self.setGETResponse(response)
 
+
     def getQuery(self, path):
         return parse.parse_qs(parse.urlsplit(path).query)
+
 
     def setGETResponse(self, response: MyResponse):
         self.send_response(response.resCode)
@@ -41,9 +46,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         jsonArea = infoReceived[b'jsonArea'][0]
         jsonObj = self.getJsonObject(jsonArea)
         
-        storageHandler = StorageHandler()
-        storageHandler.calculateTimesInMin(jsonObj)
-        storageHandler.saveInputStorageContent(jsonObj)
+        self.handlePostContent(jsonObj)
 
         self.send_response(301)
         self.send_header("location", "/index.html")
@@ -53,6 +56,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         myResponse = router.route("", "/")
         if isinstance(myResponse, MyResponseSuccessful):  
             self.wfile.write(myResponse.fileContent)
+
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])
@@ -64,6 +68,14 @@ class ReqHandler(BaseHTTPRequestHandler):
                     self.rfile.read(length), 
                     keep_blank_values=1)
         return {}
+
+
+    def handlePostContent(self, jsonObj):
+        storageHandler = StorageHandler()
+        storageHandler.calculateTimesInMin(jsonObj)
+        storageHandler.saveInputStorageContent(jsonObj)
+        sync_settings.sync()
+
 
     def getJsonObject(self, jsonArea):
         jsonAreaStr = jsonArea.decode("utf-8")

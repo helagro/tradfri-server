@@ -1,13 +1,13 @@
-import math
 from settings.storage_handler import StorageHandler
 import requests
 import logs
 
+
 def sync():
     syncData = getRoutinesSyncData()
     if syncData is None: return
-    logs.log(f"syncData: {syncData}")
-    updateEventsValues(syncData['result'])
+    logs.log(f"data from sync: {syncData}")
+    updateEventsValues(syncData)
 
 
 def getRoutinesSyncData():
@@ -19,10 +19,10 @@ def getRoutinesSyncData():
 
     response = requests.get(endpoint)
     try:
-        return response.json()
+        responseJson = response.json()
+        return responseJson["result"]
     except:
         logs.log(f"Invalid sync data: {response}")
-        
 
 
 def updateEventsValues(syncData):
@@ -36,12 +36,13 @@ def updateEventsValues(syncData):
         for event in events:
             if event["name"] == name:
                 updateEventValues(event, timeInMin)
+                break
+        else:
+            logs.log(f"event '{name}' exists in the sync but not locally")
 
     storageHandler.saveInputStorageContent(storageHandler.storageContent)
 
+
 def updateEventValues(event, timeInMin):
     event["timeInMin"] = timeInMin
-    minutes = timeInMin % 60
-    hours = math.floor(timeInMin / 60)
-    minutesStr = format(minutes, '02d')
-    event["timeStr"] = f"{hours}:{minutesStr}"
+    event["timeStr"] = StorageHandler().calculateTimeStr(timeInMin)
