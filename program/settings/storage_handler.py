@@ -61,6 +61,10 @@ class StorageHandler:
     def getStorageContentCopy(self):
         return copy.deepcopy(self.storageContent)
 
+    def getSyncEndpoint(self):
+        if "endpoint" in self.storageContent:
+            return self.storageContent["endpoint"]
+
 
 
         

@@ -4,6 +4,7 @@ from server.req_handler import ReqHandler
 import tradfri.timers as timers
 import tradfri.tradfri_handler as tradfri_handler
 import logs
+from settings import sync_settings
 
 
 def startServer():
@@ -25,4 +26,5 @@ if __name__ == "__main__":
 
     startServerThread()
     startRoutinedThread()
+    sync_settings.sync()
     logs.log("Successfull tradfri setup")
