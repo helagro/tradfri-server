@@ -29,7 +29,7 @@ class ReqHandler(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        self.send_header('Content-type', response.mimeType)
+        self.send_header('Content-type', response.mimeType.value)
         self.end_headers()
         self.wfile.write(response.fileContent)
 
