@@ -17,7 +17,6 @@ def getNewStorageItem():
                 timeStr = "20:30",
                 color = "ebb63e",
                 brightness = 10,
-                isSynced = True,
                 lamps = ["65546"]
             )
         ],
