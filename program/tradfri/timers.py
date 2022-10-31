@@ -78,15 +78,19 @@ def performEvent(event):
         try:
             performEventForDevice(event, device)
         except Exception as e:
-            logs.log("Performing scheduled event failed because: ", e)
+            logs.log(f"Performing scheduled event: {event} on {device} failed because: ", e)
     logs.log("performed timed event: " + event["name"])
 
 def performEventForDevice(event, device):
     isOn = tradfri_handler.performAction(device, "isOn", None)
-    tradfri_handler.performAction(device, "setBrightness", event["brightness"])
-    time.sleep(3)
-    tradfri_handler.performAction(device, "setColor", event["color"])
-    time.sleep(3)
+
+    if("brightness" in event):
+        tradfri_handler.performAction(device, "setBrightness", event["brightness"])
+        time.sleep(3)
+    if("color" in event):
+        tradfri_handler.performAction(device, "setColor", event["color"])
+        time.sleep(3)
+
     tradfri_handler.performAction(device, "setState", isOn)
 
 

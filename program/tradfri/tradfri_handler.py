@@ -93,7 +93,7 @@ def performAction(deviceID, action, payload):
         case "getColor": 
             result = {"color": device.light_control.lights[0].hex_color}
         case "getBrightness":
-            result = {"color": device.light_control.lights[0].dimmer}
+            result = {"brightness": device.light_control.lights[0].dimmer}
         case "isOn":
             result =  deviceControl.lights[0].state if device.has_light_control else deviceControl.sockets[0].state
         case _:

@@ -49,7 +49,10 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.send_header("location", "/index.html")
         self.send_header('Content-type', MyMimeTypes.HTML)
         self.end_headers()
-        self.wfile.write(router.route("", "/")["fileContent"])
+
+        myResponse = router.route("", "/")
+        if isinstance(myResponse, MyResponseSuccessful):  
+            self.wfile.write(myResponse.fileContent)
 
     def parse_POST(self):
         ctype, pdict = parse_header(self.headers['content-type'])

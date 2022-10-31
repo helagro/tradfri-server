@@ -1,3 +1,4 @@
+const backgroundElem = document.getElementById("backgroundElem")
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let deviceJson
@@ -6,8 +7,13 @@ function main(){
     deviceJson = urlParams.get('device')
     device = JSON.parse(deviceJson)
 
-    performAction(urlParams.get("action"), deviceJson, urlParams.get("payload"))
+    const action = urlParams.get("action")
+    if(action !== null){
+        performAction(action, deviceJson, urlParams.get("payload")) 
+    }
+
     fillElements(device)
+    getDeviceProperties()
 }
 
 
@@ -22,10 +28,25 @@ function performAction(action, deviceJson, payload){
 function actionListener(status, jsonObj){
     console.log(jsonObj)
 
-    if(jsonObj != null && "color" in jsonObj){
-        alert("color: " + jsonObj.color)
+    if(jsonObj == null) return
+
+    if("color" in jsonObj){
+        const color = jsonObj["color"]
+        backgroundElem.style.backgroundColor = "#" + color
+        document.getElementById("deviceColor").innerHTML = color
+    }
+
+    if("brightness" in jsonObj){
+        const brightness = jsonObj["brightness"]
+        document.getElementById("deviceBrightness").innerHTML = brightness
     }
 }
+
+function getDeviceProperties(){
+    performAction("getColor", deviceJson, null)
+    performAction("getBrightness", deviceJson, null)
+}
+
 
 
 function fillElements(device){
