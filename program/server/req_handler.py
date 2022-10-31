@@ -42,7 +42,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         jsonObj = self.getJsonObject(jsonArea)
         
         storageHandler = StorageHandler()
-        storageHandler.calculateTimeInMin(jsonObj)
+        storageHandler.calculateTimesInMin(jsonObj)
         storageHandler.saveInputStorageContent(jsonObj)
 
         self.send_response(301)

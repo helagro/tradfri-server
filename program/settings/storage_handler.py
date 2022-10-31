@@ -28,15 +28,20 @@ class StorageHandler:
 
         self.callOnUpdateListeners()
 
-    def calculateTimeInMin(self, storageContent) -> None:
+    def calculateTimesInMin(self, storageContent, splitter=":") -> None:
         events = storageContent["events"]
 
         for event in events:
             timeStr = event["timeStr"]
-            timeStrSplit = timeStr.split(":")
-            hour = timeStrSplit[0]
-            min = timeStrSplit[1]
-            event["timeInMin"] = int(hour) * 60 + int(min)
+            event["timeInMin"] = self.calculateTimeInMin(timeStr, ":")
+
+
+    def calculateTimeInMin(self, timeStr, splitter) -> str:
+        timeStrSplit = timeStr.split(splitter)
+        hour = timeStrSplit[0]
+        min = timeStrSplit[1]
+        return int(hour) * 60 + int(min)
+
 
     def saveInputStorageContent(self, input):
         self.storageContent = input

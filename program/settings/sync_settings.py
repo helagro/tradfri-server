@@ -1,29 +1,47 @@
+import math
 from settings.storage_handler import StorageHandler
 import requests
 import logs
 
 def sync():
-    routines = getRoutinesToSync()
-    logs.log("Routines to sync", routines)
-    syncRoutines(routines)
+    syncData = getRoutinesSyncData()
+    if syncData is None: return
+    logs.log(f"syncData: {syncData}")
+    updateEventsValues(syncData['result'])
 
-def getRoutinesToSync():
-    routinesToSync = []
-    for routine in StorageHandler().storageContent["events"]:
-        if("isSynced" in routine and routine["isSynced"] == True):
-            routinesToSync.append(routine)
-    return routinesToSync
 
-def syncRoutines(routines):
+def getRoutinesSyncData():
     storageHandler = StorageHandler()
     endpoint = storageHandler.getSyncEndpoint()
-    if(endpoint is None): 
+    if endpoint is None: 
         logs.log("Won't sync, syncing endpoint is not defined")
         return
 
-    for routine in routines:
-        syncRoutine(routine, endpoint)
+    response = requests.get(endpoint)
+    try:
+        return response.json()
+    except:
+        logs.log(f"Invalid sync data: {response}")
+        
 
-def syncRoutine(routine, endpoint):
-    response = requests.post(endpoint, routine["name"])
-    logs.log(f"Sent syncing post request for {routine['name']} to {endpoint}. Response was {response.content}")
+
+def updateEventsValues(syncData):
+    storageHandler = StorageHandler()
+    events = storageHandler.storageContent["events"]
+    for syncDataValues in syncData:
+        name = syncDataValues["name"]
+        timeValue = syncDataValues["time"]
+        timeInMin = storageHandler.calculateTimeInMin(timeValue, ".")
+
+        for event in events:
+            if event["name"] == name:
+                updateEventValues(event, timeInMin)
+
+    storageHandler.saveInputStorageContent(storageHandler.storageContent)
+
+def updateEventValues(event, timeInMin):
+    event["timeInMin"] = timeInMin
+    minutes = timeInMin % 60
+    hours = math.floor(timeInMin / 60)
+    minutesStr = format(minutes, '02d')
+    event["timeStr"] = f"{hours}:{minutesStr}"
