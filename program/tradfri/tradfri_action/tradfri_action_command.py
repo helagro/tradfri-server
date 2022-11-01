@@ -1,3 +1,4 @@
+from sre_constants import SUCCESS
 from ..tradfri_handler import TradfriHandler
 from .tradfri_action import TradfriAction
 import logs
@@ -10,7 +11,7 @@ class TradfriActionCommand(TradfriAction):
     def execute(self) -> str:
         if self.command is None:
             self.fail()
-            return
+            return {"success": False}
         result = self.tradfriHandler.api(self.command)
         self.didSucceed = True
         return {"success":True}

@@ -6,5 +6,5 @@ class TradfriActionGetValue(TradfriAction):
         self.valueName = valueName
         self.value = value
 
-    def execute(self) -> str:
+    def execute(self) -> dict:
         return {self.valueName: self.value}

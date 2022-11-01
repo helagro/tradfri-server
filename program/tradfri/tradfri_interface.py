@@ -23,7 +23,7 @@ class TradfriInterface:
         didSucceed = tradfriAction.getDidSucceed()
 
         logs.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
-            + f" with and didSucceed={didSucceed}")
+            + f" with and didSucceed={didSucceed} and result={result}")
         return result
 
     def actionRouter(self, device, deviceID, action, payload):
@@ -58,11 +58,12 @@ class TradfriInterface:
             command = deviceControl.set_state(state)
             return TradfriActionCommand(command)
         elif action == "turnOffIf":
-            brightness = self.performAction(deviceID, "getbrightness", None)["brightness"]
-            if payload == brightness:
-                return self.actionRouter(deviceID, "setState", False)
+            brightness = self.performAction(deviceID, "getBrightness", None)["brightness"]
+            if int(payload) == brightness:
+                return self.actionRouter(device, deviceID, "setState", False)
+            return TradfriActionSuccess(msg=f"{payload} != {brightness}")
         else:
-            return TradfriActionFail()
+            return TradfriActionFail(msg="Invalid Action")
 
 
     def isOn(self, deviceID):
