@@ -59,8 +59,8 @@ class TradfriInterface:
                 command = deviceControl.set_state(state)
                 return TradfriActionCommand(command)
             case "turnOffIf":
-                color = self.performAction(deviceID, "getColor", None)["color"]
-                if payload == color:
+                brightness = self.performAction(deviceID, "getbrightness", None)["brightness"]
+                if payload == brightness:
                     return self.actionRouter(deviceID, "setState", False)
 
             case _:
