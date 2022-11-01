@@ -26,7 +26,6 @@ class TradfriHandler:
         return cls.instance
 
 
-
     #========== INPUT ==========
 
     def getInput(self):
@@ -62,9 +61,6 @@ class TradfriHandler:
     #========== SETUP ==========
 
     def setup(self):
-        global gateway
-        global api
-
         conf = load_json(self.CONFIG_FILE)
 
         try:
@@ -88,5 +84,5 @@ class TradfriHandler:
                     "-K flag."
                 )
 
-        api = api_factory.request
-        gateway = Gateway()
+        self.api = api_factory.request
+        self.gateway = Gateway()

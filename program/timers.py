@@ -4,9 +4,11 @@ from datetime import datetime
 from threading import Timer
 import logs
 import time
+from tradfri.tradfri_interface import TradfriInterface
 
 timer = None
 STORAGE_HANDLER = StorageHandler()
+TRADFRI_INTERFACE = TradfriInterface()
 
 
 #========== ENTRY POINTS ==========
@@ -15,9 +17,11 @@ def start():
     STORAGE_HANDLER.addStorageUpdateListener(rescheduleEvent)
     scheduleNextEvent()
 
+
 def performEventAndScheduleNext(event):
     performEvent(event)
     scheduleNextEvent()
+
 
 def rescheduleEvent():
     if timer is None: return
@@ -34,6 +38,7 @@ def scheduleNextEvent():
     logs.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", minutesToNextEvent, " miniutes")
     scheduleEvent(event, minutesToNextEvent)
 
+
 def findNextEvent():
     curNearestEvent = None
     events = STORAGE_HANDLER.getStorageContentCopy()["events"]
@@ -45,6 +50,7 @@ def findNextEvent():
 
     return curNearestEvent
 
+
 def addRelevantDaysToEvent(event):
     currentTime = getCurTimeInMin()
 
@@ -52,15 +58,18 @@ def addRelevantDaysToEvent(event):
         return event["timeInMin"] + 24*60
     return event["timeInMin"]
 
+
 def getCurTimeInMin():
     now = datetime.now()
     return now.hour * 60 + now.minute
+
 
 def getMinutesToNextEvent(event):
     eventTime = event["timeInMin"]
     nowInMin = getCurTimeInMin()
     day = 0 if nowInMin < eventTime else 60*24
     return eventTime + day - nowInMin
+
 
 def scheduleEvent(event, minutesFromNow):
     global timer
@@ -73,24 +82,14 @@ def scheduleEvent(event, minutesFromNow):
 #========== PERFORM EVENT ==========
 
 def performEvent(event):
-    for device in event["lamps"]:
+    for action in event["actions"]:
         try:
-            performEventForDevice(event, device)
+            TRADFRI_INTERFACE.performAction(action["device"], action["name"], action["payload"])
         except Exception as e:
-            logs.log(f"Performing scheduled event: {event} on {device} failed because: ", e)
+            logs.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
+
+        time.sleep(3)
     logs.log("performed timed event: " + event["name"])
-
-def performEventForDevice(event, device):
-    isOn = tradfri_handler.performAction(device, "isOn", None)
-
-    if("brightness" in event):
-        tradfri_handler.performAction(device, "setBrightness", event["brightness"])
-        time.sleep(3)
-    if("color" in event):
-        tradfri_handler.performAction(device, "setColor", event["color"])
-        time.sleep(3)
-
-    tradfri_handler.performAction(device, "setState", isOn)
 
 
 

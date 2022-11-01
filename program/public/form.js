@@ -19,18 +19,23 @@ function processJsonDocument(json){
     
     for(let i = 0; i<jsonString.length; i++){
         let letter = jsonString[i]
+        let insertTextLeng
+        const tabs = generateTabs(tabI)
+        let insertStr = `\n${tabs}`;
         switch (letter){
+            case "[":
             case "{": 
+                insertStr += "   "
                 tabI ++
             case ",": 
-                const tabs = generateTabs(tabI)
-                let insertStr = "\n" + tabs
-                let insertTextLeng
                 [insertTextLeng, jsonString] = insert(insertStr, jsonString, i)
                 i += insertTextLeng
                 break
+            case "]":
             case "}":
                 tabI --
+                [insertTextLeng, jsonString] = insert(insertStr, jsonString, i-1)
+                i += insertTextLeng
                 
         }
     }

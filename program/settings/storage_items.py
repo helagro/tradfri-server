@@ -1,20 +1,19 @@
 
 def getNewStorageItem():
     return dict(
-        endpoint = "",
+        endpoint = "https://hook.eu1.make.com/",
         events = [
             dict(                 
-                name="Day",
+                name="wake up",
                 timeInMin = 380,
                 timeStr = "6:00",
                 actions = [
                     dict(
-                        action = "setBrightess"
+                        name = "setBrightessLevel",
+                        payload = "150",
+                        device = "65546"
                     )
                 ],
-                color = "eaf6fb",
-                brightness = 90,
-                lamps = ["65546"]
             )
         ]
     )
