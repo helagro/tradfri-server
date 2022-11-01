@@ -6,6 +6,8 @@ import logs
 from settings import sync_settings
 import schedule
 
+VERSION = "1.0"
+
 
 def startServer():
     httpd = HTTPServer(('0.0.0.0', 8000), ReqHandler)
@@ -29,4 +31,4 @@ if __name__ == "__main__":
     startServerThread()
     startSyncThread()
     startRoutinedThread()
-    logs.log("Successfull tradfri setup")
+    logs.log("Successfull tradfri setup; Version: {VERSION}")
