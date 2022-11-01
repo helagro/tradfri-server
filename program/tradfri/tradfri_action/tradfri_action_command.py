@@ -13,7 +13,7 @@ class TradfriActionCommand(TradfriAction):
             return
         result = self.tradfriHandler.api(self.command)
         self.didSucceed = True
-        return result
+        return {"success":True}
 
     def fail(self):
         self.didSucceed = False
