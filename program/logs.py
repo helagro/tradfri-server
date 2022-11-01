@@ -10,7 +10,7 @@ def log(*logInput):
     logsList.append(logStr)
     print("log:", logStr, flush=True)
 
-    if len(logsList) > 100:
+    if len(logsList) > 1000:
         logsList.pop(0)
 
 def createLogStr(logInput):
