@@ -28,6 +28,10 @@ def rescheduleEvent():
     timer.cancel()
     scheduleNextEvent()
 
+def performEventByName(eventName: str):
+    event = findEvent(eventName)
+    performEvent(event)
+
 
 #========== SCHEDULING ROUTINE ==========
 
@@ -79,6 +83,15 @@ def scheduleEvent(event, minutesFromNow):
     timer.start()
 
 
+#========== OTHER ==========
+
+def findEvent(eventName: str) -> dict:
+    events = STORAGE_HANDLER.getStorageContentCopy()["events"]
+    for event in events:
+        if event["name"] == eventName:
+            return event
+
+
 #========== PERFORM EVENT ==========
 
 def performEvent(event):
@@ -90,6 +103,3 @@ def performEvent(event):
 
         time.sleep(3)
     logs.log("performed timed event: " + event["name"])
-
-
-

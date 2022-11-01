@@ -5,6 +5,7 @@ import logs
 import subprocess
 import sys
 from .my_mime_types import MyMimeTypes
+import events
 from .my_response_successful import MyResponseSuccessful
 
 tradfriInterface = TradfriInterface()
@@ -27,8 +28,14 @@ def performAction(query: dict):
     deviceId = json.loads(query["device"][0])["id"]
     action = query["action"][0]
     payload = query["payload"][0] if "payload" in query else None
+    result = None
 
-    result = tradfriInterface.performAction(deviceId, action, payload)
+    if(action == "performEvent"):
+        events.performEventByName(payload)
+        result = {"success": True}
+    else:
+        result = tradfriInterface.performAction(deviceId, action, payload)
+        
     contentDictStr = None if result == None else json.dumps(result)
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)

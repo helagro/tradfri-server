@@ -1,6 +1,6 @@
 import unittest
 import sys
-import program.timers as timers
+import program.events as events
 
 class TestStringMethods(unittest.TestCase):
     def test_getMinutesToNextEvent(self):
@@ -11,7 +11,7 @@ class TestStringMethods(unittest.TestCase):
             color = "ebb63e",
             brightness = 10,
             lamps = ["65546"])
-        minutesToNextEvent = timers.getsMinutesToNextEvent(event)
+        minutesToNextEvent = events.getsMinutesToNextEvent(event)
         print(minutesToNextEvent, " fesfes")
 
 if __name__ == '__main__':

@@ -5,8 +5,6 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 import argparse
-import logs
-import threading
 
 
 class TradfriHandler:
@@ -21,12 +19,15 @@ class TradfriHandler:
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(TradfriHandler, cls).__new__(cls)
-            cls.instance.getInput()
-            cls.instance.setup()
+            cls.instance.doSetups()
         return cls.instance
 
+    def doSetups(self):
+        self.getInput()
+        self.setup()
 
-    #========== INPUT ==========
+
+    #========== HANDLE ARGUMENTS ==========
 
     def getInput(self):
         global args
@@ -54,8 +55,6 @@ class TradfriHandler:
                 raise PytradfriError("Invalid 'Security Code' provided.")
             else:
                 args.key = key
-
-    
 
 
     #========== SETUP ==========
