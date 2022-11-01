@@ -16,6 +16,7 @@ def startServerThread():
 
 def startSyncThread():
     t = threading.Thread(target=startSyncing)
+    t.start()
 def startSyncing():
     sync_settings.sync()
     schedule.every().day.at("01:00").do(sync_settings.sync)
