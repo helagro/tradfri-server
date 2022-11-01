@@ -1,5 +1,6 @@
 from mimetypes import init
 import threading
+import time
 from .tradfri_action.tradfri_action_command import TradfriActionCommand
 from .tradfri_action.tradfri_action_success import TradfriActionSuccess
 from .tradfri_action.tradfri_action_get_value import TradfriActionGetValue
@@ -39,6 +40,11 @@ class TradfriInterface:
             case "setBrightness": 
                 command = device.light_control.set_dimmer(int(payload))
                 return TradfriActionCommand(command)
+            case "setBrightnessLevel":
+                isOn = self.isOn()
+                self.performAction(deviceID, "setBrightness", payload)
+                time.sleep(3)
+                self.performAction(deviceID, "setState", isOn)
             case "setColor": 
                 command = device.light_control.set_hex_color(payload)
                 return TradfriActionCommand(command)
