@@ -42,10 +42,11 @@ class TradfriInterface:
                 command = device.light_control.set_dimmer(int(payload))
                 return TradfriActionCommand(command)
             case "setBrightnessLevel":
-                isOn = self.isOn()
-                self.performAction(deviceID, "setBrightness", payload)
+                isOn = self.isOn(deviceID)
+                setBrightnessResult = self.performAction(deviceID, "setBrightness", payload)
                 time.sleep(3)
                 self.performAction(deviceID, "setState", isOn)
+                return setBrightnessResult
             case "setColor": 
                 command = device.light_control.set_hex_color(payload)
                 return TradfriActionCommand(command)
