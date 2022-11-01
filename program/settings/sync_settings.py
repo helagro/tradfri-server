@@ -19,7 +19,7 @@ def getRoutinesSyncData():
         return
 
     try:
-        response = requests.get(endpoint)   
+        response = requests.get(endpoint, timeout=60)  
         responseJson = response.json()
         return responseJson["result"]
     except:
