@@ -1,11 +1,14 @@
 from settings.storage_handler import StorageHandler
-import tradfri.tradfri_handler as tradfri_handler
+from tradfri.tradfri_interface import TradfriInterface
 import json
 import logs
 import subprocess
 import sys
 from .my_mime_types import MyMimeTypes
 from .my_response_successful import MyResponseSuccessful
+
+tradfriInterface = TradfriInterface()
+
 
 
 #========== SPECIFIC ROUTES ==========
@@ -15,7 +18,7 @@ def getSettings(_):
     return MyResponseSuccessful(MyMimeTypes.JSON, storageContentJson.encode('utf-8'))
 
 def getDevices(_):
-    contentDict = dict(devices = tradfri_handler.getDevices())
+    contentDict = dict(devices = tradfriInterface.getDevices())
     contentDictStr = json.dumps(contentDict)
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
@@ -25,7 +28,7 @@ def performAction(query: dict):
     action = query["action"][0]
     payload = query["payload"][0] if "payload" in query else None
 
-    result = tradfri_handler.performAction(deviceId, action, payload)
+    result = tradfriInterface.performAction(deviceId, action, payload)
     contentDictStr = None if result == None else json.dumps(result)
     fileContent = contentDictStr.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
@@ -33,7 +36,7 @@ def performAction(query: dict):
 def getColor(query):
     deviceId = json.loads(query["device"][0])["id"]
 
-    deviceStatus = tradfri_handler.getDeviceStatus(deviceId)
+    deviceStatus = tradfriInterface.getDeviceStatus(deviceId)
 
     fileContent = deviceStatus.encode('utf-8')
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)

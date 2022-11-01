@@ -1,7 +1,6 @@
 from ast import Num
 from settings.storage_handler import StorageHandler
 from datetime import datetime
-from . import tradfri_handler
 from threading import Timer
 import logs
 import time

@@ -1,7 +1,11 @@
-
 from mimetypes import init
-
-from program.tradfri.tradfri_handler import TradfriHandler
+import threading
+from .tradfri_action.tradfri_action_command import TradfriActionCommand
+from .tradfri_action.tradfri_action_success import TradfriActionSuccess
+from .tradfri_action.tradfri_action_get_value import TradfriActionGetValue
+from .tradfri_handler import TradfriHandler
+from .tradfri_action.tradfri_action_fail import TradfriActionFail
+import logs
 
 
 class TradfriInterface:
@@ -11,55 +15,60 @@ class TradfriInterface:
 
 
     def performAction(self, deviceID, action, payload):
-        device = getDevice(deviceID)
-        deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-        result = None
+        device = self.getDevice(deviceID)
 
-        match action:
-            case "tOn":
-                performAction(deviceID, "setState", 1)
-                threading.Timer(3600, lambda: performAction(deviceID, "setState", 0)).start()
-            case "getColor": 
-                result = {"color": device.light_control.lights[0].hex_color}
-            case "getBrightness":
-                result = {"brightness": device.light_control.lights[0].dimmer}
-            case "isOn":
-                result =  deviceControl.lights[0].state if device.has_light_control else deviceControl.sockets[0].state
-            case _:
-                actionPerformedSuccessfully = performActionWithCommand(device, deviceID, deviceControl, action, payload)
-                if not actionPerformedSuccessfully: 
-                    FAILED_MESSAGE = "Failed to perform action " + action
-                    logs.log(FAILED_MESSAGE)
-                    return {"result": FAILED_MESSAGE}
-                result = {"result": f"Action '{action}' performed successfully with payload '{payload}'"}
+        tradfriAction = self.actionRouter(device, deviceID, action, payload)
+        result = tradfriAction.execute()
 
-        logs.log(f"Performed action \"{action}\" for \"{deviceID}\" with payload \"{str(payload)}\"")
+        logs.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
+            + "with and didSucceed={tradfriAction.getDidSucceed()}")
         return result
 
-
-    def performActionWithCommand(self, device, deviceID, deviceControl, action, payload) -> bool:
-        command = getCommand(device, deviceID, deviceControl, action, payload)
-        if(command is None): 
-            return False
-        api(command)
-        return True
-
-    def getCommand(self, device, deviceID, deviceControl, action: str, payload):
+    def actionRouter(self, device, deviceID, action, payload):
         match action:
-            case "setBrightness": return device.light_control.set_dimmer(int(payload))
-            case "setColor": return device.light_control.set_hex_color(payload)
-            case "setDefinedColor": return device.light_control.set_predefined_color(payload)
+            case "tOn":
+                self.performAction(deviceID, "setState", 1)
+                threading.Timer(3600, lambda: self.performAction(deviceID, "setState", 0)).start()
+                return TradfriActionSuccess()
+            case "getColor": 
+                color = device.light_control.lights[0].hex_color
+                return TradfriActionGetValue(valueName="color", value=color)
+            case "getBrightness":
+                brightness = device.light_control.lights[0].dimmer
+                return TradfriActionGetValue(valueName="brightness", value=brightness)
+            case "setBrightness": 
+                command = device.light_control.set_dimmer(int(payload))
+                return TradfriActionCommand(command)
+            case "setColor": 
+                command = device.light_control.set_hex_color(payload)
+                return TradfriActionCommand(command)
+            case "setDefinedColor": 
+                command = device.light_control.set_predefined_color(payload)
+                return TradfriActionCommand(command)
             case "setState":
-                state = payload if (payload != "toggle") else (not performAction(deviceID, "isOn", None))
-                return deviceControl.set_state(state)
+                deviceControl = device.light_control if(device.has_light_control) else device.socket_control
+                state = payload if (payload != "toggle") else (not self.performAction(deviceID, "isOn", None))
+                command = deviceControl.set_state(state)
+                return TradfriActionCommand(command)
+            case _:
+                return TradfriActionFail()
+
+
+    def isOn(self, deviceID):
+        device = self.getDevice(deviceID)
+        if device.has_light_control:
+            return device.light_control.lights[0].state
+        if device.has_socket_control:
+            return device.socket_control.sockets[0].state
+        raise Exception("Invalid device")
 
 
     #========== GET DEVICE ==========
         
     def getDevices(self):
-        devices_command = gateway.get_devices()
-        devices_commands = api(devices_command)
-        devices = api(devices_commands)
+        devices_command = self.tradfriHandler.gateway.get_devices()
+        devices_commands = self.tradfriHandler.api(devices_command)
+        devices = self.tradfriHandler.api(devices_commands)
 
         devicesSerializable = []
         for device in devices:
@@ -74,7 +83,7 @@ class TradfriInterface:
 
 
     def getDevice(self, deviceID):
-        device_command = gateway.get_device(deviceID)
-        device = api(device_command)
+        device_command = self.tradfriHandler.gateway.get_device(deviceID)
+        device = self.tradfriHandler.api(device_command)
         return device
 

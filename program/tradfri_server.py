@@ -1,8 +1,7 @@
 from http.server import HTTPServer
 import threading
 from server.req_handler import ReqHandler
-import tradfri.timers as timers
-import tradfri.tradfri_handler as tradfri_handler
+import timers as timers
 import logs
 from settings import sync_settings
 import schedule
@@ -26,8 +25,6 @@ def startRoutinedThread():
     t.start()
 
 if __name__ == "__main__":
-    tradfri_handler.setup()
-
     startServerThread()
     startSyncing()
     startRoutinedThread()

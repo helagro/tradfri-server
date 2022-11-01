@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 
-from program.settings.sync_settings import sync
+from settings.sync_settings import sync
 from .my_response import MyResponse
 from .my_response_successful import MyResponseSuccessful
 from .my_mime_types import MyMimeTypes

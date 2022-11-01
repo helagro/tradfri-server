@@ -1,6 +1,6 @@
 import unittest
 import sys
-import program.tradfri.timers as timers
+import program.timers as timers
 
 class TestStringMethods(unittest.TestCase):
     def test_getMinutesToNextEvent(self):
