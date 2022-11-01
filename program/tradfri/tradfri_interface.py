@@ -42,7 +42,7 @@ class TradfriInterface:
             return TradfriActionCommand(command)
         elif action == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
-            setBrightnessResult = self.performAction(deviceID, "setBrightness", payload)
+            self.performAction(deviceID, "setBrightness", payload)
             time.sleep(3)
             self.performAction(deviceID, "setState", isOn)
             return TradfriActionSuccess()
@@ -54,7 +54,7 @@ class TradfriInterface:
             return TradfriActionCommand(command)
         elif action == "setState":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-            state = payload if (payload != "toggle") else (not self.performAction(deviceID, "isOn", None))
+            state = payload if (payload != "toggle") else not self.isOn(deviceID)
             command = deviceControl.set_state(state)
             return TradfriActionCommand(command)
         elif action == "turnOffIf":
