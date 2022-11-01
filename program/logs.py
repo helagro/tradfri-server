@@ -15,7 +15,7 @@ def log(*logInput):
 
 def createLogStr(logInput):
     logStr = str(datetime.now())
-    logStr += "\n  "
+    logStr += "\n   "
     for log in logInput:
         logStr += str(log) + " "
     return logStr
