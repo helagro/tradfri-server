@@ -31,4 +31,4 @@ if __name__ == "__main__":
     startServerThread()
     startSyncThread()
     startRoutinedThread()
-    logs.log("Successfull tradfri setup; Version: {VERSION}")
+    logs.log(f"Successfull tradfri setup; Version: {VERSION}")
