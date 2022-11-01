@@ -58,6 +58,11 @@ class TradfriInterface:
                 state = payload if (payload != "toggle") else (not self.performAction(deviceID, "isOn", None))
                 command = deviceControl.set_state(state)
                 return TradfriActionCommand(command)
+            case "turnOffIf":
+                color = self.performAction(deviceID, "getColor", None)["color"]
+                if payload == color:
+                    return self.actionRouter(deviceID, "setState", False)
+
             case _:
                 return TradfriActionFail()
 
