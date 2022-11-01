@@ -46,7 +46,7 @@ class TradfriInterface:
                 setBrightnessResult = self.performAction(deviceID, "setBrightness", payload)
                 time.sleep(3)
                 self.performAction(deviceID, "setState", isOn)
-                return setBrightnessResult
+                return TradfriActionSuccess()
             case "setColor": 
                 command = device.light_control.set_hex_color(payload)
                 return TradfriActionCommand(command)
