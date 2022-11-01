@@ -4,6 +4,7 @@ import logs
 
 
 def sync():
+    logs.log("Starting sync...")
     syncData = getRoutinesSyncData()
     if syncData is None: return
     logs.log(f"data from sync: {syncData}")
@@ -17,12 +18,12 @@ def getRoutinesSyncData():
         logs.log("Won't sync, syncing endpoint is not defined")
         return
 
-    response = requests.get(endpoint)
     try:
+        response = requests.get(endpoint)   
         responseJson = response.json()
         return responseJson["result"]
     except:
-        logs.log(f"Invalid sync data: {response}")
+        logs.log(f"sync failed: {response}")
 
 
 def updateEventsValues(syncData):
