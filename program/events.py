@@ -7,14 +7,14 @@ import time
 from tradfri.tradfri_interface import TradfriInterface
 
 timer = None
-STORAGE_HANDLER = StorageHandler()
-TRADFRI_INTERFACE = TradfriInterface()
+storageHandler = StorageHandler()
+storageInterface = TradfriInterface()
 
 
 #========== ENTRY POINTS ==========
 
 def start():
-    STORAGE_HANDLER.addStorageUpdateListener(rescheduleEvent)
+    storageHandler.addStorageUpdateListener(rescheduleEvent)
     scheduleNextEvent()
 
 
@@ -45,7 +45,7 @@ def scheduleNextEvent():
 
 def findNextEvent():
     curNearestEvent = None
-    events = STORAGE_HANDLER.getStorageContentCopy()["events"]
+    events = storageHandler.getStorageContentCopy()["events"]
     for event in events:
         event["timeInMin"] = addRelevantDaysToEvent(event)
 
@@ -86,7 +86,7 @@ def scheduleEvent(event, minutesFromNow):
 #========== OTHER ==========
 
 def findEvent(eventName: str) -> dict:
-    events = STORAGE_HANDLER.getStorageContentCopy()["events"]
+    events = storageHandler.getStorageContentCopy()["events"]
     for event in events:
         if event["name"] == eventName:
             return event
@@ -97,7 +97,7 @@ def findEvent(eventName: str) -> dict:
 def performEvent(event):
     for action in event["actions"]:
         try:
-            TRADFRI_INTERFACE.performAction(action["device"], action["name"], action["payload"])
+            storageInterface.performAction(action["device"], action["name"], action["payload"])
         except Exception as e:
             logs.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
 
