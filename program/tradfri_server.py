@@ -26,6 +26,6 @@ def startRoutinedThread():
 
 if __name__ == "__main__":
     startServerThread()
-    startSyncing()
+    startSyncThread()
     startRoutinedThread()
     logs.log("Successfull tradfri setup")
