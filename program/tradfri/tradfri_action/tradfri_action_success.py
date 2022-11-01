@@ -5,5 +5,5 @@ class TradfriActionSuccess(TradfriAction):
     def execute(self) -> str:
         {"result": None}
 
-    def getDidSucceed() -> bool:
+    def getDidSucceed(self) -> bool:
         return True

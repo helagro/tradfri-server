@@ -5,5 +5,5 @@ class TradfriAction(ABC):
     def execute(self) -> str:
         pass
 
-    def getDidSucceed() -> bool:
+    def getDidSucceed(self) -> bool:
         return True

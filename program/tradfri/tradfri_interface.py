@@ -20,9 +20,10 @@ class TradfriInterface:
 
         tradfriAction = self.actionRouter(device, deviceID, action, payload)
         result = tradfriAction.execute()
+        didSucceed = tradfriAction.getDidSucceed()
 
         logs.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
-            + f" with and didSucceed={tradfriAction.getDidSucceed()}")
+            + f" with and didSucceed={didSucceed}")
         return result
 
     def actionRouter(self, device, deviceID, action, payload):

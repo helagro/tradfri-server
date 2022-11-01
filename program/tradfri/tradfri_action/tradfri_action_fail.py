@@ -4,5 +4,5 @@ class TradfriActionFail(TradfriAction):
     def execute(self) -> str:
         return ""
 
-    def getDidSucceed() -> bool:
+    def getDidSucceed(self) -> bool:
         return False
