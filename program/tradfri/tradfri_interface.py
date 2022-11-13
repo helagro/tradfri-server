@@ -45,7 +45,7 @@ class TradfriInterface:
             if isOn: 
                 return TradfriActionSuccess()
             else: 
-                return self.actionRouter(device, deviceID, action, payload)
+                return self.actionRouter(device, deviceID, "setBrightness", payload)
         elif action == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
             self.performAction(deviceID, "setBrightness", payload)
