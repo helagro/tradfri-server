@@ -43,7 +43,7 @@ class TradfriInterface:
         elif action == "wakeUp":
             isOn = self.isOn(deviceID)
             if isOn: 
-                return TradfriActionSuccess()
+                return TradfriActionSuccess("Lamp was already on, aborting...")
             else: 
                 return self.actionRouter(device, deviceID, "setBrightness", payload)
         elif action == "setBrightnessLevel":
