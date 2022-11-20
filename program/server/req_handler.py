@@ -10,17 +10,21 @@ import json
 from cgi import parse_header, parse_multipart
 from settings.storage_handler import StorageHandler
 from settings import sync_settings
+import logs
 
 class ReqHandler(BaseHTTPRequestHandler):
 
     #========== GET ==========
 
     def do_GET(self):
-        query: dict = self.getQuery(self.path)
-        location: str = self.path.split("?")[0]
-        
-        response: MyResponse = router.route(location, query)
-        self.setGETResponse(response)
+        try:
+            query: dict = self.getQuery(self.path)
+            location: str = self.path.split("?")[0]
+            
+            response: MyResponse = router.route(location, query)
+            self.setGETResponse(response)
+        except Exception as e:
+            logs.log(e, self.path)
 
 
     def getQuery(self, path):
