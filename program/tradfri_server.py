@@ -1,5 +1,6 @@
 from http.server import HTTPServer
 import threading
+import time
 from server.req_handler import ReqHandler
 import events
 import logs
@@ -22,6 +23,9 @@ def startSyncThread():
 def startSyncing():
     sync_settings.sync()
     schedule.every().day.at("01:00").do(sync_settings.sync)
+    while True: 
+        time.sleep(30*60)
+        schedule.run_pending()
 
 def startRoutinedThread():
     t = threading.Thread(target=events.start)
