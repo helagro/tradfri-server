@@ -7,7 +7,7 @@ import logs
 from settings import sync_settings
 import schedule
 
-VERSION = "1.1"
+VERSION = "1.11"
 
 
 def startServer():
