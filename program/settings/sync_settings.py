@@ -14,12 +14,15 @@ def sync():
 def getRoutinesSyncData():
     storageHandler = StorageHandler()
     endpoint = storageHandler.getSyncEndpoint()
+    params = {
+        "command": "tradfri"
+    }
     if endpoint is None: 
         logs.log("Won't sync, syncing endpoint is not defined")
         return
 
     try:
-        response = requests.get(endpoint, timeout=60)  
+        response = requests.get(endpoint, params=params, timeout=60)  
         responseJson = response.json()
         return responseJson["result"]
     except:
