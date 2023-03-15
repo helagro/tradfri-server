@@ -1,11 +1,11 @@
-#!/bin/sh
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run the script as: sudo ./install-coap-client.sh"
-  exit
-fi
+# look at older versions of this
 
-apt-get install -f autoconf automake libtool  
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    apt-get install -f autoconf automake libtool 
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install libcoap
+fi 
 
 git clone --depth 1 --recursive -b dtls https://github.com/home-assistant/libcoap.git
 cd libcoap

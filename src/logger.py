@@ -10,9 +10,11 @@ def getLogFilePath():
     return logFolder + os.path.sep + logFileName
 
 LOG_PATH = getLogFilePath()
-print(LOG_PATH)
 
 def getLogs():
+    if not os.path.exists(LOG_PATH):
+        return ""
+
     f = open(LOG_PATH, "f")
     logs = f.read()
     f.close()
