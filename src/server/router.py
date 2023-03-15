@@ -1,6 +1,4 @@
-from settings.events import StorageHandler
 from tradfri.tradfri_interface import TradfriInterface
-import json
 import logger
 import subprocess
 import sys
@@ -27,7 +25,7 @@ def route(location: dict):
     elif(command == "doEvent"): 
         schedule.performEventByName(payload)
     else: 
-        return tradfriInterface.performAction(device, command, payload)
+        return tradfriInterface.commandRouter(device, command, payload)
 
 
     return {

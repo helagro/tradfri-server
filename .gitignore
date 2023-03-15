@@ -7,3 +7,4 @@ libcoap/
 .vscode/
 pytradfri/
 nohup.out
+.log

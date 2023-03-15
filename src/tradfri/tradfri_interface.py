@@ -1,31 +1,14 @@
 import threading
 import time
-from .tradfri_action.tradfri_action_command import TradfriActionCommand
-from .tradfri_action.tradfri_action_success import TradfriActionSuccess
-from .tradfri_action.tradfri_action_get_value import TradfriActionGetValue
 from .tradfri_handler import TradfriHandler
-from .tradfri_action.tradfri_action_fail import TradfriActionFail
 import logger
 
 
 class TradfriInterface:
-
-    def __init__(self) -> None:
-        self.tradfriHandler = TradfriHandler()
+    tradfriHandler = TradfriHandler()
 
 
-    def performAction(self, deviceID, action, payload):
-        device = self.getDevice(deviceID)
 
-        tradfriAction = self.actionRouter(device, deviceID, action, payload)
-        result = tradfriAction.execute()
-        didSucceed = tradfriAction.getDidSucceed()
-
-        logger.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
-            + f" with and didSucceed={didSucceed} and result={result}")
-        return result
-
-        
     def getDevices(self):
         devices_command = self.tradfriHandler.gateway.get_devices()
         devices_commands = self.tradfriHandler.api(devices_command)
@@ -59,61 +42,71 @@ class TradfriInterface:
 
 
 
+    def commandRouter(self, deviceID, command, payload):
+        device = self.getDevice(deviceID)
 
-    def actionRouter(self, device, deviceID, action, payload):
-        if action == "tOn":
-            self.performAction(deviceID, "setState", 1)
-            threading.Timer(3600, lambda: self.performAction(deviceID, "setState", 0)).start()
+        try:
+            return self.commandRouterHelper(device, deviceID, command, payload)
+        except Exception:
+            logger.log(f"{command} for {deviceID} with {payload} failed")
+            return "error"
 
-        elif action == "getColor": 
+
+
+    def commandRouterHelper(self, device, deviceID, command, payload):
+        if command == "tOn":
+            self.commandRouter(deviceID, "setState", 1)
+            threading.Timer(3600, lambda: self.commandRouter(deviceID, "setState", 0)).start()
+
+        elif command == "getColor": 
             color = device.light_control.lights[0].hex_color
             return {"color": color}
 
-        elif action == "getBrightness":
+        elif command == "getBrightness":
             brightness = device.light_control.lights[0].dimmer
             return {brightness: brightness}
 
-        elif action == "setBrightness": 
+        elif command == "setBrightness": 
             return self.tradfriHandler.api(
                 device.light_control.set_dimmer(int(payload))
             )
 
-        elif action == "wakeUp":
+        elif command == "wakeUp":
             if self.isOn(deviceID): 
                 return {"msg": "Lamp was already on, aborting..."}
             else: 
-                return self.actionRouter(device, deviceID, "setBrightness", payload)
+                return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
-        elif action == "setBrightnessLevel":
+        elif command == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
-            self.performAction(deviceID, "setBrightness", payload)
+            self.commandRouter(deviceID, "setBrightness", payload)
             time.sleep(3)
-            self.performAction(deviceID, "setState", isOn)
+            self.commandRouter(deviceID, "setState", isOn)
 
-        elif action == "setColor": 
+        elif command == "setColor": 
             return self.tradfriHandler.api(
                 device.light_control.set_hex_color(payload)
             )
 
-        elif action == "setDefinedColor": 
+        elif command == "setDefinedColor": 
             return self.tradfriHandler.api(
                 device.light_control.set_predefined_color(payload)
             )
 
-        elif action == "setState":
+        elif command == "setState":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
             state = payload if (payload != "toggle") else not self.isOn(deviceID)
             return self.tradfriHandler.api(
                 deviceControl.set_state(state)
             )
 
-        elif action == "turnOffIf":
-            brightness = self.performAction(deviceID, "getBrightness", None)["brightness"]
+        elif command == "turnOffIf":
+            brightness = self.commandRouter(deviceID, "getBrightness", None)["brightness"]
             if int(payload) == brightness:
-                return self.actionRouter(device, deviceID, "setState", False)
+                return self.commandRouterHelper(device, deviceID, "setState", False)
             return {"msg": f"{payload} != {brightness}"}
 
         else:
-            raise Exception("Invalid Action")
+            raise Exception("Invalid command")
 
 

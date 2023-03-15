@@ -1,7 +1,19 @@
 from datetime import datetime
+import asyncio
+import os
+
+
+def getLogFilePath():
+    logFileName = ".log"
+    parentFolderName = os.path.dirname(os.path.realpath(__file__))
+    logFolder = os.path.dirname(parentFolderName)
+    return logFolder + os.path.sep + logFileName
+
+LOG_PATH = getLogFilePath()
+print(LOG_PATH)
 
 def getLogs():
-    f = open(".log", "f")
+    f = open(LOG_PATH, "f")
     logs = f.read()
     f.close()
     return logs
@@ -9,7 +21,7 @@ def getLogs():
 def log(*logInput):
     logStr = createLogStr(logInput)
     print("log:", logStr, flush=True)
-    saveLog(logStr)
+    asyncio.run(saveLog(logStr))
 
 
 def createLogStr(logInput):
@@ -20,5 +32,5 @@ def createLogStr(logInput):
 
 
 async def saveLog(log):
-    with open(".log", "a") as myfile:
-        myfile.write(log)
+    with open(LOG_PATH, "a+") as myfile:
+        myfile.write(f"{log}\n")

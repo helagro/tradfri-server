@@ -96,7 +96,7 @@ def findEvent(eventName: str) -> dict:
 def performEvent(event):
     for action in event["actions"]:
         try:
-            storageInterface.performAction(action["device"], action["name"], action["payload"])
+            storageInterface.commandRouter(action["device"], action["name"], action["payload"])
         except Exception as e:
             logger.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
 

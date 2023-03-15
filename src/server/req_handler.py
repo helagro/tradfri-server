@@ -1,6 +1,5 @@
 from http.server import BaseHTTPRequestHandler
-
-
+import json
 from . import router
 from urllib import parse
 import logger
@@ -23,13 +22,16 @@ class ReqHandler(BaseHTTPRequestHandler):
         return parse.parse_qs(parse.urlsplit(path).query)
 
 
-    def setGETResponse(self, response):
-        self.send_response(200)
-
-        if not isinstance(response, MyResponseSuccessful):
+    def setGETResponse(self, responseObj):
+        if responseObj == "error":
+            self.send_response(500)
             self.end_headers()
             return
 
-        self.send_header('Content-type', response.mimeType.value)
+        self.send_response(200)
+        self.send_header('Content-type', "application/json")
         self.end_headers()
-        self.wfile.write(response.fileContent)
+
+        responseStr = json.dumps(responseObj)
+        response = responseStr.encode("utf-8")
+        self.wfile.write(response)
