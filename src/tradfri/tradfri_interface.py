@@ -1,4 +1,3 @@
-from mimetypes import init
 import threading
 import time
 from .tradfri_action.tradfri_action_command import TradfriActionCommand

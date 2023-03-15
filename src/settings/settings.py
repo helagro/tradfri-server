@@ -5,7 +5,7 @@ import logger
 class Settings:
     FILE_PATH = "settings/storage.json"
     endpoint = None
-    tradfriGatewayURL = None
+    gatewayAddr = None
 
     def __new__(cls):
         if not hasattr(cls, 'instance'):
@@ -22,5 +22,5 @@ class Settings:
         with open(self.FILE_PATH, "r") as f:
             settings = json.loads(f)
             self.endpoint = settings["endpoint"]
-            self.tradfriGatewayURL = settings["tradfriGatewayURL"]
+            self.gatewayAddr = settings["gatewayAddr"]
             self.storageContent = json.load(f)

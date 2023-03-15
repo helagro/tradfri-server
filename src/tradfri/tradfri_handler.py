@@ -5,10 +5,12 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 import argparse
+from settings.settings import Settings
 
 
 class TradfriHandler:
-    CONFIG_FILE = "tradfri/tradfri_standalone_psk.conf"
+    CONFIG_PATH = "tradfri/tradfri_standalone_psk.conf"
+    gatewayAddr = Settings().gatewayAddr
     gateway = None
     api = None
     args = None
@@ -34,9 +36,6 @@ class TradfriHandler:
         
         parser = argparse.ArgumentParser()
         parser.add_argument(
-            "host", metavar="IP", type=str, help="IP Address of your Tradfri gateway"
-        )
-        parser.add_argument(
             "-K",
             "--key",
             dest="key",
@@ -45,7 +44,7 @@ class TradfriHandler:
         )
         args = parser.parse_args()
 
-        if args.host not in load_json(self.CONFIG_FILE) and args.key is None:
+        if self.gatewayAddr not in load_json(self.CONFIG_PATH) and args.key is None:
             print(
                 "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
                 end=" ",
@@ -60,22 +59,22 @@ class TradfriHandler:
     #========== SETUP ==========
 
     def setup(self):
-        conf = load_json(self.CONFIG_FILE)
+        conf = load_json(self.CONFIG_PATH)
 
         try:
-            identity = conf[args.host].get("identity")
-            psk = conf[args.host].get("key")
-            api_factory = APIFactory(host=args.host, psk_id=identity, psk=psk)
+            identity = conf[self.gatewayAddr].get("identity")
+            psk = conf[self.gatewayAddr].get("key")
+            api_factory = APIFactory(host=self.gatewayAddr, psk_id=identity, psk=psk)
         except KeyError:
             identity = uuid.uuid4().hex
-            api_factory = APIFactory(host=args.host, psk_id=identity)
+            api_factory = APIFactory(host=self.gatewayAddr, psk_id=identity)
 
             try:
                 psk = api_factory.generate_psk(args.key)
                 print("Generated PSK: ", psk)
 
-                conf[args.host] = {"identity": identity, "key": psk}
-                save_json(self.CONFIG_FILE, conf)
+                conf[self.gatewayAddr] = {"identity": identity, "key": psk}
+                save_json(self.CONFIG_PATH, conf)
             except AttributeError:
                 raise PytradfriError(
                     "Please provide the 'Security Code' on the "

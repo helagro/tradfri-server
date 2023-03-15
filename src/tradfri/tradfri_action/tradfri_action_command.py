@@ -8,13 +8,15 @@ class TradfriActionCommand(TradfriAction):
         self.command = command
         self.tradfriHandler = TradfriHandler()
 
+
     def execute(self) -> str:
         if self.command is None:
             self.fail()
             return {"success": False}
-        result = self.tradfriHandler.api(self.command)
+        self.result = self.tradfriHandler.api(self.command)
         self.didSucceed = True
         return {"success":True}
+
 
     def fail(self):
         self.didSucceed = False
