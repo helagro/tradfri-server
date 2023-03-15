@@ -1,13 +1,13 @@
-from settings.storage_handler import StorageHandler
+from settings.events import StorageHandler
 import requests
-import logs
+import logger
 
 
 def sync():
-    logs.log("Starting sync...")
+    logger.log("Starting sync...")
     syncData = getRoutinesSyncData()
     if syncData is None: return
-    logs.log(f"data from sync: {syncData}")
+    logger.log(f"data from sync: {syncData}")
     updateEventsValues(syncData)
 
 
@@ -18,7 +18,7 @@ def getRoutinesSyncData():
         "command": "tradfri"
     }
     if endpoint is None: 
-        logs.log("Won't sync, syncing endpoint is not defined")
+        logger.log("Won't sync, syncing endpoint is not defined")
         return
 
     try:
@@ -26,7 +26,7 @@ def getRoutinesSyncData():
         responseJson = response.json()
         return responseJson["result"]
     except:
-        logs.log(f"sync failed: {response}")
+        logger.log(f"sync failed: {response}")
 
 
 def updateEventsValues(syncData):
@@ -42,7 +42,7 @@ def updateEventsValues(syncData):
                 updateEventValues(event, timeInMin)
                 break
         else:
-            logs.log(f"event '{name}' exists in the sync but not locally")
+            logger.log(f"event '{name}' exists in the sync but not locally")
 
     storageHandler.saveInputStorageContent(storageHandler.storageContent)
 

@@ -1,8 +1,8 @@
 from ast import Num
-from settings.storage_handler import StorageHandler
+from settings.events import StorageHandler
 from datetime import datetime
 from threading import Timer
-import logs
+import logger
 import time
 from tradfri.tradfri_interface import TradfriInterface
 
@@ -39,7 +39,7 @@ def scheduleNextEvent():
     event = findNextEvent()
     minutesToNextEvent = getMinutesToNextEvent(event)
     
-    logs.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", minutesToNextEvent, " miniutes")
+    logger.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", minutesToNextEvent, " miniutes")
     scheduleEvent(event, minutesToNextEvent)
 
 
@@ -99,7 +99,7 @@ def performEvent(event):
         try:
             storageInterface.performAction(action["device"], action["name"], action["payload"])
         except Exception as e:
-            logs.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
+            logger.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
 
         time.sleep(3)
-    logs.log("performed timed event: " + event["name"])
+    logger.log("performed timed event: " + event["name"])

@@ -1,7 +1,7 @@
-from settings.storage_handler import StorageHandler
+from settings.events import StorageHandler
 from tradfri.tradfri_interface import TradfriInterface
 import json
-import logs
+import logger
 import subprocess
 import sys
 from .my_mime_types import MyMimeTypes
@@ -49,7 +49,7 @@ def getColor(query):
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent)
 
 def getLogs(_):
-    logsList = logs.getLogs()
+    logsList = logger.getLogs()
     logsJson = json.dumps(logsList)
     return MyResponseSuccessful(MyMimeTypes.JSON, fileContent=logsJson.encode('utf-8'))
 

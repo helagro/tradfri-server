@@ -1,7 +1,7 @@
 from sre_constants import SUCCESS
 from ..tradfri_handler import TradfriHandler
 from .tradfri_action import TradfriAction
-import logs
+import logger
 
 class TradfriActionCommand(TradfriAction):
     def __init__(self, command) -> None:
@@ -18,4 +18,4 @@ class TradfriActionCommand(TradfriAction):
 
     def fail(self):
         self.didSucceed = False
-        logs.log("Failed to perform action")
+        logger.log("Failed to perform action")

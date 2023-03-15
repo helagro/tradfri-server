@@ -3,8 +3,8 @@ import threading
 import time
 from server.req_handler import ReqHandler
 import events
-import logs
-from settings import sync_settings
+import logger
+from settings import sync_events
 import schedule
 
 VERSION = "1.11"
@@ -21,8 +21,8 @@ def startSyncThread():
     t = threading.Thread(target=startSyncing)
     t.start()
 def startSyncing():
-    sync_settings.sync()
-    schedule.every().day.at("01:00").do(sync_settings.sync)
+    sync_events.sync()
+    schedule.every().day.at("01:00").do(sync_events.sync)
     while True: 
         time.sleep(30*60)
         schedule.run_pending()
@@ -35,4 +35,4 @@ if __name__ == "__main__":
     startServerThread()
     startSyncThread()
     startRoutinedThread()
-    logs.log(f"Successfull tradfri setup; Version: {VERSION}")
+    logger.log(f"Successfull tradfri setup; Version: {VERSION}")

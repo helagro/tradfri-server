@@ -1,5 +1,5 @@
-.env
-env.py
+settings.json
+
 *.conf
 storage.json
 __pycache__/

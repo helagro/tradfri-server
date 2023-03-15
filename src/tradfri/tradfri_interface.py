@@ -6,7 +6,7 @@ from .tradfri_action.tradfri_action_success import TradfriActionSuccess
 from .tradfri_action.tradfri_action_get_value import TradfriActionGetValue
 from .tradfri_handler import TradfriHandler
 from .tradfri_action.tradfri_action_fail import TradfriActionFail
-import logs
+import logger
 
 
 class TradfriInterface:
@@ -22,7 +22,7 @@ class TradfriInterface:
         result = tradfriAction.execute()
         didSucceed = tradfriAction.getDidSucceed()
 
-        logs.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
+        logger.log(f"Performed action '{action}' for '{deviceID}' with payload '{str(payload)}'"
             + f" with and didSucceed={didSucceed} and result={result}")
         return result
 
