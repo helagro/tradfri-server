@@ -1,4 +1,4 @@
-from settings.events import StorageHandler
+from settings.events import Events
 from datetime import datetime
 from threading import Timer
 import logger
@@ -6,7 +6,7 @@ import time
 from tradfri.tradfri_interface import TradfriInterface
 
 timer = None
-storageHandler = StorageHandler()
+storageHandler = Events()
 storageInterface = TradfriInterface()
 
 
