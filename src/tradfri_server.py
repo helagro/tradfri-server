@@ -2,7 +2,7 @@ from http.server import HTTPServer
 import threading
 import time
 from server.req_handler import ReqHandler
-import events
+import schedule
 import logger
 from settings import sync_events
 import schedule
@@ -28,7 +28,7 @@ def startSyncing():
         schedule.run_pending()
 
 def startRoutinedThread():
-    t = threading.Thread(target=events.start)
+    t = threading.Thread(target=schedule.start)
     t.start()
 
 if __name__ == "__main__":

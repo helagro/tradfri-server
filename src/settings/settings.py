@@ -21,6 +21,6 @@ class Settings:
 
         with open(self.FILE_PATH, "r") as f:
             settings = json.loads(f)
-            self.endpoint = settings["tradfriGatewayURL"]
+            self.endpoint = settings["endpoint"]
             self.tradfriGatewayURL = settings["tradfriGatewayURL"]
             self.storageContent = json.load(f)

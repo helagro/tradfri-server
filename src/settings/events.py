@@ -1,10 +1,3 @@
-import json
-from genericpath import isfile
-import math
-from . import storage_items
-import logger
-import copy
-
 class Events:
     events = []
 
@@ -18,14 +11,6 @@ class Events:
         return cls.instance
 
 
-    def saveInputStorageContent(self, input):
-        self.storageContent = input
-        with open(self.FILE_NAME, "w") as filestream:
-            json.dump(self.storageContent, filestream)
-
-        self.callOnUpdateListeners()
-
-
     #========== LISTENERS ==========
 
     def addStorageUpdateListener(self, storageUpdateListener):
@@ -34,10 +19,4 @@ class Events:
     def callOnUpdateListeners(self):
         for listener in self.storageContentUpdateListeners:
             listener()
-
-
-    #========== OTHER ==========
-
-    def getStorageContentCopy(self):
-        return copy.deepcopy(self.storageContent)
 

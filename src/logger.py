@@ -1,21 +1,24 @@
 from datetime import datetime
 
-logsList = list([])
-
 def getLogs():
-    return logsList
+    f = open(".log", "f")
+    logs = f.read()
+    f.close()
+    return logs
 
 def log(*logInput):
     logStr = createLogStr(logInput)
-    logsList.append(logStr)
     print("log:", logStr, flush=True)
+    saveLog(logStr)
 
-    if len(logsList) > 1000:
-        logsList.pop(0)
 
 def createLogStr(logInput):
-    logStr = str(datetime.now())
-    logStr += "\n   "
+    logStr = f"{str(datetime.now())}: "
     for log in logInput:
         logStr += str(log) + " "
     return logStr
+
+
+async def saveLog(log):
+    with open(".log", "a") as myfile:
+        myfile.write(log)

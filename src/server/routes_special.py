@@ -5,7 +5,7 @@ import logger
 import subprocess
 import sys
 from .my_mime_types import MyMimeTypes
-import events
+import schedule
 from .my_response_successful import MyResponseSuccessful
 
 tradfriInterface = TradfriInterface()
@@ -31,7 +31,7 @@ def performAction(query: dict):
     result = None
 
     if(action == "performEvent"):
-        events.performEventByName(payload)
+        schedule.performEventByName(payload)
         result = {"success": True}
     else:
         result = tradfriInterface.performAction(deviceId, action, payload)
