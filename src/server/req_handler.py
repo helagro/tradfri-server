@@ -13,7 +13,7 @@ class ReqHandler(BaseHTTPRequestHandler):
         try:
             location: str = self.path.split("?")[0]
             
-            router.route(location)
+            response = router.route(location)
             self.setGETResponse(response)
         except Exception as e:
             logger.log(e, self.path)
@@ -23,8 +23,8 @@ class ReqHandler(BaseHTTPRequestHandler):
         return parse.parse_qs(parse.urlsplit(path).query)
 
 
-    def setGETResponse(self, response: MyResponse):
-        self.send_response(response.resCode)
+    def setGETResponse(self, response):
+        self.send_response(200)
 
         if not isinstance(response, MyResponseSuccessful):
             self.end_headers()

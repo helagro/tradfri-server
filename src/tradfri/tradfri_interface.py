@@ -25,8 +25,6 @@ class TradfriInterface:
             + f" with and didSucceed={didSucceed} and result={result}")
         return result
 
-
-    #========== GET DEVICE ==========
         
     def getDevices(self):
         devices_command = self.tradfriHandler.gateway.get_devices()
@@ -44,69 +42,10 @@ class TradfriInterface:
 
         return devicesSerializable
 
-
     def getDevice(self, deviceID):
         device_command = self.tradfriHandler.gateway.get_device(deviceID)
         device = self.tradfriHandler.api(device_command)
         return device
-
-
-
-
-    # ============ ACTIONS =============
-
-    def actionRouter(self, device, deviceID, action, payload):
-        if action == "tOn":
-            self.performAction(deviceID, "setState", 1)
-            threading.Timer(3600, lambda: self.performAction(deviceID, "setState", 0)).start()
-            return TradfriActionSuccess()
-
-        if action == "getColor": 
-            color = device.light_control.lights[0].hex_color
-            return TradfriActionGetValue(valueName="color", value=color)
-
-        if action == "getBrightness":
-            brightness = device.light_control.lights[0].dimmer
-            return TradfriActionGetValue(valueName="brightness", value=brightness)
-
-        if action == "setBrightness": 
-            command = device.light_control.set_dimmer(int(payload))
-            return TradfriActionCommand(command)
-
-        if action == "wakeUp":
-            if self.isOn(deviceID): 
-                return TradfriActionSuccess("Lamp was already on, aborting...")
-            else: 
-                return self.actionRouter(device, deviceID, "setBrightness", payload)
-
-        if action == "setBrightnessLevel":
-            isOn = self.isOn(deviceID)
-            self.performAction(deviceID, "setBrightness", payload)
-            time.sleep(3)
-            self.performAction(deviceID, "setState", isOn)
-            return TradfriActionSuccess()
-
-        if action == "setColor": 
-            command = device.light_control.set_hex_color(payload)
-            return TradfriActionCommand(command)
-
-        if action == "setDefinedColor": 
-            command = device.light_control.set_predefined_color(payload)
-            return TradfriActionCommand(command)
-
-        if action == "setState":
-            deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-            state = payload if (payload != "toggle") else not self.isOn(deviceID)
-            command = deviceControl.set_state(state)
-            return TradfriActionCommand(command)
-
-        if action == "turnOffIf":
-            brightness = self.performAction(deviceID, "getBrightness", None)["brightness"]
-            if int(payload) == brightness:
-                return self.actionRouter(device, deviceID, "setState", False)
-            return TradfriActionSuccess(msg=f"{payload} != {brightness}")
-
-        return TradfriActionFail(msg="Invalid Action")
 
 
     def isOn(self, deviceID):
@@ -116,3 +55,65 @@ class TradfriInterface:
         if device.has_socket_control:
             return device.socket_control.sockets[0].state
         raise Exception("Invalid device")
+
+
+
+
+
+    def actionRouter(self, device, deviceID, action, payload):
+        if action == "tOn":
+            self.performAction(deviceID, "setState", 1)
+            threading.Timer(3600, lambda: self.performAction(deviceID, "setState", 0)).start()
+
+        elif action == "getColor": 
+            color = device.light_control.lights[0].hex_color
+            return {"color": color}
+
+        elif action == "getBrightness":
+            brightness = device.light_control.lights[0].dimmer
+            return {brightness: brightness}
+
+        elif action == "setBrightness": 
+            return self.tradfriHandler.api(
+                device.light_control.set_dimmer(int(payload))
+            )
+
+        elif action == "wakeUp":
+            if self.isOn(deviceID): 
+                return {"msg": "Lamp was already on, aborting..."}
+            else: 
+                return self.actionRouter(device, deviceID, "setBrightness", payload)
+
+        elif action == "setBrightnessLevel":
+            isOn = self.isOn(deviceID)
+            self.performAction(deviceID, "setBrightness", payload)
+            time.sleep(3)
+            self.performAction(deviceID, "setState", isOn)
+
+        elif action == "setColor": 
+            return self.tradfriHandler.api(
+                device.light_control.set_hex_color(payload)
+            )
+
+        elif action == "setDefinedColor": 
+            return self.tradfriHandler.api(
+                device.light_control.set_predefined_color(payload)
+            )
+
+        elif action == "setState":
+            deviceControl = device.light_control if(device.has_light_control) else device.socket_control
+            state = payload if (payload != "toggle") else not self.isOn(deviceID)
+            return self.tradfriHandler.api(
+                deviceControl.set_state(state)
+            )
+
+        elif action == "turnOffIf":
+            brightness = self.performAction(deviceID, "getBrightness", None)["brightness"]
+            if int(payload) == brightness:
+                return self.actionRouter(device, deviceID, "setState", False)
+            return {"msg": f"{payload} != {brightness}"}
+
+        else:
+            raise Exception("Invalid Action")
+
+
