@@ -104,6 +104,6 @@ def performEvents(events):
             logger.log(f"performing event: {event}")
             TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
         except Exception as e:
-            logger.log(f"   failed because: ", e)
+            logger.log(f"performing event failed because: ", e)
 
         time.sleep(3)

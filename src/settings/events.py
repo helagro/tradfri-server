@@ -23,7 +23,6 @@ class Events:
 
         if not syncData is None:
             self.events = syncData
-            logger.log("syncing failed")
 
 
     def getRoutinesSyncData(self):
@@ -39,7 +38,7 @@ class Events:
             response = requests.get(endpoint, params=params, timeout=60)  
             return response.json()
         except:
-            logger.log(f"sync failed: {response}")
+            logger.log("sync failed")
 
     #========== LISTENERS ==========
 
