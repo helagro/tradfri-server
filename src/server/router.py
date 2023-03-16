@@ -5,6 +5,7 @@ import sys
 import event_schedule
 from events import Events
 import json
+from threading import Timer
 
 tradfriInterface = TradfriInterface()
 
@@ -32,11 +33,14 @@ def route(location: dict):
     elif command == "sync":
         Events().downloadEvents()
     elif command == "update": 
-        subprocess.Popen("scripts/update.sh")
-        sys.exit()  
+        Timer(5.0, doUpdate).start()
+        return {"updating..., refresh in 10 seconds"}
     elif command == "usage" or command == "help":
         f = open("usage.json")
         return json.load(f) 
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
 
+def doUpdate():
+    subprocess.Popen("scripts/update.sh")
+    sys.exit() 
