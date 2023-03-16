@@ -19,7 +19,7 @@ def route(location: dict):
     elif(command == "logs"): 
         return logger.getLogs()
     elif(command == "update"): 
-        subprocess.Popen("bash_scripts/update.sh")
+        subprocess.Popen("scripts/update.sh")
         sys.exit()
     elif(command == "events"):
         return Events().events
