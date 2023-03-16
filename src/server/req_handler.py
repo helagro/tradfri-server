@@ -3,6 +3,7 @@ import json
 from . import router
 from urllib import parse
 import logger
+import traceback
 
 class ReqHandler(BaseHTTPRequestHandler):
 
@@ -15,7 +16,7 @@ class ReqHandler(BaseHTTPRequestHandler):
             response = router.route(query)
             self.setGETResponse(response)
         except Exception as e:
-            logger.log("req_handler exception:", e, self.path)
+            logger.log("req_handler exception:", traceback.format_exc)
 
 
     def getQuery(self, path):
