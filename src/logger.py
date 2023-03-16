@@ -17,6 +17,7 @@ def getLogs():
 
     f = open(LOG_PATH, "r")
     logs = f.read()
+    print(logs)
     f.close()
     return logs
 
