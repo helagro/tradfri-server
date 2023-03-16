@@ -21,6 +21,6 @@ class Settings:
 
         with open(self.FILE_PATH, "r") as f:
             settings = json.load(f)
-            print(settings, flush=1)
+            logger.log(settings)
             self.endpoint = settings["endpoint"]
             self.gatewayAddr = settings["gatewayAddr"]

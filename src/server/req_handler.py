@@ -10,12 +10,12 @@ class ReqHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            location: str = self.path.split("?")[0]
+            query: dict = self.getQuery(self.path)
             
-            response = router.route(location)
+            response = router.route(query)
             self.setGETResponse(response)
         except Exception as e:
-            logger.log(e, self.path)
+            logger.log("req_handler exception:", e, self.path)
 
 
     def getQuery(self, path):

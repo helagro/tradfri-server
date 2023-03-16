@@ -2,7 +2,7 @@ from tradfri.tradfri_interface import TradfriInterface
 import logger
 import subprocess
 import sys
-import schedule
+import event_schedule
 
 tradfriInterface = TradfriInterface()
 
@@ -11,6 +11,8 @@ def route(location: dict):
     command = location["c"][0]
     device = location["d"][0] if "d" in location else None
     payload = location["p"][0] if "p" in location else None
+
+    print(command, device, payload, flush=True)
 
     response = None
     resCode = 200
@@ -23,9 +25,9 @@ def route(location: dict):
         subprocess.Popen("bash_scripts/update.sh")
         sys.exit()
     elif(command == "doEvent"): 
-        schedule.performEventByName(payload)
+        event_schedule.performEventByName(payload)
     else: 
-        return tradfriInterface.commandRouter(device, command, payload)
+        response = tradfriInterface.commandRouter(device, command, payload)
 
 
     return {

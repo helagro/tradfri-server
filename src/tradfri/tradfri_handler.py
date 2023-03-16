@@ -1,4 +1,3 @@
-from cgitb import reset
 from pytradfri import Gateway
 from pytradfri.api.libcoap_api import APIFactory
 from pytradfri.error import PytradfriError
