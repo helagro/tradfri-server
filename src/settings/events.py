@@ -36,7 +36,9 @@ class Events:
 
         try:
             response = requests.get(endpoint, params=params, timeout=60)  
-            return response.json()
+            jsonResponse = response.json()
+            logger.log("downloaded": jsonResponse)
+            return jsonResponse
         except:
             logger.log("sync failed")
 
