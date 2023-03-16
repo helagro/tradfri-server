@@ -1,6 +1,7 @@
 import logger
 import requests
 from settings.settings import Settings
+import traceback
 
 class Events:
     events = []
@@ -42,7 +43,7 @@ class Events:
             logger.log("successful sync")
             return jsonResponse
         except:
-            logger.log("sync failed")
+            logger.log("sync failed", traceback.format_exc())
 
     #========== LISTENERS ==========
 

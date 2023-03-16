@@ -24,7 +24,7 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 
     def setGETResponse(self, responseObj):
-        if "resCode" in responseObj and responseObj["resCode"] != 200 :
+        if isinstance(responseObj, dict) and "resCode" in responseObj and responseObj["resCode"] != 200 :
             self.send_response(responseObj["resCode"])
             self.end_headers()
             return

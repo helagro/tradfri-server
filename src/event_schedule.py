@@ -4,6 +4,7 @@ from threading import Timer
 import logger
 import time
 from tradfri.tradfri_interface import TradfriInterface
+import traceback
 
 timer = None
 eventsHandler = Events()
@@ -104,6 +105,6 @@ def performEvents(events):
             logger.log(f"performing event: {event}")
             TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
         except Exception as e:
-            logger.log(f"performing event failed because: ", e)
+            logger.log(traceback.format_exc())
 
         time.sleep(3)

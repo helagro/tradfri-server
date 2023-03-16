@@ -2,6 +2,7 @@ import threading
 import time
 from .tradfri_handler import TradfriHandler
 import logger
+import traceback
 
 
 class TradfriInterface:
@@ -48,7 +49,7 @@ class TradfriInterface:
         try:
             return self.commandRouterHelper(device, deviceID, command, payload)
         except Exception as e:
-            logger.log(f"{command} for {deviceID} with {payload} failed because {e}")
+            logger.log(f"{command} for {deviceID} with {payload} failed: {traceback.print_exc}")
             return {"resCode": 500}
 
 
