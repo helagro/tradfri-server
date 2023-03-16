@@ -49,7 +49,7 @@ class TradfriInterface:
         try:
             return self.commandRouterHelper(device, deviceID, command, payload)
         except Exception as e:
-            logger.log(f"{command} for {deviceID} with {payload} failed: {traceback.print_exc()}")
+            logger.log(f"{command} for {deviceID} with {payload} failed: {traceback.format_exc()}")
             return {"resCode": 500}
 
 
