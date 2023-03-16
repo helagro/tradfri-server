@@ -47,9 +47,9 @@ class TradfriInterface:
 
         try:
             return self.commandRouterHelper(device, deviceID, command, payload)
-        except Exception:
-            logger.log(f"{command} for {deviceID} with {payload} failed")
-            return "error"
+        except Exception as e:
+            logger.log(f"{command} for {deviceID} with {payload} failed because {e}")
+            return {"resCode": 500}
 
 
 
@@ -107,6 +107,6 @@ class TradfriInterface:
                 return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
         else:
-            raise Exception("Invalid command")
+            return {"resCode": 404}
 
 
