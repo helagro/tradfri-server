@@ -54,28 +54,18 @@ class TradfriInterface:
 
 
     def commandRouterHelper(self, device, deviceID, command, payload):
-        if command == "tOn":
-            self.commandRouter(deviceID, "setState", 1)
-            threading.Timer(3600, lambda: self.commandRouter(deviceID, "setState", 0)).start()
-
+        if command == "getBrightness":
+            brightness = device.light_control.lights[0].dimmer
+            return {brightness: brightness}
+        
         elif command == "getColor": 
             color = device.light_control.lights[0].hex_color
             return {"color": color}
-
-        elif command == "getBrightness":
-            brightness = device.light_control.lights[0].dimmer
-            return {brightness: brightness}
 
         elif command == "setBrightness": 
             return self.tradfriHandler.api(
                 device.light_control.set_dimmer(int(payload))
             )
-
-        elif command == "wakeUp":
-            if self.isOn(deviceID): 
-                return {"msg": "Lamp was already on, aborting..."}
-            else: 
-                return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
         elif command == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
@@ -100,11 +90,21 @@ class TradfriInterface:
                 deviceControl.set_state(state)
             )
 
+        elif command == "tOn":
+            self.commandRouter(deviceID, "setState", 1)
+            threading.Timer(3600, lambda: self.commandRouter(deviceID, "setState", 0)).start()
+
         elif command == "turnOffIf":
             brightness = self.commandRouter(deviceID, "getBrightness", None)["brightness"]
             if int(payload) == brightness:
                 return self.commandRouterHelper(device, deviceID, "setState", False)
             return {"msg": f"{payload} != {brightness}"}
+
+        elif command == "wakeUp":
+            if self.isOn(deviceID): 
+                return {"msg": "Lamp was already on, aborting..."}
+            else: 
+                return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
         else:
             raise Exception("Invalid command")

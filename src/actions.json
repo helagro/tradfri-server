@@ -1,6 +1,24 @@
 [
+    "commands",
     "devices",
     "doNext",
+    "events",
+    "logs",
+    "nextEvents",
+    "sync",
     "update",
-    "logs"
+    {
+        "tradfri": [
+            "getBrightness",
+            "getColor",
+            "setBrightness",
+            "setBrightnessLevel",
+            "setColor",
+            "setDefinedColor",
+            "setState",
+            "tOn",
+            "turnOffIf",
+            "wakeUp"
+        ]
+    }
 ]
