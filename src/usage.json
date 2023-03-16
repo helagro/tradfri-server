@@ -3,7 +3,6 @@
     "version": "3.0",
     "syntax": "<url>?c=<command>&d=<device>&p=<payload>",
     "commands": [
-        "commands",
         "devices",
         "doNext",
         "events",
@@ -11,6 +10,7 @@
         "nextEvents",
         "sync",
         "update",
+        "usage",
         {
             "tradfri": [
                 "getBrightness",
