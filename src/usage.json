@@ -1,7 +1,6 @@
 
 {
     "version": "3.0",
-    "test": "/dwa",
     "syntax": "<url>?c=<command>&d=<device>&p=<payload>",
     "commands": [
         "commands",
