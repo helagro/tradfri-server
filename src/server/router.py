@@ -15,12 +15,10 @@ def route(location: dict):
     payload = location["p"][0] if "p" in location else None
 
     if not command:
-        command = "commands"
+        command = "usage"
 
-    if command == "commands":
-        f = open("actions.json")
-        return json.load(f)
-    elif command == "devices": 
+
+    if command == "devices": 
         return tradfriInterface.getDevices()
     elif command == "doNext":
         events = event_schedule.findNextEvents()
@@ -35,7 +33,10 @@ def route(location: dict):
         Events().downloadEvents()
     elif command == "update": 
         subprocess.Popen("scripts/update.sh")
-        sys.exit()   
+        sys.exit()  
+    elif command == "usage" | command == "help":
+        f = open("usage.json")
+        return json.load(f) 
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
 

@@ -1,0 +1,30 @@
+[
+    "<url>?c=<command>&d=<device>&p=<payload>",
+    {
+       "commands": [
+            "commands",
+            "devices",
+            "doNext",
+            "events",
+            "logs",
+            "nextEvents",
+            "sync",
+            "update",
+            {
+                "tradfri": [
+                    "getBrightness",
+                    "getColor",
+                    "setBrightness",
+                    "setBrightnessLevel",
+                    "setColor",
+                    "setDefinedColor",
+                    "setState",
+                    "tOn",
+                    "turnOffIf",
+                    "wakeUp"
+                ]
+            }
+       ] 
+    }
+
+]
