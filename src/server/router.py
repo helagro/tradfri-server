@@ -14,18 +14,21 @@ def route(location: dict):
     payload = location["p"][0] if "p" in location else None
 
 
-    if(command == "devices"): 
+    if command == "devices": 
         return tradfriInterface.getDevices()
-    elif(command == "logs"): 
+    elif command == "logs": 
         return logger.getLogs()
-    elif(command == "update"): 
+    elif command == "update": 
         subprocess.Popen("scripts/update.sh")
         sys.exit()
-    elif(command == "sync"):
+    elif command == "doNext":
+        events = event_schedule.findNextEvents()
+        event_schedule.performEvents(events)
+    elif command == "sync":
         Events().downloadEvents()
-    elif(command == "events"):
+    elif command == "events":
         return Events().events
-    elif(command == "nextEvent"):
+    elif command == "nextEvent":
         return event_schedule.findNextEvents()
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
