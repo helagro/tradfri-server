@@ -18,7 +18,7 @@ def getLogs():
     logs = []
     with open(LOG_PATH, "r") as f:
         for line in f:
-            logs.push(line)
+            logs.append(line)
 
     return logs
 
