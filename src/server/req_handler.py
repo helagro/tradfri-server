@@ -29,7 +29,7 @@ class ReqHandler(BaseHTTPRequestHandler):
             return
 
         self.send_response(200)
-        self.send_header('Content-type', "text/plain")#"application/json")
+        self.send_header('Content-type', "text/plain; charset=utf-8")#"application/json")
         self.end_headers()
 
         responseStr = json.dumps(responseObj)
