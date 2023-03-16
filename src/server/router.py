@@ -35,7 +35,7 @@ def route(location: dict):
     elif command == "update": 
         Timer(2.0, doUpdate).start()
         return "updating..., refresh in 10 seconds"
-    elif command == "usage" or command == "help":
+    elif command == "usage" or command == "help" or command == "info":
         f = open("usage.json")
         return json.load(f) 
     else: 
