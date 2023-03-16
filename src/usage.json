@@ -1,5 +1,6 @@
 
 {
+    "version": "3.0",
     "syntax": "<url>?c=<command>&d=<device>&p=<payload>",
     "commands": [
         "commands",

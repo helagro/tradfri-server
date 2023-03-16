@@ -33,7 +33,7 @@ def route(location: dict):
     elif command == "sync":
         Events().downloadEvents()
     elif command == "update": 
-        Timer(5.0, doUpdate).start()
+        Timer(2.0, doUpdate).start()
         return "updating..., refresh in 10 seconds"
     elif command == "usage" or command == "help":
         f = open("usage.json")

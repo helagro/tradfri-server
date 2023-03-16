@@ -1,3 +1,0 @@
-better message for update
-better error messages
-    404 for invalid command
