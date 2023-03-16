@@ -1,6 +1,6 @@
 import logger
 import requests
-from .settings import Settings
+from settings.settings import Settings
 
 class Events:
     events = []
@@ -30,6 +30,7 @@ class Events:
         params = {
             "command": "tradfri"
         }
+        
         if endpoint is None: 
             logger.log("Won't sync, syncing endpoint is not defined")
             return

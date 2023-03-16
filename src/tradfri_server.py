@@ -3,8 +3,7 @@ import threading
 import time
 from server.req_handler import ReqHandler
 import schedule
-import logger
-from settings.events import Events
+from events import Events
 import event_schedule
 
 

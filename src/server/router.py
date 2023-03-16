@@ -3,7 +3,8 @@ import logger
 import subprocess
 import sys
 import event_schedule
-from settings.events import Events
+from events import Events
+import json
 
 tradfriInterface = TradfriInterface()
 
@@ -21,6 +22,9 @@ def route(location: dict):
     elif command == "update": 
         subprocess.Popen("scripts/update.sh")
         sys.exit()
+    elif command == "commands":
+        f = open("actions.json")
+        return json.load(f)
     elif command == "doNext":
         events = event_schedule.findNextEvents()
         event_schedule.performEvents(events)
