@@ -21,6 +21,8 @@ def route(location: dict):
     elif(command == "update"): 
         subprocess.Popen("scripts/update.sh")
         sys.exit()
+    elif(command == "sync"):
+        Events().downloadEvents()
     elif(command == "events"):
         return Events().events
     elif(command == "nextEvent"):
