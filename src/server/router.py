@@ -12,8 +12,6 @@ def route(location: dict):
     device = location["d"][0] if "d" in location else None
     payload = location["p"][0] if "p" in location else None
 
-    print(command, device, payload, flush=True)
-
     response = None
     resCode = 200
 

@@ -15,7 +15,7 @@ def getLogs():
     if not os.path.exists(LOG_PATH):
         return ""
 
-    f = open(LOG_PATH, "f")
+    f = open(LOG_PATH, "r")
     logs = f.read()
     f.close()
     return logs
