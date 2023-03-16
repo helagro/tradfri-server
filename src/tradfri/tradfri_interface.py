@@ -57,7 +57,7 @@ class TradfriInterface:
     def commandRouterHelper(self, device, deviceID, command, payload):
         if command == "getBrightness":
             brightness = device.light_control.lights[0].dimmer
-            return {brightness: brightness}
+            return {"brightness": brightness}
         
         elif command == "getColor": 
             color = device.light_control.lights[0].hex_color
@@ -96,7 +96,7 @@ class TradfriInterface:
             threading.Timer(3600, lambda: self.commandRouter(deviceID, "setState", 0)).start()
 
         elif command == "turnOffIf":
-            brightness = self.commandRouter(deviceID, "getBrightness", None)
+            brightness = self.commandRouter(deviceID, "getBrightness", None)["brightness"]
             if int(payload) == brightness:
                 return self.commandRouterHelper(device, deviceID, "setState", False)
             return {"msg": f"{payload} != {brightness}"}
