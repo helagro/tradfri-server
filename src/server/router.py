@@ -23,8 +23,6 @@ def route(location: dict):
         sys.exit()
     elif(command == "events"):
         return Events().events
-    elif(command == "doEvent"): 
-        event_schedule.performEventByName(payload)
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
 

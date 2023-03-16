@@ -27,9 +27,6 @@ def rescheduleEvent():
     timer.cancel()
     scheduleNextEvent()
 
-def performEventByName(eventName: str):
-    event = findEvent(eventName)
-    performEvent(event)
 
 
 #========== SCHEDULING ROUTINE ==========
@@ -42,17 +39,20 @@ def scheduleNextEvent():
 
     minutesToNextEvent = getMinutesToNextEvent(event)
     
-    logger.log("scheduleding for:", event, "(\"timeInMin\" is including a day if the event is tomorrow), in ", minutesToNextEvent, " miniutes")
+    logger.log("scheduleding for:", event, ", in ", minutesToNextEvent, " miniutes")
     scheduleEvent(event, minutesToNextEvent)
 
 
 def findNextEvent():
     curNearestEvent = None
+    curNearestEventTime = None
+
     for event in events.events:
         eventTime = addRelevantDaysToEvent(event)
 
-        if(curNearestEvent is None or (eventTime < curNearestEvent["time"])):
+        if(curNearestEvent is None or (eventTime < curNearestEventTime)):
             curNearestEvent = event
+            curNearestEventTime = eventTime
 
     return curNearestEvent
 
