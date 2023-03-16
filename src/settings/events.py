@@ -17,10 +17,9 @@ class Events:
 
 
     def downloadEvents(self):
-        logger.log("starting sync...")
+        logger.log("syncing...")
 
         syncData = self.getRoutinesSyncData()
-        logger.log(f"data from sync: {syncData}")
 
         if not syncData is None:
             self.events = syncData
