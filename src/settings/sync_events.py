@@ -1,4 +1,4 @@
-from settings.events import StorageHandler
+from settings.events import Events
 import requests
 import logger
 
@@ -12,7 +12,7 @@ def sync():
 
 
 def getRoutinesSyncData():
-    storageHandler = StorageHandler()
+    storageHandler = Events()
     endpoint = storageHandler.getSyncEndpoint()
     params = {
         "command": "tradfri"
@@ -30,7 +30,7 @@ def getRoutinesSyncData():
 
 
 def updateEventsValues(syncData):
-    storageHandler = StorageHandler()
+    storageHandler = Events()
     events = storageHandler.storageContent["events"]
     for syncDataValues in syncData:
         name = syncDataValues["name"]
@@ -49,4 +49,4 @@ def updateEventsValues(syncData):
 
 def updateEventValues(event, timeInMin):
     event["timeInMin"] = timeInMin
-    event["timeStr"] = StorageHandler().calculateTimeStr(timeInMin)
+    event["timeStr"] = Events().calculateTimeStr(timeInMin)

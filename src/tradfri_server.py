@@ -4,7 +4,7 @@ import time
 from server.req_handler import ReqHandler
 import schedule
 import logger
-from settings import sync_events
+import settings.sync_events as sync_events
 import schedule
 
 VERSION = "1.11"
