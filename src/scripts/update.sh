@@ -1,4 +1,4 @@
-
+#!/bin/sh
 sleep 2
 git pull
 
