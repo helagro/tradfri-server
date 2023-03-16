@@ -6,19 +6,18 @@ import time
 from tradfri.tradfri_interface import TradfriInterface
 
 timer = None
-events = Events()
-storageInterface = TradfriInterface()
+eventsHandler = Events()
 
 
 #========== ENTRY POINTS ==========
 
 def start():
-    events.addStorageUpdateListener(rescheduleEvent)
+    eventsHandler.addStorageUpdateListener(rescheduleEvent)
     scheduleNextEvent()
 
 
-def performEventAndScheduleNext(event):
-    performEvent(event)
+def performEventsAndScheduleNext(events):
+    performEvents(events)
     scheduleNextEvent()
 
 
@@ -32,29 +31,32 @@ def rescheduleEvent():
 #========== SCHEDULING ROUTINE ==========
 
 def scheduleNextEvent():
-    event = findNextEvent()
-    if event is None:
+    events = findNextEvents()
+    if not events:
         logger.log("nothing to schedule, no events")
         return
 
-    minutesToNextEvent = getMinutesToNextEvent(event)
+    minutesToNextEvent = getMinutesToNextEvent(events[0])
     
-    logger.log("scheduleding for:", event, ", in ", minutesToNextEvent, " miniutes")
-    scheduleEvent(event, minutesToNextEvent)
+    logger.log("scheduleding for:", events, ", in ", minutesToNextEvent, " miniutes")
+    scheduleEvents(events, minutesToNextEvent)
 
 
-def findNextEvent():
-    curNearestEvent = None
-    curNearestEventTime = None
+def findNextEvents():
+    nextEvents = []
+    nextEventTime = None
 
-    for event in events.events:
+    for event in eventsHandler.events:
         eventTime = addRelevantDaysToEvent(event)
 
-        if(curNearestEvent is None or (eventTime < curNearestEventTime)):
-            curNearestEvent = event
-            curNearestEventTime = eventTime
+        if eventTime == nextEventTime:
+            nextEvents.append(event)
+        elif nextEventTime is None or eventTime < nextEventTime:
+            nextEvents.clear()
+            nextEvents.append(event)
+            nextEventTime = eventTime
 
-    return curNearestEvent
+    return nextEvents
 
 
 def addRelevantDaysToEvent(event):
@@ -77,11 +79,11 @@ def getMinutesToNextEvent(event):
     return eventTime + day - nowInMin
 
 
-def scheduleEvent(event, minutesFromNow):
+def scheduleEvents(event, minutesFromNow):
     global timer
 
     if not timer is None: timer.cancel()
-    timer = Timer(minutesFromNow * 60, lambda: performEventAndScheduleNext(event))
+    timer = Timer(minutesFromNow * 60, lambda: performEventsAndScheduleNext(event))
     timer.start()
 
 
@@ -96,12 +98,12 @@ def findEvent(eventName: str) -> dict:
 
 #========== PERFORM EVENT ==========
 
-def performEvent(event):
-    for action in event["actions"]:
+def performEvents(events):
+    for event in events:
         try:
-            storageInterface.commandRouter(action["device"], action["name"], action["payload"])
+            logger.log(f"performing event: {event}")
+            TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
         except Exception as e:
-            logger.log(f"Performing action: '{action}' in scheduled event: '{event}' failed because: ", e)
+            logger.log(f"   failed because: ", e)
 
         time.sleep(3)
-    logger.log("performed timed event: " + event["name"])

@@ -26,7 +26,7 @@ def route(location: dict):
     elif(command == "events"):
         return Events().events
     elif(command == "nextEvent"):
-        return event_schedule.findNextEvent()
+        return event_schedule.findNextEvents()
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
 
