@@ -10,7 +10,7 @@ tradfriInterface = TradfriInterface()
 
 
 def route(location: dict):
-    command = location["c"][0]
+    command = location["c"][0] if "c" in location else None
     device = location["d"][0] if "d" in location else None
     payload = location["p"][0] if "p" in location else None
 
