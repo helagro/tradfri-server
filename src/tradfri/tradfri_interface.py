@@ -48,7 +48,7 @@ class TradfriInterface:
 
         try:
             return self.commandRouterHelper(device, deviceID, command, payload)
-        except Exception as e:
+        except Exception:
             logger.log(f"{command} for {deviceID} with {payload} failed: {traceback.format_exc()}")
             return {"resCode": 500}
 
@@ -96,7 +96,7 @@ class TradfriInterface:
             threading.Timer(3600, lambda: self.commandRouter(deviceID, "setState", 0)).start()
 
         elif command == "turnOffIf":
-            brightness = self.commandRouter(deviceID, "getBrightness", None)["brightness"]
+            brightness = self.commandRouter(deviceID, "getBrightness", None)
             if int(payload) == brightness:
                 return self.commandRouterHelper(device, deviceID, "setState", False)
             return {"msg": f"{payload} != {brightness}"}
