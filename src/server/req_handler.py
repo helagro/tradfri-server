@@ -23,10 +23,10 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 
     def setGETResponse(self, responseObj):
-        if responseObj == "error":
-            self.send_response(500)
-            self.end_headers()
-            return
+        # if responseObj == "error":
+        #     self.send_response(500)
+        #     self.end_headers()
+        #     return
 
         self.send_response(200)
         self.send_header('Content-type', "application/json")
