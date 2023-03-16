@@ -15,10 +15,11 @@ def getLogs():
     if not os.path.exists(LOG_PATH):
         return ""
 
-    f = open(LOG_PATH, "r")
-    logs = f.read()
-    print(logs)
-    f.close()
+    logs = []
+    with open(LOG_PATH, "r") as f:
+        for line in f:
+            logs.push(line)
+
     return logs
 
 def log(*logInput):
