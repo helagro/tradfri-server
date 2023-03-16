@@ -16,13 +16,22 @@
                 "getBrightness",
                 "getColor",
                 "setBrightness",
-                "setBrightnessLevel",
+                {
+                    "name": "setBrightnessLevel",
+                    "description": "turns on device; sets brightness; turns of device if it was off before"
+                },
                 "setColor",
                 "setDefinedColor",
                 "setState",
                 "tOn",
-                "turnOffIf",
-                "wakeUp"
+                {
+                    "name": "turnOffIf",
+                    "description": "takes device and payload. Turns of the device if the device brighness equals payload"
+                },
+                {
+                    "name": "wakeUp",
+                    "description": "sets device brighness, but only if it wasn't on before"
+                }
             ]
         }
     ] 
