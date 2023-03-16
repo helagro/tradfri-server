@@ -34,7 +34,7 @@ def route(location: dict):
     elif command == "update": 
         subprocess.Popen("scripts/update.sh")
         sys.exit()  
-    elif command == "usage" | command == "help":
+    elif command == "usage" or command == "help":
         f = open("usage.json")
         return json.load(f) 
     else: 
