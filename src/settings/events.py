@@ -23,6 +23,7 @@ class Events:
 
         if not syncData is None:
             self.events = syncData
+            logger.log("syncing failed")
 
 
     def getRoutinesSyncData(self):
