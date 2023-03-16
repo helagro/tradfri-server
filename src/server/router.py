@@ -18,7 +18,7 @@ def route(location: dict):
     if(command == "devices"): 
         response = tradfriInterface.getDevices()
     elif(command == "logs"): 
-        response = logger.getLogs().replace("\n", "\r\n")
+        response = logger.getLogs()
     elif(command == "update"): 
         subprocess.Popen("bash_scripts/update.sh")
         sys.exit()
