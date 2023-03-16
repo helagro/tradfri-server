@@ -37,7 +37,7 @@ def createLogStr(logInput):
 
 async def saveLog(log):
     with open(LOG_PATH, "a+") as myfile:
-        myfile.write(f"{log}\r\n")
+        myfile.write(f"{log}\n")
 
 
-asyncio.run(saveLog(f"\r\n\r\n\n============ STARTED AT {str(datetime.now())} =============\n"))
+asyncio.run(saveLog(f"\n\n============ STARTED AT {str(datetime.now())} =============\n"))
