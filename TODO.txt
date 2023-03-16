@@ -1,0 +1,5 @@
+list available actions
+index.html with ez opts for entering nums
+better message for update
+better error messages
+    404 for invalid command
