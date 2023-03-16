@@ -13,7 +13,6 @@ def route(location: dict):
     payload = location["p"][0] if "p" in location else None
 
     response = None
-    resCode = 200
 
     if(command == "devices"): 
         response = tradfriInterface.getDevices()
@@ -27,9 +26,5 @@ def route(location: dict):
     else: 
         response = tradfriInterface.commandRouter(device, command, payload)
 
-
-    return {
-        "response": response,
-        "resCode": resCode
-    }
+    response
 
