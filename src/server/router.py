@@ -31,7 +31,7 @@ def route(location: dict):
     elif command == "nextEvents":
         return nextEvents()
     elif command == "skipNext":
-        if payload.lower() in ["false", 0, "n"]: event_schedule.skipNextAt = None
+        if isFalse(payload): event_schedule.skipNextAt = None
         else:
             events = event_schedule.findNextEvents()
             if events: event_schedule.skipNextAt = events[0]["time"]
@@ -46,6 +46,14 @@ def route(location: dict):
         return json.load(f) 
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
+
+
+def isFalse(string):
+    return (
+        string and 
+        isinstance(string, str) and 
+        string.lower() in ["false", 0, "n", "f"]
+    )
 
 def doUpdate():
     subprocess.Popen("scripts/update.sh")
