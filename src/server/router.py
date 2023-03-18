@@ -28,13 +28,14 @@ def routeHelper(command, device, payload):
         events = event_schedule.findNextEvents()
         event_schedule.performEvents(events)
     elif command == "events":
-        return Events().events
+        return getEvents()
     elif command == "logs": 
         return logger.getLogs()
     elif command == "nextEvents":
         return nextEvents()
     elif command == "skipAt":
         skipAt(payload)
+        return getEvents()
     elif command == "skipClear":
         event_schedule.skipNextAt = None
         return nextEvents()
@@ -54,9 +55,14 @@ def routeHelper(command, device, payload):
         return tradfriInterface.commandRouter(device, command, payload)
 
 
+def getEvents():
+    return {
+        "skipNextAt": event_schedule.skipNextAt,
+        "events": Events().events
+    }
+
 def skipAt(time):
     event_schedule.skipNextAt = time
-
 
 def doUpdate():
     subprocess.Popen("scripts/update.sh")
