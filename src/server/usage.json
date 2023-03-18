@@ -16,6 +16,10 @@
         "skipNext",
         "sync",
         "update",
+        {
+            "name": "update",
+            "description": "stops server; pulls changes from repo; starts server"
+        },
         "usage",
         {
             "tradfri": [
