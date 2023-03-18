@@ -35,9 +35,10 @@ def routeHelper(command, device, payload):
         return nextEvents()
     elif command == "skipAt":
         skipAt(payload)
-        return nextEvents
+        return nextEvents()
     elif command == "skipClear":
         event_schedule.skipNextAt = None
+        return nextEvents()
     elif command == "skipNext":
         events = event_schedule.findNextEvents()
         if events: skipAt(events[0]["time"])
