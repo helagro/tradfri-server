@@ -17,7 +17,7 @@ def route(location: dict):
     if not command:
         command = "usage"
 
-    routeHelper(command, device, payload)
+    return routeHelper(command, device, payload)
 
 
 
