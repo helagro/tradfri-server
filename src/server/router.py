@@ -50,7 +50,9 @@ def routeHelper(command, device, payload):
         return "updating..., refresh in 10 seconds"
     elif command == "usage" or command == "help" or command == "info":
         f = open("server/usage.json")
-        return json.load(f) 
+        usage = json.load(f)
+        f.close()
+        return usage
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
 
