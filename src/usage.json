@@ -8,6 +8,7 @@
         "events",
         "logs",
         "nextEvents",
+        "skipNext",
         "sync",
         "update",
         "usage",

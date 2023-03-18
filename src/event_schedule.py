@@ -8,6 +8,7 @@ import traceback
 
 timer = None
 eventsHandler = Events()
+skipNextAt = None
 
 
 #========== ENTRY POINTS ==========
@@ -100,11 +101,15 @@ def findEvent(eventName: str) -> dict:
 #========== PERFORM EVENT ==========
 
 def performEvents(events):
-    for event in events:
-        try:
-            logger.log(f"performing event: {event}")
-            TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
-        except Exception as e:
-            logger.log(traceback.format_exc())
+    global skipNextAt
+    if events and events[0]["time"] != skipNextAt:
+        for event in events:
+            try:
+                logger.log(f"performing event: {event}")
+                TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
+            except Exception as e:
+                logger.log(traceback.format_exc())
 
-        time.sleep(3)
+            time.sleep(3)
+            
+    skipNextAt = None
