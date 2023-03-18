@@ -40,7 +40,7 @@ def scheduleNextEvent():
 
     minutesToNextEvent = getMinutesToNextEvent(events[0])
     
-    logger.log("scheduleding for:", events, ", in ", minutesToNextEvent, " miniutes")
+    logger.log("scheduleding:", events, ", in ", minutesToNextEvent, " miniutes")
     scheduleEvents(events, minutesToNextEvent)
 
 
@@ -77,7 +77,7 @@ def getCurTimeInMin():
 def getMinutesToNextEvent(event):
     eventTime = event["time"]
     nowInMin = getCurTimeInMin()
-    day = 0 if nowInMin < eventTime else 60*24
+    day = 0 if nowInMin < eventTime else 24*60
     return eventTime + day - nowInMin
 
 

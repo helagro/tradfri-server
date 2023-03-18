@@ -33,7 +33,7 @@ class Events:
         }
         
         if endpoint is None: 
-            logger.log("Won't sync, syncing endpoint is not defined")
+            logger.log("won't sync, syncing endpoint is not defined")
             return
 
         try:
@@ -44,6 +44,7 @@ class Events:
             return jsonResponse
         except:
             logger.log("sync failed", traceback.format_exc())
+
 
     #========== LISTENERS ==========
 
