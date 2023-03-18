@@ -41,7 +41,7 @@ def route(location: dict):
         Timer(2.0, doUpdate).start()
         return "updating..., refresh in 10 seconds"
     elif command == "usage" or command == "help" or command == "info":
-        f = open("usage.json")
+        f = open("server/usage.json")
         return json.load(f) 
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
