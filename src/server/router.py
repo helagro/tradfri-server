@@ -29,12 +29,12 @@ def route(location: dict):
     elif command == "logs": 
         return logger.getLogs()
     elif command == "nextEvents":
-        return nextEvents()
+        return events()
     elif command == "skipNext":
         if payload == False: event_schedule.skipNextAt = None
         else:
-            nextEvents = event_schedule.findNextEvents()
-            if nextEvents: event_schedule.skipNextAt = nextEvents[0]["time"]
+            events = event_schedule.findNextEvents()
+            if events: event_schedule.skipNextAt = events[0]["time"]
         return nextEvents()
     elif command == "sync":
         Events().downloadEvents()
