@@ -31,7 +31,8 @@ def route(location: dict):
     elif command == "nextEvents":
         return nextEvents()
     elif command == "skipNext":
-        if isFalse(payload): event_schedule.skipNextAt = None
+        if isFalse(payload): 
+            event_schedule.skipNextAt = None
         else:
             events = event_schedule.findNextEvents()
             if events: event_schedule.skipNextAt = events[0]["time"]
