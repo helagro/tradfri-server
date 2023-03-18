@@ -9,7 +9,10 @@
         "logs",
         "nextEvents",
         "skipAt",
-        "skipClear",
+        {
+            "name": "skipClear",
+            "description": "cancels event skip"
+        },
         "skipNext",
         "sync",
         "update",

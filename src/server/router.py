@@ -24,37 +24,46 @@ def route(location: dict):
 def routeHelper(command, device, payload):
     if command == "devices": 
         return tradfriInterface.getDevices()
+
     elif command == "doNext":
         events = event_schedule.findNextEvents()
         event_schedule.performEvents(events)
+
     elif command == "events":
         return getEvents()
+
     elif command == "logs": 
         return logger.getLogs()
+
     elif command == "nextEvents":
         return nextEvents()
+
     elif command == "skipAt":
-        skipAt(payload)
+        skipAt(int(payload))
         return getEvents()
+
     elif command == "skipClear":
         event_schedule.skipNextAt = None
-        return nextEvents()
+        return getEvents()
+
     elif command == "skipNext":
         events = event_schedule.findNextEvents()
         if events: skipAt(events[0]["time"])
         return nextEvents()
+
     elif command == "sync":
         Events().downloadEvents()
+
     elif command == "update": 
         Timer(2.0, doUpdate).start()
         return "updating..., refresh in 10 seconds"
+
     elif command == "usage" or command == "help" or command == "info":
-        f = open("server/usage.json")
-        usage = json.load(f)
-        f.close()
-        return usage
+        return usage()
+
     else: 
         return tradfriInterface.commandRouter(device, command, payload)
+
 
 
 def getEvents():
@@ -63,12 +72,15 @@ def getEvents():
         "events": Events().events
     }
 
+
 def skipAt(time):
     event_schedule.skipNextAt = time
+
 
 def doUpdate():
     subprocess.Popen("scripts/update.sh")
     sys.exit() 
+
 
 def nextEvents():
     nextEvents = event_schedule.findNextEvents()
@@ -76,3 +88,10 @@ def nextEvents():
         "willSkip": event_schedule.isSkipped(nextEvents),
         "events": nextEvents
     }
+
+
+def usage():
+    f = open("server/usage.json")
+    usage = json.load(f)
+    f.close()
+    return usage
