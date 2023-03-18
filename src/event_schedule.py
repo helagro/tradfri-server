@@ -91,18 +91,14 @@ def scheduleEvents(event, minutesFromNow):
 
 #========== OTHER ==========
 
-def findEvent(eventName: str) -> dict:
-    events = events.getStorageContentCopy()["events"]
-    for event in events:
-        if event["name"] == eventName:
-            return event
-
+def isSkipped(events):
+    return events and events[0]["time"] == skipNextAt
 
 #========== PERFORM EVENT ==========
 
 def performEvents(events):
     global skipNextAt
-    if events and events[0]["time"] != skipNextAt:
+    if not isSkipped(events):
         for event in events:
             try:
                 logger.log(f"performing event: {event}")

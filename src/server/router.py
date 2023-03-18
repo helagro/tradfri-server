@@ -29,7 +29,11 @@ def route(location: dict):
     elif command == "logs": 
         return logger.getLogs()
     elif command == "nextEvents":
-        return event_schedule.findNextEvents()
+        nextEvents = event_schedule.findNextEvents()
+        return {
+            "willSkip": event_schedule.isSkipped(nextEvents),
+            "events": nextEvents
+        }
     elif command == "skipNext":
         nextEvents = event_schedule.findNextEvents()
         if nextEvents:
