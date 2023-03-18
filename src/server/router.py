@@ -29,16 +29,13 @@ def route(location: dict):
     elif command == "logs": 
         return logger.getLogs()
     elif command == "nextEvents":
-        nextEvents = event_schedule.findNextEvents()
-        return {
-            "willSkip": event_schedule.isSkipped(nextEvents),
-            "events": nextEvents
-        }
+        return nextEvents()
     elif command == "skipNext":
-        nextEvents = event_schedule.findNextEvents()
-        if nextEvents:
-            event_schedule.skipNextAt = nextEvents[0]["time"]
-        return {"skipping": nextEvents}
+        if payload == False: event_schedule.skipNextAt = None
+        else:
+            nextEvents = event_schedule.findNextEvents()
+            if nextEvents: event_schedule.skipNextAt = nextEvents[0]["time"]
+        return nextEvents()
     elif command == "sync":
         Events().downloadEvents()
     elif command == "update": 
@@ -53,3 +50,10 @@ def route(location: dict):
 def doUpdate():
     subprocess.Popen("scripts/update.sh")
     sys.exit() 
+
+def nextEvents():
+    nextEvents = event_schedule.findNextEvents()
+    return {
+        "willSkip": event_schedule.isSkipped(nextEvents),
+        "events": nextEvents
+    }
