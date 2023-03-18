@@ -52,7 +52,7 @@ def isFalse(string):
     return (
         string and 
         isinstance(string, str) and 
-        string.lower() in ["false", 0, "n", "f"]
+        string.lower() in ["false", "0", "n", "f"]
     )
 
 def doUpdate():
