@@ -38,7 +38,7 @@ def route(location: dict):
         nextEvents = event_schedule.findNextEvents()
         if nextEvents:
             event_schedule.skipNextAt = nextEvents[0]["time"]
-        return {"Skipping:", nextEvents}
+        return {"skipping": nextEvents}
     elif command == "sync":
         Events().downloadEvents()
     elif command == "update": 
