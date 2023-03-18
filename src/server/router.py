@@ -29,7 +29,7 @@ def route(location: dict):
     elif command == "logs": 
         return logger.getLogs()
     elif command == "nextEvents":
-        return events()
+        return nextEvents()
     elif command == "skipNext":
         if not payload is None and not payload: event_schedule.skipNextAt = None
         else:
