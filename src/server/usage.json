@@ -8,6 +8,8 @@
         "events",
         "logs",
         "nextEvents",
+        "skipAt",
+        "skipClear",
         "skipNext",
         "sync",
         "update",

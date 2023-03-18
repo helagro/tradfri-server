@@ -9,7 +9,6 @@ from threading import Timer
 
 tradfriInterface = TradfriInterface()
 
-
 def route(location: dict):
     command = location["c"][0] if "c" in location else None
     device = location["d"][0] if "d" in location else None
@@ -18,7 +17,11 @@ def route(location: dict):
     if not command:
         command = "usage"
 
+    routeHelper(command, device, payload)
 
+
+
+def routeHelper(command, device, payload):
     if command == "devices": 
         return tradfriInterface.getDevices()
     elif command == "doNext":
@@ -30,12 +33,14 @@ def route(location: dict):
         return logger.getLogs()
     elif command == "nextEvents":
         return nextEvents()
+    elif command == "skipAt":
+        skipAt(payload)
+        return nextEvents
+    elif command == "skipClear":
+        event_schedule.skipNextAt = None
     elif command == "skipNext":
-        if isFalse(payload): 
-            event_schedule.skipNextAt = None
-        else:
-            events = event_schedule.findNextEvents()
-            if events: event_schedule.skipNextAt = events[0]["time"]
+        events = event_schedule.findNextEvents()
+        if events: skipAt(events[0]["time"])
         return nextEvents()
     elif command == "sync":
         Events().downloadEvents()
@@ -49,12 +54,9 @@ def route(location: dict):
         return tradfriInterface.commandRouter(device, command, payload)
 
 
-def isFalse(string):
-    return (
-        string and 
-        isinstance(string, str) and 
-        string.lower() in ["false", "0", "n", "f"]
-    )
+def skipAt(time):
+    event_schedule.skipNextAt = time
+
 
 def doUpdate():
     subprocess.Popen("scripts/update.sh")
