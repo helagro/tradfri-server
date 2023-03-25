@@ -98,7 +98,9 @@ def isSkipped(events):
 
 def performEvents(events):
     global skipNextAt
-    if not isSkipped(events):
+    if isSkipped(events):
+        skipNextAt = None
+    else:
         for event in events:
             try:
                 logger.log(f"performing event: {event}")
@@ -107,5 +109,3 @@ def performEvents(events):
                 logger.log(traceback.format_exc())
 
             time.sleep(3)
-            
-    skipNextAt = None
