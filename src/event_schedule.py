@@ -103,8 +103,8 @@ def performEvents(events):
     else:
         for event in events:
             try:
-                logger.log(f"performing event: {event}")
-                TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
+                result = TradfriInterface().commandRouter(event["device"], event["command"], event["payload"])
+                logger.log(f"performing event: {event} result: {result}")
             except Exception as e:
                 logger.log(traceback.format_exc())
 
