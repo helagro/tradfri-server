@@ -6,6 +6,7 @@ import traceback
 
 
 class TradfriInterface:
+    TIME_BETWEEN_REQUESTS = 3
     tradfriHandler = TradfriHandler()
 
 
@@ -62,7 +63,7 @@ class TradfriInterface:
         elif command == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
             self.commandRouter(deviceID, "setBrightness", payload)
-            time.sleep(3)
+            time.sleep(self.TIME_BETWEEN_REQUESTS)
             return self.commandRouter(deviceID, "setState", isOn)
 
         elif command == "setColor": 
@@ -114,11 +115,11 @@ class TradfriInterface:
         raise Exception("Invalid device")
 
     def getBrightness(self, device):
-        time.sleep(2)
+        time.sleep(self.TIME_BETWEEN_REQUESTS)
         brightness = device.light_control.lights[0].dimmer
         return {"brightness": brightness}
 
     def getColor(self, device):
-        time.sleep(2)
+        time.sleep(self.TIME_BETWEEN_REQUESTS)
         color = device.light_control.lights[0].hex_color
         return {"color": color}
