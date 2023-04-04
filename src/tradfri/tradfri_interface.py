@@ -9,7 +9,6 @@ class TradfriInterface:
     tradfriHandler = TradfriHandler()
 
 
-
     def getDevices(self):
         devices_command = self.tradfriHandler.gateway.get_devices()
         devices_commands = self.tradfriHandler.api(devices_command)
@@ -32,13 +31,6 @@ class TradfriInterface:
         return device
 
 
-    def isOn(self, deviceID):
-        device = self.getDevice(deviceID)
-        if device.has_light_control:
-            return device.light_control.lights[0].state
-        if device.has_socket_control:
-            return device.socket_control.sockets[0].state
-        raise Exception("Invalid device")
 
 
 
@@ -56,17 +48,16 @@ class TradfriInterface:
 
     def commandRouterHelper(self, device, deviceID, command, payload):
         if command == "getBrightness":
-            brightness = device.light_control.lights[0].dimmer
-            return {"brightness": brightness}
+            return self.getBrightness(device)
         
         elif command == "getColor": 
-            color = device.light_control.lights[0].hex_color
-            return {"color": color}
+            return self.getColor(device)
 
         elif command == "setBrightness": 
-            return self.tradfriHandler.api(
+            self.tradfriHandler.api(
                 device.light_control.set_dimmer(int(payload))
             )
+            return self.getBrightness(device)
 
         elif command == "setBrightnessLevel":
             isOn = self.isOn(deviceID)
@@ -75,14 +66,16 @@ class TradfriInterface:
             return self.commandRouter(deviceID, "setState", isOn)
 
         elif command == "setColor": 
-            return self.tradfriHandler.api(
+            self.tradfriHandler.api(
                 device.light_control.set_hex_color(payload)
             )
+            return self.getColor(device)
 
         elif command == "setDefinedColor": 
-            return self.tradfriHandler.api(
+            self.tradfriHandler.api(
                 device.light_control.set_predefined_color(payload)
             )
+            return self.getColor(device)
 
         elif command == "setState":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
@@ -111,3 +104,19 @@ class TradfriInterface:
             return {"resCode": 404}
 
 
+
+    def isOn(self, deviceID):
+        device = self.getDevice(deviceID)
+        if device.has_light_control:
+            return device.light_control.lights[0].state
+        if device.has_socket_control:
+            return device.socket_control.sockets[0].state
+        raise Exception("Invalid device")
+
+    def getBrightness(self, device):
+        brightness = device.light_control.lights[0].dimmer
+        return {"brightness": brightness}
+
+    def getColor(self, device):
+        color = device.light_control.lights[0].hex_color
+        return {"color": color}
