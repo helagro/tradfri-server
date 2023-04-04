@@ -114,11 +114,11 @@ class TradfriInterface:
         raise Exception("Invalid device")
 
     def getBrightness(self, device):
-        time.sleep(1)
+        time.sleep(2)
         brightness = device.light_control.lights[0].dimmer
         return {"brightness": brightness}
 
     def getColor(self, device):
-        time.sleep(1)
+        time.sleep(2)
         color = device.light_control.lights[0].hex_color
         return {"color": color}
