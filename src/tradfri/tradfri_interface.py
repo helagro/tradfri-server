@@ -58,10 +58,12 @@ class TradfriInterface:
             )
 
         elif command == "setBrightnessLevel":
-            isOn = self.isOn(deviceID)
+            wasOn = self.isOn(deviceID)
             self.commandRouter(deviceID, "setBrightness", payload)
-            time.sleep(self.TIME_BETWEEN_REQUESTS)
-            return self.commandRouter(deviceID, "setState", isOn)
+            
+            if not wasOn: 
+                time.sleep(self.TIME_BETWEEN_REQUESTS)
+                self.commandRouter(deviceID, "setState", False)
 
         elif command == "setColor": 
             return self.tradfriHandler.api(
