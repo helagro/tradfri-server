@@ -53,6 +53,7 @@ def routeHelper(command, device, payload):
 
     elif command == "sync":
         Events().downloadEvents()
+        return tradfriInterface.commandRouter(None, "events", None)
 
     elif command == "update": 
         Timer(2.0, doUpdate).start()

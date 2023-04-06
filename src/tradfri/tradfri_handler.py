@@ -5,6 +5,7 @@ from pytradfri.util import load_json, save_json
 import uuid
 import argparse
 from settings.settings import Settings
+import logger
 
 
 class TradfriHandler:
