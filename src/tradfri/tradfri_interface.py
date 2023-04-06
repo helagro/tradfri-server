@@ -123,5 +123,5 @@ class TradfriInterface:
         color = device.light_control.lights[0].hex_color
         return {"color": color}
 
-def observer(device):
+def observer():
     logger.log("feaufeaoifheaof")
