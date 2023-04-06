@@ -107,7 +107,7 @@ class TradfriInterface:
             return {"resCode": 404}
 
 
-    def observer(self):
+    def observer(self, device):
         logger.log("feaufeaoifheaof")
 
 
