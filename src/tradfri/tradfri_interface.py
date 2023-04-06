@@ -99,16 +99,12 @@ class TradfriInterface:
                 return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
         elif command == "observe":
-            device.observe(self.observer)
+            device.observe(observer)
             logger.log("started observing", deviceID)
 
 
         else:
             return {"resCode": 404}
-
-
-    def observer(self, device):
-        logger.log("feaufeaoifheaof")
 
 
     def isOn(self, deviceID):
@@ -126,3 +122,6 @@ class TradfriInterface:
     def getColor(self, device):
         color = device.light_control.lights[0].hex_color
         return {"color": color}
+
+def observer(device):
+    logger.log("feaufeaoifheaof")
