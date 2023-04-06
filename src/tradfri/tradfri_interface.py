@@ -99,8 +99,9 @@ class TradfriInterface:
                 return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
 
         elif command == "observe":
-            TradfriHandler.api(device.observe(observer, observer))
-            logger.log("started observing", deviceID)
+            cmd2 = device.observe(observer, observer)
+            TradfriHandler.api(cmd2)
+            logger.log("started observing", deviceID, cmd2)
 
 
         else:
