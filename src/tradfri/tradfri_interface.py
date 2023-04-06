@@ -100,8 +100,8 @@ class TradfriInterface:
 
         elif command == "observe":
             cmd2 = device.observe(observer, observer)
-            TradfriHandler.api(cmd2)
             logger.log("started observing", deviceID, cmd2)
+            TradfriHandler.api(cmd2)
 
 
         else:
