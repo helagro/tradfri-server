@@ -101,7 +101,7 @@ class TradfriInterface:
 
         # ====== BETA =====
         elif command == "observe":
-            cmd2 = device.observe(observer, observer)
+            cmd2 = device.observe(self.callback, self.err_callback)
             logger.log("started observing", deviceID, cmd2)
             TradfriHandler.api(cmd2)
 
@@ -126,5 +126,12 @@ class TradfriInterface:
         color = device.light_control.lights[0].hex_color
         return {"color": color}
 
-def observer():
-    logger.log("feaufeaoifheaof")
+
+
+
+    def callback(self, updated_device):
+        light = updated_device.light_control.lights[0]
+        print(f"Received message for: {light}")
+
+    def err_callback(self, err: Exception) -> None:
+        print(err)
