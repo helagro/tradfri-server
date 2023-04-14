@@ -3,7 +3,6 @@ import threading
 from server.req_handler import ReqHandler
 import event.event_schedule as event_schedule
 import argparse
-from settings import options
 import logger
 from event import sync
 
