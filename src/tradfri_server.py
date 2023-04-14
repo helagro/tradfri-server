@@ -16,7 +16,7 @@ def parseArguments():
     args = parser.parse_args()
 
     options.noDownload = args.noDownload
-    if options.noDownload: logger.log("will not download events")
+    if options.noDownload: logger.log("will not download events", options.noDownload)
 
 
 def startServer():
