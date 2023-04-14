@@ -33,10 +33,11 @@ def startSyncThread():
     t.start()
 
 def startSyncing():
-    schedule.every().day.at("04:00").do(Events().downloadEvents)
-    while True: 
-        time.sleep(50*60)
-        schedule.run_pending()
+    pass
+    # schedule.every().day.at("04:00").do(Events().downloadEvents)
+    # while True: 
+    #     time.sleep(50*60)
+    #     schedule.run_pending()
 
 
 def startRoutinedThread():
