@@ -1,13 +1,11 @@
 from http.server import HTTPServer
 import threading
-import time
 from server.req_handler import ReqHandler
-import schedule
-from events import Events
-import event_schedule
+import event.event_schedule as event_schedule
 import argparse
 from settings import options
 import logger
+from event import sync
 
 
 def parseArguments():
@@ -15,8 +13,9 @@ def parseArguments():
     parser.add_argument("--noDownload", action="store_true")
     args = parser.parse_args()
 
-    options.noDownload = args.noDownload
-    if options.noDownload: logger.log("will not download events", options.noDownload)
+    if args.noDownload: logger.log("will not download events", args.noDownload)
+
+    return args.noDownload
 
 
 def startServer():
@@ -29,15 +28,9 @@ def startServerThread():
 
 
 def startSyncThread():
-    t = threading.Thread(target=startSyncing)
+    t = threading.Thread(target=sync.scheduleSync)
     t.start()
 
-def startSyncing():
-    pass
-    # schedule.every().day.at("04:00").do(Events().downloadEvents)
-    # while True: 
-    #     time.sleep(50*60)
-    #     schedule.run_pending()
 
 
 def startRoutinedThread():
@@ -47,8 +40,9 @@ def startRoutinedThread():
 
 
 if __name__ == "__main__":
-    parseArguments()
+    noDownloads = parseArguments()
+    if noDownloads: sync.sync()
 
     startServerThread()
-    startSyncThread()
     startRoutinedThread()
+    startSyncThread()

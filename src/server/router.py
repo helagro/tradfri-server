@@ -2,8 +2,8 @@ from tradfri.tradfri_interface import TradfriInterface
 import logger
 import subprocess
 import sys
-import event_schedule
-from events import Events
+import event.event_schedule as event_schedule
+from event.events import Events
 import json
 from threading import Timer
 

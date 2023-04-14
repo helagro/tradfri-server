@@ -1,4 +1,4 @@
-from events import Events
+from event.events import Events
 from datetime import datetime
 from threading import Timer
 import logger
