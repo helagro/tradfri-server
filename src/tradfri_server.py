@@ -7,6 +7,7 @@ from events import Events
 import event_schedule
 import argparse
 from settings import options
+import logger
 
 
 def parseArguments():
@@ -15,6 +16,7 @@ def parseArguments():
     args = parser.parse_args()
 
     options.noDownload = args.noDownload
+    if options.noDownload: logger.log("will not download events")
 
 
 def startServer():
