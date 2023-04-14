@@ -12,7 +12,7 @@ def parseArguments():
     parser.add_argument("--noDownload", action="store_true")
     args = parser.parse_args()
 
-    if args.noDownload: logger.log("will not download events", args.noDownload)
+    if args.noDownload: logger.log("will not download events")
 
     return args.noDownload
 
