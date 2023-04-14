@@ -3,7 +3,6 @@ from pytradfri.api.libcoap_api import APIFactory
 from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
-import argparse
 from settings.settings import Settings
 import logger
 
@@ -13,7 +12,7 @@ class TradfriHandler:
     gatewayAddr = Settings().gatewayAddr
     gateway = None
     api = None
-    args = None
+    key = None
 
 
     #========== CONSTRUCTOR ==========
@@ -32,28 +31,14 @@ class TradfriHandler:
     #========== HANDLE ARGUMENTS ==========
 
     def getInput(self):
-        global args
-        
-        parser = argparse.ArgumentParser()
-        parser.add_argument(
-            "-K",
-            "--key",
-            dest="key",
-            required=False,
-            help="Security code found on your Tradfri gateway",
-        )
-        args = parser.parse_args()
-
-        if self.gatewayAddr not in load_json(self.CONFIG_PATH) and args.key is None:
+        if self.gatewayAddr not in load_json(self.CONFIG_PATH):
             print(
                 "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
                 end=" ",
             )
-            key = input().strip()
-            if len(key) != 16:
+            self.key = input().strip()
+            if len(self.key) != 16:
                 raise PytradfriError("Invalid 'Security Code' provided.")
-            else:
-                args.key = key
 
 
     #========== SETUP ==========
@@ -70,7 +55,7 @@ class TradfriHandler:
             api_factory = APIFactory(host=self.gatewayAddr, psk_id=identity)
 
             try:
-                psk = api_factory.generate_psk(args.key)
+                psk = api_factory.generate_psk(self.key)
                 print("Generated PSK: ", psk)
 
                 conf[self.gatewayAddr] = {"identity": identity, "key": psk}

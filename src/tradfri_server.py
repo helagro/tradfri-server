@@ -5,6 +5,16 @@ from server.req_handler import ReqHandler
 import schedule
 from events import Events
 import event_schedule
+import argparse
+from settings import options
+
+
+def parseArguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--noDownload", action="store_true")
+    args = parser.parse_args()
+
+    options.noDownload = args.noDownload
 
 
 def startServer():
@@ -31,7 +41,11 @@ def startRoutinedThread():
     t = threading.Thread(target=event_schedule.start)
     t.start()
 
+
+
 if __name__ == "__main__":
+    parseArguments()
+
     startServerThread()
     startSyncThread()
     startRoutinedThread()

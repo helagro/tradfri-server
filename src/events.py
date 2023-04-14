@@ -2,6 +2,7 @@ import logger
 import requests
 from settings.settings import Settings
 import traceback
+from settings import options
 
 class Events:
     events = []
@@ -13,7 +14,10 @@ class Events:
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(Events, cls).__new__(cls)
-            cls.instance.downloadEvents()
+            
+            if not options.noDownload:
+                cls.instance.downloadEvents()
+
         return cls.instance
 
 
