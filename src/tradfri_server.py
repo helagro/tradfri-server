@@ -40,7 +40,7 @@ def startRoutinedThread():
 
 if __name__ == "__main__":
     noDownloads = parseArguments()
-    if noDownloads: sync.sync()
+    if not noDownloads: sync.sync()
 
     startServerThread()
     startRoutinedThread()
