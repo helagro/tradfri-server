@@ -16,6 +16,7 @@ class Events:
             cls.instance = super(Events, cls).__new__(cls)
             
             if not options.noDownload:
+                print("fea", options.noDownload)
                 cls.instance.downloadEvents()
 
         return cls.instance
