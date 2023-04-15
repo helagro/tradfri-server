@@ -106,9 +106,9 @@ class TradfriInterface:
             self.tradfriHandler.api(cmd2)
 
         elif command == "raw":
-            logger.log("raw", device.light_control.raw())
+            logger.log("raw", device.light_control.raw)
             return self.tradfriHandler.api(
-                device.light_control.raw()
+                device.light_control.raw
             )
 
 
