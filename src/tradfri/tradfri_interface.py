@@ -107,7 +107,7 @@ class TradfriInterface:
 
         elif command == "raw":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-            logger.log("raw", deviceControl.raw)
+            logger.log("raw", deviceControl.raw, device.reachable)
             # return self.tradfriHandler.api(
             #     device.light_control.raw
             # )
