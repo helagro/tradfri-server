@@ -40,4 +40,4 @@ def _getRoutinesSyncData():
         logger.log("successful sync")
         return jsonResponse
     except:
-        logger.log("sync failed", traceback.format_exc())
+        logger.log("sync failed: ", traceback.format_exc())

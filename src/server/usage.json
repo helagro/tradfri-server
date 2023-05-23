@@ -4,32 +4,32 @@
     "version": "3.0",
     "syntax": "<url>?c=<command>&d=<device>&p=<payload>",
     "commands": [
-        "devices",
-        "doNext",
-        "events",
-        "logs",
-        "nextEvents",
-        "skipAt",
+        {"name": "devices"},
+        {"name": "doNext"},
+        {"name": "events"},
+        {"name": "logs"},
+        {"name": "nextEvents"},
+        {"name": "skipAt"},
+        {"name": "skipNext"},
+        {"name": "sync"},
+        {"name": "usage"},
         {
             "name": "skipClear",
             "description": "cancels event skip"
         },
-        "skipNext",
-        "sync",
-        "usage",
         {
             "tradfri": [
-                "getBrightness",
-                "getColor",
-                "setBrightness",
+                {"name": "getBrightness"},
+                {"name": "getColor"},
+                {"name": "setBrightness"},
+                {"name": "setColor"},
+                {"name": "setDefinedColor"},
+                {"name": "setState"},
+                {"name": "tOn"},
                 {
                     "name": "setBrightnessLevel",
                     "description": "turns on device; sets brightness; turns off device if it was off before"
                 },
-                "setColor",
-                "setDefinedColor",
-                "setState",
-                "tOn",
                 {
                     "name": "turnOffIf",
                     "description": "takes device and payload. Turns off the device if the device brighness equals payload"
