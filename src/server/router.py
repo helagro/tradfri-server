@@ -55,10 +55,6 @@ def _routeHelper(command, device, payload):
         Events().downloadEvents()
         return _TRADFRI_INTERFACE.commandRouter(None, "events", None)
 
-    elif command == "update": 
-        Timer(2.0, doUpdate).start()
-        return "updating..., refresh in 10 seconds"
-
     elif command == "usage" or command == "help" or command == "info":
         return usage()
 
