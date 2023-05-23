@@ -9,7 +9,7 @@ from event import sync
 
 def _main():
     noDownloads = _parseArguments()
-    if not noDownloads: sync._sync()
+    if not noDownloads: sync.sync()
 
     _startServerThread()
     _startRoutinedThread()
