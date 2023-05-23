@@ -1,11 +1,8 @@
 from tradfri.tradfri_interface import TradfriInterface
 import logger
-import subprocess
-import sys
 import event.event_schedule as event_schedule
 from event.events import Events
 import json
-from threading import Timer
 
 _TRADFRI_INTERFACE = TradfriInterface()
 
@@ -72,11 +69,6 @@ def getEvents():
 
 def skipAt(time):
     event_schedule._skipNextAt = time
-
-
-def doUpdate():
-    subprocess.Popen("scripts/update.sh")
-    sys.exit() 
 
 
 def nextEvents():
