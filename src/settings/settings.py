@@ -22,7 +22,7 @@ class Settings:
         return self._endpoint
     
     def getGatewayAddr(self):
-        return self.getGatewayAddr
+        return self._gatewayAddr
 
 
 
