@@ -72,7 +72,7 @@ class TradfriHandler:
 
             try:
                 psk = api_factory.generate_psk(key)
-                print("Generated PSK: ", psk)
+                print("Generated PSK: ", psk, flush=True)
 
                 conf[self._GATEWAY_ADDR] = {"identity": identity, "key": psk}
                 save_json(self._CONFIG_PATH, conf)
