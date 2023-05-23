@@ -34,8 +34,8 @@ class TradfriInterface:
 
 
     def commandRouter(self, deviceID, command, payload) -> dict:
-        device = self.getDevice(deviceID)
-
+        device = None if deviceID is None else self.getDevice(deviceID)
+        
         try:
             return self._commandRouterHelper(device, deviceID, command, payload)
         except Exception:
