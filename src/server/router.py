@@ -8,12 +8,9 @@ _TRADFRI_INTERFACE = TradfriInterface()
 
 
 def route(location: dict):
-    command = location["c"][0] if "c" in location else None
+    command = location["c"][0] if "c" in location else "usage"
     device = location["d"][0] if "d" in location else None
     payload = location["p"][0] if "p" in location else None
-
-    if not command:
-        command = "usage"
 
     return _routeHelper(command, device, payload)
 
