@@ -14,7 +14,7 @@ def scheduleSync() -> None:
         schedule.run_pending()
 
 
-def _sync() -> None:
+def sync() -> None:
     logger.log("syncing...")
 
     syncData = _getRoutinesSyncData()

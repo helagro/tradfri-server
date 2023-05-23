@@ -37,14 +37,14 @@ class TradfriInterface:
         device = self.getDevice(deviceID)
 
         try:
-            return self.commandRouterHelper(device, deviceID, command, payload)
+            return self._commandRouterHelper(device, deviceID, command, payload)
         except Exception:
             logger.log(f"{command} for {deviceID} with {payload} failed: {traceback.format_exc()}")
             return {"resCode": 500}
 
 
 
-    def commandRouterHelper(self, device, deviceID, command, payload) -> dict:
+    def _commandRouterHelper(self, device, deviceID, command, payload) -> dict:
         if command == "getBrightness":
             return self.getBrightness(device)
         
@@ -88,28 +88,28 @@ class TradfriInterface:
         elif command == "turnOffIf":
             brightness = self.commandRouter(deviceID, "getBrightness", None)["brightness"]
             if int(payload) == brightness:
-                return self.commandRouterHelper(device, deviceID, "setState", False)
+                return self._commandRouterHelper(device, deviceID, "setState", False)
             return {"msg": f"{payload} != {brightness}"}
 
         elif command == "wakeUp":
             if self.isOn(deviceID): 
                 return {"msg": "Lamp was already on, aborting..."}
             else: 
-                return self.commandRouterHelper(device, deviceID, "setBrightness", payload)
+                return self._commandRouterHelper(device, deviceID, "setBrightness", payload)
 
 
         # ====== BETA =====
-        elif command == "observe":
-            cmd2 = device.observe(self.callback, self.err_callback)
-            logger.log("started observing", deviceID, cmd2)
-            self._TF.doAPI(cmd2)
+        # elif command == "observe":
+        #     cmd2 = device.observe(self.callback, self.err_callback)
+        #     logger.log("started observing", deviceID, cmd2)
+        #     self._TF.doAPI(cmd2)
 
-        elif command == "raw":
-            deviceControl = device.light_control if(device.has_light_control) else device.socket_control
-            logger.log("raw", deviceControl.raw, device.reachable, device.last_seen)
-            # return self.tradfriHandler.api(
-            #     device.light_control.raw
-            # )
+        # elif command == "raw":
+        #     deviceControl = device.light_control if(device.has_light_control) else device.socket_control
+        #     logger.log("raw", deviceControl.raw, device.reachable, device.last_seen)
+        #     # return self.tradfriHandler.api(
+        #     #     device.light_control.raw
+        #     # )
 
 
         else:

@@ -2,6 +2,7 @@ from tradfri.tradfri_interface import TradfriInterface
 import logger
 import event.event_schedule as event_schedule
 from event.events import Events
+from event import sync
 import json
 
 _TRADFRI_INTERFACE = TradfriInterface()
@@ -46,7 +47,7 @@ def _routeHelper(command, device, payload):
         return nextEvents()
 
     elif command == "sync":
-        Events().downloadEvents()
+        sync.sync
         return _TRADFRI_INTERFACE.commandRouter(None, "events", None)
 
     elif command == "usage" or command == "help" or command == "info":
