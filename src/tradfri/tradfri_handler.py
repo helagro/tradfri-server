@@ -4,15 +4,14 @@ from pytradfri.error import PytradfriError
 from pytradfri.util import load_json, save_json
 import uuid
 from settings.settings import Settings
-import logger
 
 
 class TradfriHandler:
-    CONFIG_PATH = "tradfri/tradfri_standalone_psk.conf"
-    gatewayAddr = Settings().gatewayAddr
-    gateway = None
-    api = None
-    key = None
+    _CONFIG_PATH = "tradfri/tradfri_standalone_psk.conf"
+    _GATEWAY_ADDR = Settings().getGatewayAddr()
+
+    _gateway = None
+    _api = None
 
 
     #========== CONSTRUCTOR ==========
@@ -20,46 +19,63 @@ class TradfriHandler:
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(TradfriHandler, cls).__new__(cls)
-            cls.instance.doSetups()
         return cls.instance
+    
+
+    def __init__(self):
+        self.doSetups()
+
 
     def doSetups(self):
-        self.getInput()
-        self.setup()
+        key = self._getKey()
+        self._setup(key)
+
+
+
+    def doAPI(self, command):
+        return self._api(command)
+
+
+    def getGateway(self):
+        return self._gateway
+
 
 
     #========== HANDLE ARGUMENTS ==========
 
-    def getInput(self):
-        if self.gatewayAddr not in load_json(self.CONFIG_PATH):
+    def _getKey(self) -> None:
+        if self._GATEWAY_ADDR not in load_json(self._CONFIG_PATH):
             print(
                 "Please provide the 'Security Code' on the back of your " "Tradfri gateway:",
                 end=" ",
             )
-            self.key = input().strip()
-            if len(self.key) != 16:
+            key = input().strip()
+            if len(key) != 16:
                 raise PytradfriError("Invalid 'Security Code' provided.")
+            
+            return key
+
 
 
     #========== SETUP ==========
 
-    def setup(self):
-        conf = load_json(self.CONFIG_PATH)
+    def _setup(self, key):
+        conf = load_json(self._CONFIG_PATH)
 
         try:
-            identity = conf[self.gatewayAddr].get("identity")
-            psk = conf[self.gatewayAddr].get("key")
-            api_factory = APIFactory(host=self.gatewayAddr, psk_id=identity, psk=psk)
+            identity = conf[self._GATEWAY_ADDR].get("identity")
+            psk = conf[self._GATEWAY_ADDR].get("key")
+            api_factory = APIFactory(host=self._GATEWAY_ADDR, psk_id=identity, psk=psk)
         except KeyError:
             identity = uuid.uuid4().hex
-            api_factory = APIFactory(host=self.gatewayAddr, psk_id=identity)
+            api_factory = APIFactory(host=self._GATEWAY_ADDR, psk_id=identity)
 
             try:
-                psk = api_factory.generate_psk(self.key)
+                psk = api_factory.generate_psk(key)
                 print("Generated PSK: ", psk)
 
-                conf[self.gatewayAddr] = {"identity": identity, "key": psk}
-                save_json(self.CONFIG_PATH, conf)
+                conf[self._GATEWAY_ADDR] = {"identity": identity, "key": psk}
+                save_json(self._CONFIG_PATH, conf)
             except AttributeError:
                 raise PytradfriError(
                     "Please provide the 'Security Code' on the "
@@ -67,5 +83,5 @@ class TradfriHandler:
                     "-K flag."
                 )
 
-        self.api = api_factory.request
-        self.gateway = Gateway()
+        self._api = api_factory.request
+        self._gateway = Gateway()

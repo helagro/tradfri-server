@@ -1,13 +1,22 @@
 from http.server import HTTPServer
 import threading
-from server.req_handler import ReqHandler
+from server.server import MyServer
 import event.event_schedule as event_schedule
 import argparse
 import logger
 from event import sync
 
 
-def parseArguments():
+def main():
+    noDownloads = _parseArguments()
+    if not noDownloads: sync._sync()
+
+    _startServerThread()
+    _startRoutinedThread()
+    _startSyncThread()
+    
+
+def _parseArguments():
     parser = argparse.ArgumentParser()
     parser.add_argument("--noDownload", action="store_true")
     args = parser.parse_args()
@@ -17,31 +26,26 @@ def parseArguments():
     return args.noDownload
 
 
-def startServer():
-    httpd = HTTPServer(('0.0.0.0', 8000), ReqHandler)
+
+def _startServerThread():
+    t = threading.Thread(target=_startServer)
+    t.start()
+
+def _startServer():
+    httpd = HTTPServer(('0.0.0.0', 8000), MyServer)
     httpd.serve_forever()
 
-def startServerThread():
-    t = threading.Thread(target=startServer)
+
+def _startRoutinedThread():
+    t = threading.Thread(target=event_schedule.start)
     t.start()
 
 
-def startSyncThread():
+def _startSyncThread():
     t = threading.Thread(target=sync.scheduleSync)
     t.start()
 
 
 
-def startRoutinedThread():
-    t = threading.Thread(target=event_schedule.start)
-    t.start()
-
-
-
 if __name__ == "__main__":
-    noDownloads = parseArguments()
-    if not noDownloads: sync.sync()
-
-    startServerThread()
-    startRoutinedThread()
-    startSyncThread()
+    main()

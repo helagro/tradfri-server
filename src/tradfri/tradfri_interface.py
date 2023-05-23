@@ -6,14 +6,14 @@ import traceback
 
 
 class TradfriInterface:
-    TIME_BETWEEN_REQUESTS = 3
-    tradfriHandler = TradfriHandler()
+    _TIME_BETWEEN_REQUESTS = 3
+    _TF = TradfriHandler()
 
 
     def getDevices(self):
-        devices_command = self.tradfriHandler.gateway.get_devices()
-        devices_commands = self.tradfriHandler.api(devices_command)
-        devices = self.tradfriHandler.api(devices_commands)
+        devices_command = self._TF.getGateway().get_devices()
+        devices_commands = self._TF.doAPI(devices_command)
+        devices = self._TF.doAPI(devices_commands)
 
         devicesSerializable = []
         for device in devices:
@@ -23,18 +23,17 @@ class TradfriInterface:
                     name=device.name  
                 ))
 
-
         return devicesSerializable
 
+
     def getDevice(self, deviceID):
-        device_command = self.tradfriHandler.gateway.get_device(deviceID)
-        device = self.tradfriHandler.api(device_command)
+        device_command = self._TF.getGateway().get_device(deviceID)
+        device = self._TF.doAPI(device_command)
         return device
 
 
 
-
-    def commandRouter(self, deviceID, command, payload):
+    def commandRouter(self, deviceID, command, payload) -> dict:
         device = self.getDevice(deviceID)
 
         try:
@@ -45,7 +44,7 @@ class TradfriInterface:
 
 
 
-    def commandRouterHelper(self, device, deviceID, command, payload):
+    def commandRouterHelper(self, device, deviceID, command, payload) -> dict:
         if command == "getBrightness":
             return self.getBrightness(device)
         
@@ -53,7 +52,7 @@ class TradfriInterface:
             return self.getColor(device)
 
         elif command == "setBrightness": 
-            return self.tradfriHandler.api(
+            return self._TF.doAPI(
                 device.light_control.set_dimmer(int(payload))
             )
 
@@ -62,23 +61,23 @@ class TradfriInterface:
             self.commandRouter(deviceID, "setBrightness", payload)
             
             if not wasOn: 
-                time.sleep(self.TIME_BETWEEN_REQUESTS)
+                time.sleep(self._TIME_BETWEEN_REQUESTS)
                 self.commandRouter(deviceID, "setState", False)
 
         elif command == "setColor": 
-            return self.tradfriHandler.api(
+            return self._TF.doAPI(
                 device.light_control.set_hex_color(payload)
             )
 
         elif command == "setDefinedColor": 
-            return self.tradfriHandler.api(
+            return self._TF.doAPI(
                 device.light_control.set_predefined_color(payload)
             )
 
         elif command == "setState":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
             state = payload if (payload != "toggle") else not self.isOn(deviceID)
-            return self.tradfriHandler.api(
+            return self._TF.doAPI(
                 deviceControl.set_state(state)
             )
 
@@ -103,7 +102,7 @@ class TradfriInterface:
         elif command == "observe":
             cmd2 = device.observe(self.callback, self.err_callback)
             logger.log("started observing", deviceID, cmd2)
-            self.tradfriHandler.api(cmd2)
+            self._TF.doAPI(cmd2)
 
         elif command == "raw":
             deviceControl = device.light_control if(device.has_light_control) else device.socket_control
@@ -117,6 +116,7 @@ class TradfriInterface:
             return {"resCode": 404}
 
 
+
     def isOn(self, deviceID):
         device = self.getDevice(deviceID)
         if device.has_light_control:
@@ -125,9 +125,11 @@ class TradfriInterface:
             return device.socket_control.sockets[0].state
         raise Exception("Invalid device")
 
+
     def getBrightness(self, device):
         brightness = device.light_control.lights[0].dimmer
         return {"brightness": brightness}
+
 
     def getColor(self, device):
         color = device.light_control.lights[0].hex_color

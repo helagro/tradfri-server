@@ -1,6 +1,6 @@
 class Events:
     events = []
-    storageContentUpdateListeners = []
+    _updateListener = []
 
 
     #========== CONSTRUCTOR ==========
@@ -19,10 +19,10 @@ class Events:
 
     #========== LISTENERS ==========
 
-    def addStorageUpdateListener(self, storageUpdateListener):
-        self.storageContentUpdateListeners.append(storageUpdateListener)
+    def addUpdateListener(self, storageUpdateListener):
+        self._updateListener.append(storageUpdateListener)
 
     def callOnUpdateListeners(self):
-        for listener in self.storageContentUpdateListeners:
+        for listener in self._updateListener:
             listener()
 

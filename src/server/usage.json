@@ -1,5 +1,6 @@
 
 {
+    "description": "usage information for the tradfri-server",
     "version": "3.0",
     "syntax": "<url>?c=<command>&d=<device>&p=<payload>",
     "commands": [

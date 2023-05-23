@@ -3,41 +3,47 @@ import asyncio
 import os
 
 
-def getLogFilePath():
-    logFileName = ".log"
+# ========= SETUP =========
+
+def _getLogFilePath():
+    LOG_FILE_NAME = ".log"
     parentFolderName = os.path.dirname(os.path.realpath(__file__))
     logFolder = os.path.dirname(parentFolderName)
-    return logFolder + os.path.sep + logFileName
+    return logFolder + os.path.sep + LOG_FILE_NAME
 
-LOG_PATH = getLogFilePath()
+_LOG_PATH = _getLogFilePath()
 
-def getLogs():
-    if not os.path.exists(LOG_PATH):
+
+def getLogs() -> list:
+    if not os.path.exists(_LOG_PATH):
         return ""
 
     logs = []
-    with open(LOG_PATH, "r") as f:
+    with open(_LOG_PATH, "r") as f:
         for line in f:
             logs.append(line)
 
     return logs
 
+
+
 def log(*logInput):
-    logStr = createLogStr(logInput)
+    logStr = _createLogStr(logInput)
     print("log:", logStr, flush=True)
-    asyncio.run(saveLog(logStr))
+    asyncio.run(_saveLog(logStr))
 
 
-def createLogStr(logInput):
+def _createLogStr(logInput):
     logStr = f"{str(datetime.now())}: "
     for log in logInput:
         logStr += str(log) + " "
     return logStr
 
 
-async def saveLog(log):
-    with open(LOG_PATH, "a+") as myfile:
+async def _saveLog(log):
+    with open(_LOG_PATH, "a+") as myfile:
         myfile.write(f"{log}\n")
 
 
-asyncio.run(saveLog(f"\n\n============ STARTED AT {str(datetime.now())} =============\n"))
+# Initial message
+asyncio.run(_saveLog(f"\n\n============ STARTED AT {str(datetime.now())} =============\n"))

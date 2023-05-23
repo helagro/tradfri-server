@@ -7,24 +7,24 @@ import time
 import logger
 
 
-def scheduleSync():
-    schedule.every().day.at("04:00").do(sync)
+def scheduleSync() -> None:
+    schedule.every().day.at("04:00").do(_sync)
     while True: 
         time.sleep(50*60)
         schedule.run_pending()
 
 
-def sync():
+def _sync() -> None:
     logger.log("syncing...")
 
-    syncData = getRoutinesSyncData()
+    syncData = _getRoutinesSyncData()
 
     if not syncData is None:
         Events().setEvents(syncData)
 
 
-def getRoutinesSyncData():
-    endpoint = Settings().endpoint
+def _getRoutinesSyncData():
+    endpoint = Settings().getEndpoint()
     params = {
         "command": "tradfri"
     }

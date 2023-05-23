@@ -5,25 +5,25 @@ from urllib import parse
 import logger
 import traceback
 
-class ReqHandler(BaseHTTPRequestHandler):
+class MyServer(BaseHTTPRequestHandler):
 
     #========== GET ==========
 
     def do_GET(self):
         try:
-            query: dict = self.getQuery(self.path)
+            query: dict = self._getQuery(self.path)
             
             response = router.route(query)
-            self.setGETResponse(response)
-        except Exception as e:
+            self._setGETResponse(response)
+        except Exception as _:
             logger.log("req_handler exception:", traceback.format_exc())
 
 
-    def getQuery(self, path):
+    def _getQuery(self, path) -> dict:
         return parse.parse_qs(parse.urlsplit(path).query)
 
 
-    def setGETResponse(self, responseObj):
+    def _setGETResponse(self, responseObj):
         if isinstance(responseObj, dict) and "resCode" in responseObj and responseObj["resCode"] != 200 :
             self.send_response(responseObj["resCode"])
             self.end_headers()

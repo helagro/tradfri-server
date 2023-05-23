@@ -7,7 +7,8 @@ from event.events import Events
 import json
 from threading import Timer
 
-tradfriInterface = TradfriInterface()
+_TRADFRI_INTERFACE = TradfriInterface()
+
 
 def route(location: dict):
     command = location["c"][0] if "c" in location else None
@@ -17,17 +18,16 @@ def route(location: dict):
     if not command:
         command = "usage"
 
-    return routeHelper(command, device, payload)
+    return _routeHelper(command, device, payload)
 
 
-
-def routeHelper(command, device, payload):
+def _routeHelper(command, device, payload):
     if command == "devices": 
-        return tradfriInterface.getDevices()
+        return _TRADFRI_INTERFACE.getDevices()
 
     elif command == "doNext":
-        events = event_schedule.findNextEvents()
-        event_schedule.performEvents(events)
+        events = event_schedule._findNextEvents()
+        event_schedule._performEvents(events)
 
     elif command == "events":
         return getEvents()
@@ -43,17 +43,17 @@ def routeHelper(command, device, payload):
         return getEvents()
 
     elif command == "skipClear":
-        event_schedule.skipNextAt = None
+        event_schedule._skipNextAt = None
         return getEvents()
 
     elif command == "skipNext":
-        events = event_schedule.findNextEvents()
+        events = event_schedule._findNextEvents()
         if events: skipAt(events[0]["time"])
         return nextEvents()
 
     elif command == "sync":
         Events().downloadEvents()
-        return tradfriInterface.commandRouter(None, "events", None)
+        return _TRADFRI_INTERFACE.commandRouter(None, "events", None)
 
     elif command == "update": 
         Timer(2.0, doUpdate).start()
@@ -63,19 +63,19 @@ def routeHelper(command, device, payload):
         return usage()
 
     else: 
-        return tradfriInterface.commandRouter(device, command, payload)
+        return _TRADFRI_INTERFACE.commandRouter(device, command, payload)
 
 
 
 def getEvents():
     return {
-        "skipNextAt": event_schedule.skipNextAt,
+        "skipNextAt": event_schedule._skipNextAt,
         "events": Events().events
     }
 
 
 def skipAt(time):
-    event_schedule.skipNextAt = time
+    event_schedule._skipNextAt = time
 
 
 def doUpdate():
@@ -84,9 +84,9 @@ def doUpdate():
 
 
 def nextEvents():
-    nextEvents = event_schedule.findNextEvents()
+    nextEvents = event_schedule._findNextEvents()
     return {
-        "willSkip": event_schedule.isSkipped(nextEvents),
+        "willSkip": event_schedule._isSkipped(nextEvents),
         "events": nextEvents
     }
 
