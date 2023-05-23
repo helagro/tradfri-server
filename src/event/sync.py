@@ -8,7 +8,7 @@ import logger
 
 
 def scheduleSync() -> None:
-    schedule.every().day.at("04:00").do(_sync)
+    schedule.every().day.at("04:00").do(sync)
     while True: 
         time.sleep(50*60)
         schedule.run_pending()
