@@ -48,7 +48,7 @@ def _routeHelper(command, device, payload):
 
     elif command == "sync":
         sync.sync()
-        return _TRADFRI_INTERFACE.commandRouter(None, "events", None)
+        return getEvents()
 
     elif command == "usage" or command == "help" or command == "info":
         return usage()
