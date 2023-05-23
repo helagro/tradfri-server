@@ -18,7 +18,8 @@
             "description": "cancels event skip"
         },
         {
-            "tradfri": [
+            "category": "tradfri",
+            "commands": [
                 {"name": "getBrightness"},
                 {"name": "getColor"},
                 {"name": "setBrightness"},

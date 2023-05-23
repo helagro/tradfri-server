@@ -7,7 +7,7 @@ import logger
 from event import sync
 
 
-def main():
+def _main():
     noDownloads = _parseArguments()
     if not noDownloads: sync._sync()
 
@@ -48,4 +48,4 @@ def _startSyncThread():
 
 
 if __name__ == "__main__":
-    main()
+    _main()
