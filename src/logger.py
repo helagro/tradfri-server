@@ -3,7 +3,7 @@ import asyncio
 import os
 
 
-# ========= SETUP =========
+# --------------------------- SETUP -------------------------- #
 
 def _getLogFilePath():
     LOG_FILE_NAME = ".log"
@@ -13,6 +13,7 @@ def _getLogFilePath():
 
 _LOG_PATH = _getLogFilePath()
 
+# -------------------------- METHODS ------------------------- #
 
 def getLogs() -> list:
     if not os.path.exists(_LOG_PATH):
@@ -24,7 +25,6 @@ def getLogs() -> list:
             logs.append(line)
 
     return logs
-
 
 
 def log(*logInput):
